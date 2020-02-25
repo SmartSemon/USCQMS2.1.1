@@ -72,7 +72,7 @@ public class ActCommonUtil
 			List<HashMap<String, Object>> rows)
 	{
 		HashMap restore = new HashMap();
-		// 设置状态为1，（C:初始状态，0:待审批，1:审批中，2:已审批，其它:未知状态）
+		// 设置状态为E，（维护中:C,签审中:E,已归档:F,检出:U)
 		restore.put("STATE", state);
 		restore.put("DSNO", dson);
 		// 获取ItemNo

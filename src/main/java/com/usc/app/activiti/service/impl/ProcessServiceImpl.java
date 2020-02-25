@@ -149,9 +149,9 @@ public class ProcessServiceImpl extends BaseService implements ProcessService {
         ProcessInstance processInstance = runtimeService.startProcessInstanceById(param.getString("id"), map);
         // 根据流程定义ID启动流程
 //        ProcessInstance processInstance = runtimeService.startProcessInstanceById(param.getString("id"));
-        // 修改业务数据状态
+        // 修改业务数据状态（维护中:C,签审中:E,已归档:F,检出:U)
         boolean isRestore = ActCommonUtil.restore(processInstance.getProcessInstanceId(), param.getString("userName"),
-                "1", processInstance.getProcessInstanceId(), (List<HashMap<String, Object>>) param.get("selectedRows"));
+                "E", processInstance.getProcessInstanceId(), (List<HashMap<String, Object>>) param.get("selectedRows"));
         if (isRestore) {
             result.put("result", true);
             return result;

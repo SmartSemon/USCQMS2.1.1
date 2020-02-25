@@ -1,102 +1,15 @@
-2020-02-24 16:09:47.900  WARN 14644 --- [qtp1164934558-138] org.eclipse.jetty.server.HttpChannel     : /act/process/deleteByDeploymentId/undefined
-
-org.springframework.web.util.NestedServletException: Request processing failed; nested exception is org.activiti.engine.ActivitiObjectNotFoundException: Could not find a deployment with id 'undefined'.
-	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1013) ~[spring-webmvc-5.1.8.RELEASE.jar:5.1.8.RELEASE]
-	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:908) ~[spring-webmvc-5.1.8.RELEASE.jar:5.1.8.RELEASE]
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:665) ~[javax.servlet-api-4.0.1.jar:4.0.1]
-	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:882) ~[spring-webmvc-5.1.8.RELEASE.jar:5.1.8.RELEASE]
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:750) ~[javax.servlet-api-4.0.1.jar:4.0.1]
-	at org.eclipse.jetty.servlet.ServletHolder.handle(ServletHolder.java:876) ~[jetty-servlet-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.eclipse.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1623) ~[jetty-servlet-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.eclipse.jetty.websocket.server.WebSocketUpgradeFilter.doFilter(WebSocketUpgradeFilter.java:214) ~[websocket-server-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.eclipse.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1610) ~[jetty-servlet-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at com.alibaba.druid.support.http.WebStatFilter.doFilter(WebStatFilter.java:123) ~[druid-1.1.10.jar:1.1.10]
-	at org.eclipse.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1610) ~[jetty-servlet-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:99) ~[spring-web-5.1.8.RELEASE.jar:5.1.8.RELEASE]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:109) ~[spring-web-5.1.8.RELEASE.jar:5.1.8.RELEASE]
-	at org.eclipse.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1610) ~[jetty-servlet-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:92) ~[spring-web-5.1.8.RELEASE.jar:5.1.8.RELEASE]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:109) ~[spring-web-5.1.8.RELEASE.jar:5.1.8.RELEASE]
-	at org.eclipse.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1610) ~[jetty-servlet-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.springframework.web.filter.HiddenHttpMethodFilter.doFilterInternal(HiddenHttpMethodFilter.java:93) ~[spring-web-5.1.8.RELEASE.jar:5.1.8.RELEASE]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:109) ~[spring-web-5.1.8.RELEASE.jar:5.1.8.RELEASE]
-	at org.eclipse.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1610) ~[jetty-servlet-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:200) ~[spring-web-5.1.8.RELEASE.jar:5.1.8.RELEASE]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:109) ~[spring-web-5.1.8.RELEASE.jar:5.1.8.RELEASE]
-	at org.eclipse.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1610) ~[jetty-servlet-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:540) ~[jetty-servlet-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:146) ~[jetty-server-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.eclipse.jetty.security.SecurityHandler.handle(SecurityHandler.java:548) ~[jetty-security-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:132) ~[jetty-server-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:257) ~[jetty-server-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:1711) ~[jetty-server-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:255) ~[jetty-server-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.eclipse.jetty.server.handler.ContextHandler.doHandle(ContextHandler.java:1347) ~[jetty-server-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:203) ~[jetty-server-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:480) ~[jetty-servlet-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:1678) ~[jetty-server-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:201) ~[jetty-server-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:1249) ~[jetty-server-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:144) ~[jetty-server-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:132) ~[jetty-server-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.eclipse.jetty.server.Server.handle(Server.java:505) ~[jetty-server-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:370) ~[jetty-server-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:267) [jetty-server-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:305) [jetty-io-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:103) [jetty-io-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.eclipse.jetty.io.ChannelEndPoint$2.run(ChannelEndPoint.java:117) [jetty-io-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.runTask(EatWhatYouKill.java:333) [jetty-util-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.doProduce(EatWhatYouKill.java:310) [jetty-util-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.tryProduce(EatWhatYouKill.java:168) [jetty-util-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.run(EatWhatYouKill.java:126) [jetty-util-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.eclipse.jetty.util.thread.ReservedThreadExecutor$ReservedThread.run(ReservedThreadExecutor.java:366) [jetty-util-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:781) [jetty-util-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:917) [jetty-util-9.4.19.v20190610.jar:9.4.19.v20190610]
-	at java.lang.Thread.run(Thread.java:748) [na:1.8.0_192]
-Caused by: org.activiti.engine.ActivitiObjectNotFoundException: Could not find a deployment with id 'undefined'.
-	at org.activiti.engine.impl.persistence.deploy.DeploymentManager.removeDeployment(DeploymentManager.java:202) ~[activiti-engine-5.22.0.jar:5.22.0]
-	at org.activiti.engine.impl.cmd.DeleteDeploymentCmd.execute(DeleteDeploymentCmd.java:44) ~[activiti-engine-5.22.0.jar:5.22.0]
-	at org.activiti.engine.impl.cmd.DeleteDeploymentCmd.execute(DeleteDeploymentCmd.java:24) ~[activiti-engine-5.22.0.jar:5.22.0]
-	at org.activiti.engine.impl.interceptor.CommandInvoker.execute(CommandInvoker.java:24) ~[activiti-engine-5.22.0.jar:5.22.0]
-	at org.activiti.engine.impl.interceptor.CommandContextInterceptor.execute(CommandContextInterceptor.java:57) ~[activiti-engine-5.22.0.jar:5.22.0]
-	at org.activiti.spring.SpringTransactionInterceptor$1.doInTransaction(SpringTransactionInterceptor.java:47) ~[activiti-spring-5.22.0.jar:5.22.0]
-	at org.springframework.transaction.support.TransactionTemplate.execute(TransactionTemplate.java:140) ~[spring-tx-5.1.8.RELEASE.jar:5.1.8.RELEASE]
-	at org.activiti.spring.SpringTransactionInterceptor.execute(SpringTransactionInterceptor.java:45) ~[activiti-spring-5.22.0.jar:5.22.0]
-	at org.activiti.engine.impl.interceptor.LogInterceptor.execute(LogInterceptor.java:31) ~[activiti-engine-5.22.0.jar:5.22.0]
-	at org.activiti.engine.impl.cfg.CommandExecutorImpl.execute(CommandExecutorImpl.java:40) ~[activiti-engine-5.22.0.jar:5.22.0]
-	at org.activiti.engine.impl.cfg.CommandExecutorImpl.execute(CommandExecutorImpl.java:35) ~[activiti-engine-5.22.0.jar:5.22.0]
-	at org.activiti.engine.impl.RepositoryServiceImpl.deleteDeployment(RepositoryServiceImpl.java:91) ~[activiti-engine-5.22.0.jar:5.22.0]
-	at com.usc.app.activiti.service.impl.ProcessServiceImpl.deleteByDeploymentId(ProcessServiceImpl.java:100) ~[classes/:na]
-	at com.usc.app.activiti.resource.ProcessResource.deleteByDeploymentId(ProcessResource.java:61) ~[classes/:na]
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_192]
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_192]
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_192]
-	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_192]
-	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:190) ~[spring-web-5.1.8.RELEASE.jar:5.1.8.RELEASE]
-	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:138) ~[spring-web-5.1.8.RELEASE.jar:5.1.8.RELEASE]
-	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:104) ~[spring-webmvc-5.1.8.RELEASE.jar:5.1.8.RELEASE]
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:892) ~[spring-webmvc-5.1.8.RELEASE.jar:5.1.8.RELEASE]
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:797) ~[spring-webmvc-5.1.8.RELEASE.jar:5.1.8.RELEASE]
-	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-5.1.8.RELEASE.jar:5.1.8.RELEASE]
-	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1039) ~[spring-webmvc-5.1.8.RELEASE.jar:5.1.8.RELEASE]
-	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:942) ~[spring-webmvc-5.1.8.RELEASE.jar:5.1.8.RELEASE]
-	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1005) ~[spring-webmvc-5.1.8.RELEASE.jar:5.1.8.RELEASE]
-	... 51 common frames omitted
-
-2020-02-24 16:18:52.635  INFO 14644 --- [qtp1164934558-140] o.a.e.impl.bpmn.deployer.BpmnDeployer    : Processing resource 文件审批.bpmn20.xml
-2020-02-24 16:35:31.016  WARN 14644 --- [qtp1164934558-142] com.usc.interceptor.OnlineInterceptor    : /dcm/access consume 3768 millis
-2020-02-24 16:37:15.288  INFO 14644 --- [qtp1164934558-140] com.usc.Application                      : Download the File u=1226778478,3432630272&fm=26&gp=0.jpg successfully!
-2020-02-24 16:40:16.074  INFO 14644 --- [qtp1164934558-116] o.a.e.impl.bpmn.deployer.BpmnDeployer    : Processing resource 签呈流程.bpmn20.xml
-2020-02-24 16:40:16.129  INFO 14644 --- [qtp1164934558-116] o.a.e.impl.bpmn.deployer.BpmnDeployer    : Processing resource 签呈流程.process.png
-2020-02-24 17:03:11.334  WARN 14644 --- [qtp1164934558-162] com.usc.interceptor.OnlineInterceptor    : /modelSynchronous/single consume 767 millis
-2020-02-24 17:03:58.626  WARN 14644 --- [qtp1164934558-163] com.usc.interceptor.OnlineInterceptor    : /modelSynchronous/single consume 719 millis
-2020-02-24 18:01:04.138  INFO 14644 --- [Thread-54] o.a.e.i.a.AbstractAsyncJobExecutor       : Shutting down the default async job executor [org.activiti.spring.SpringAsyncExecutor].
-2020-02-24 18:01:04.139  INFO 14644 --- [Thread-48] o.a.e.i.a.AcquireTimerJobsRunnable       : stopped async job due acquisition
-2020-02-24 18:01:04.139  INFO 14644 --- [Thread-49] o.a.e.i.a.AcquireAsyncJobsDueRunnable    : stopped async job due acquisition
-2020-02-24 18:01:04.140  INFO 14644 --- [Thread-54] o.s.s.c.ThreadPoolTaskScheduler          : Shutting down ExecutorService 'threadPoolTaskScheduler'
-2020-02-24 18:01:04.160  INFO 14644 --- [Thread-54] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
-2020-02-24 18:01:04.190  INFO 14644 --- [Thread-54] o.e.jetty.server.AbstractConnector       : Stopped ServerConnector@2282400e{HTTP/1.1,[http/1.1]}{0.0.0.0:8898}
-2020-02-24 18:01:04.190  INFO 14644 --- [Thread-54] org.eclipse.jetty.server.session         : node0 Stopped scavenging
-2020-02-24 18:01:04.195  INFO 14644 --- [Thread-54] o.e.j.s.h.ContextHandler.application     : Destroying Spring FrameworkServlet 'messageDispatcherServlet'
-2020-02-24 18:01:04.195  INFO 14644 --- [Thread-54] o.e.j.s.h.ContextHandler.application     : Destroying Spring FrameworkServlet 'dispatcherServlet'
-2020-02-24 18:01:04.196  INFO 14644 --- [Thread-54] o.e.jetty.server.handler.ContextHandler  : Stopped o.s.b.w.e.j.JettyEmbeddedWebAppContext@12fcb2c3{application,/,[file:///C:/Users/lwp/AppData/Local/Temp/jetty-docbase.5299193943131715574.8898/],UNAVAILABLE}
+2020-02-25 21:06:22.846  INFO 9384 --- [main] c.usc.conf.runner.ModelData2RedisRunner  : Initialize system model successfully, in 327964 ms
+2020-02-25 21:06:23.013  INFO 9384 --- [main] c.usc.conf.runner.UserInfo2RedisRunner   : Initialization of user information successfully, in 163 ms
+2020-02-25 21:06:23.026  INFO 9384 --- [main] c.u.c.runner.TranslateData2RedisRunner   : Initialize language transfer successfully, in 13 ms
+2020-02-25 21:06:45.533  INFO 9384 --- [main] c.u.c.r.FunctionalPermissionsRunner      : Authorization initialized successfully, in 22507 ms
+2020-02-25 21:06:45.884  INFO 9384 --- [main] com.usc.Application2_1_1                 : QMS-Service Started Successfully
+2020-02-25 21:07:32.903  INFO 9384 --- [Thread-157] o.a.e.i.a.AbstractAsyncJobExecutor       : Shutting down the default async job executor [org.activiti.spring.SpringAsyncExecutor].
+2020-02-25 21:07:32.905  INFO 9384 --- [Thread-152] o.a.e.i.a.AcquireAsyncJobsDueRunnable    : stopped async job due acquisition
+2020-02-25 21:07:32.905  INFO 9384 --- [Thread-151] o.a.e.i.a.AcquireTimerJobsRunnable       : stopped async job due acquisition
+2020-02-25 21:07:32.906  INFO 9384 --- [Thread-157] o.s.s.c.ThreadPoolTaskScheduler          : Shutting down ExecutorService 'threadPoolTaskScheduler'
+2020-02-25 21:07:32.920  INFO 9384 --- [Thread-157] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2020-02-25 21:07:32.924  INFO 9384 --- [Thread-157] o.e.jetty.server.AbstractConnector       : Stopped ServerConnector@4be0a27d{HTTP/1.1,[http/1.1]}{0.0.0.0:8898}
+2020-02-25 21:07:32.925  INFO 9384 --- [Thread-157] org.eclipse.jetty.server.session         : node0 Stopped scavenging
+2020-02-25 21:07:32.927  INFO 9384 --- [Thread-157] o.e.j.s.h.ContextHandler.application     : Destroying Spring FrameworkServlet 'messageDispatcherServlet'
+2020-02-25 21:07:32.927  INFO 9384 --- [Thread-157] o.e.j.s.h.ContextHandler.application     : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2020-02-25 21:07:32.927  INFO 9384 --- [Thread-157] o.e.jetty.server.handler.ContextHandler  : Stopped o.s.b.w.e.j.JettyEmbeddedWebAppContext@236ae13d{application,/,[file:///C:/Users/lwp/AppData/Local/Temp/jetty-docbase.5198825456010914133.8898/],UNAVAILABLE}
