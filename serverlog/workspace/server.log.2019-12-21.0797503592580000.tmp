@@ -1,0 +1,377 @@
+2019-12-21 08:49:48.218  INFO 16312 --- [main] com.usc.Application2_1_1                 : Starting Application2_1_1 on DESKTOP-K459OHT with PID 16312 (F:\UnismartCore\USCQMS2.1.1\server\target\classes started by lwp in F:\UnismartCore\USCQMS2.1.1\server)
+2019-12-21 08:49:48.234  INFO 16312 --- [main] com.usc.Application2_1_1                 : No active profile set, falling back to default profiles: default
+2019-12-21 08:49:53.187  WARN 16312 --- [main] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.usc, com.usc.conf.cf]' package. Please check your configuration.
+2019-12-21 08:49:53.485  INFO 16312 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2019-12-21 08:49:53.485  INFO 16312 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
+2019-12-21 08:49:53.578  INFO 16312 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 62ms. Found 0 repository interfaces.
+2019-12-21 08:49:54.063  INFO 16312 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$EnhancerBySpringCGLIB$$ee498f24] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-12-21 08:49:54.109  INFO 16312 --- [main] .w.s.a.s.AnnotationActionEndpointMapping : Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2019-12-21 08:49:54.156  INFO 16312 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$49b1ca25] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-12-21 08:49:54.594  INFO 16312 --- [main] org.eclipse.jetty.util.log               : Logging initialized @10498ms to org.eclipse.jetty.util.log.Slf4jLog
+2019-12-21 08:49:54.813  INFO 16312 --- [main] o.s.b.w.e.j.JettyServletWebServerFactory : Server initialized with port: 8898
+2019-12-21 08:49:54.813  INFO 16312 --- [main] org.eclipse.jetty.server.Server          : jetty-9.4.19.v20190610; built: 2019-06-10T16:30:51.723Z; git: afcf563148970e98786327af5e07c261fda175d3; jvm 1.8.0_192-b12
+2019-12-21 08:49:54.844  INFO 16312 --- [main] o.e.j.s.h.ContextHandler.application     : Initializing Spring embedded WebApplicationContext
+2019-12-21 08:49:54.844  INFO 16312 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 6470 ms
+2019-12-21 08:49:55.063  INFO 16312 --- [main] org.eclipse.jetty.server.session         : DefaultSessionIdManager workerName=node0
+2019-12-21 08:49:55.063  INFO 16312 --- [main] org.eclipse.jetty.server.session         : No SessionScavenger set, using defaults
+2019-12-21 08:49:55.063  INFO 16312 --- [main] org.eclipse.jetty.server.session         : node0 Scavenging every 600000ms
+2019-12-21 08:49:55.063  INFO 16312 --- [main] o.e.jetty.server.handler.ContextHandler  : Started o.s.b.w.e.j.JettyEmbeddedWebAppContext@31834a2b{application,/,[file:///C:/Users/lwp/AppData/Local/Temp/jetty-docbase.804761660104248145.8898/],AVAILABLE}
+2019-12-21 08:49:55.063  INFO 16312 --- [main] org.eclipse.jetty.server.Server          : Started @10965ms
+2019-12-21 08:49:55.156  INFO 16312 --- [main] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2019-12-21 09:09:29.343  INFO 22488 --- [main] com.usc.Application2_1_1                 : Starting Application2_1_1 on DESKTOP-K459OHT with PID 22488 (F:\UnismartCore\USCQMS2.1.1\server\target\classes started by lwp in F:\UnismartCore\USCQMS2.1.1\server)
+2019-12-21 09:09:29.343  INFO 22488 --- [main] com.usc.Application2_1_1                 : No active profile set, falling back to default profiles: default
+2019-12-21 09:09:30.468  WARN 22488 --- [main] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.usc, com.usc.conf.cf]' package. Please check your configuration.
+2019-12-21 09:09:30.546  INFO 22488 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2019-12-21 09:09:30.546  INFO 22488 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
+2019-12-21 09:09:30.624  INFO 22488 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 62ms. Found 0 repository interfaces.
+2019-12-21 09:09:30.999  INFO 22488 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$EnhancerBySpringCGLIB$$c6655e82] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-12-21 09:09:31.047  INFO 22488 --- [main] .w.s.a.s.AnnotationActionEndpointMapping : Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2019-12-21 09:09:31.093  INFO 22488 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$21cd9983] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-12-21 09:09:31.424  INFO 22488 --- [main] org.eclipse.jetty.util.log               : Logging initialized @4239ms to org.eclipse.jetty.util.log.Slf4jLog
+2019-12-21 09:09:31.582  INFO 22488 --- [main] o.s.b.w.e.j.JettyServletWebServerFactory : Server initialized with port: 8898
+2019-12-21 09:09:31.583  INFO 22488 --- [main] org.eclipse.jetty.server.Server          : jetty-9.4.19.v20190610; built: 2019-06-10T16:30:51.723Z; git: afcf563148970e98786327af5e07c261fda175d3; jvm 1.8.0_192-b12
+2019-12-21 09:09:31.607  INFO 22488 --- [main] o.e.j.s.h.ContextHandler.application     : Initializing Spring embedded WebApplicationContext
+2019-12-21 09:09:31.607  INFO 22488 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 2170 ms
+2019-12-21 09:09:31.728  INFO 22488 --- [main] org.eclipse.jetty.server.session         : DefaultSessionIdManager workerName=node0
+2019-12-21 09:09:31.728  INFO 22488 --- [main] org.eclipse.jetty.server.session         : No SessionScavenger set, using defaults
+2019-12-21 09:09:31.730  INFO 22488 --- [main] org.eclipse.jetty.server.session         : node0 Scavenging every 600000ms
+2019-12-21 09:09:31.738  INFO 22488 --- [main] o.e.jetty.server.handler.ContextHandler  : Started o.s.b.w.e.j.JettyEmbeddedWebAppContext@76a7fcbd{application,/,[file:///C:/Users/lwp/AppData/Local/Temp/jetty-docbase.5769021456415820407.8898/],AVAILABLE}
+2019-12-21 09:09:31.739  INFO 22488 --- [main] org.eclipse.jetty.server.Server          : Started @4554ms
+2019-12-21 09:09:31.795  INFO 22488 --- [main] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2019-12-21 09:09:36.946  INFO 22488 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2019-12-21 09:09:37.253  INFO 22488 --- [main] o.s.aop.framework.CglibAopProxy          : Unable to proxy interface-implementing method [public final void org.springframework.dao.support.DaoSupport.afterPropertiesSet() throws java.lang.IllegalArgumentException,org.springframework.beans.factory.BeanInitializationException] because it is marked as final: Consider using interface-based JDK proxies instead!
+2019-12-21 09:09:37.381  INFO 22488 --- [main] com.usc.conf.cf.polltask.PollTaskConfig  : ST-创建任务调度池-START
+2019-12-21 09:09:37.382  INFO 22488 --- [main] com.usc.conf.cf.polltask.PollTaskConfig  : ST-创建任务调度池-END
+2019-12-21 09:09:37.387  INFO 22488 --- [main] o.s.s.c.ThreadPoolTaskScheduler          : Initializing ExecutorService 'threadPoolTaskScheduler'
+2019-12-21 09:09:39.015  INFO 22488 --- [main] o.a.engine.impl.ProcessEngineImpl        : ProcessEngine default created
+2019-12-21 09:09:39.016  INFO 22488 --- [main] o.a.e.i.a.AbstractAsyncJobExecutor       : Starting up the default async job executor [org.activiti.spring.SpringAsyncExecutor].
+2019-12-21 09:09:39.018  INFO 22488 --- [Thread-33] o.a.e.i.a.AcquireAsyncJobsDueRunnable    : starting to acquire async jobs due
+2019-12-21 09:09:39.018  INFO 22488 --- [Thread-32] o.a.e.i.a.AcquireTimerJobsRunnable       : starting to acquire async jobs due
+2019-12-21 09:09:39.271  INFO 22488 --- [main] com.usc.conf.cf.polltask.PollTaskConfig  : 开始初始化POLLTASK
+2019-12-21 09:09:39.344  INFO 22488 --- [main] com.usc.conf.cf.polltask.PollTaskConfig  : 初始化POLLTASK结束
+2019-12-21 09:09:40.847  INFO 22488 --- [main] o.e.j.s.h.ContextHandler.application     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2019-12-21 09:09:40.847  INFO 22488 --- [main] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2019-12-21 09:09:40.857  INFO 22488 --- [main] o.s.web.servlet.DispatcherServlet        : Completed initialization in 10 ms
+2019-12-21 09:09:40.857  INFO 22488 --- [main] o.e.j.s.h.ContextHandler.application     : Initializing Spring MessageDispatcherServlet 'messageDispatcherServlet'
+2019-12-21 09:09:40.857  INFO 22488 --- [main] o.s.w.t.http.MessageDispatcherServlet    : Initializing Servlet 'messageDispatcherServlet'
+2019-12-21 09:09:40.861  INFO 22488 --- [main] o.s.ws.soap.saaj.SaajSoapMessageFactory  : Creating SAAJ 1.3 MessageFactory with SOAP 1.1 Protocol
+2019-12-21 09:09:40.887  INFO 22488 --- [main] o.s.w.t.http.MessageDispatcherServlet    : Completed initialization in 30 ms
+2019-12-21 09:09:40.970  INFO 22488 --- [main] o.e.jetty.server.AbstractConnector       : Started ServerConnector@18b6d3c1{HTTP/1.1,[http/1.1]}{0.0.0.0:8898}
+2019-12-21 09:09:40.975  INFO 22488 --- [main] o.s.b.web.embedded.jetty.JettyWebServer  : Jetty started on port(s) 8898 (http/1.1) with context path '/'
+2019-12-21 09:09:40.979  INFO 22488 --- [main] com.usc.Application2_1_1                 : Started Application2_1_1 in 12.308 seconds (JVM running for 13.794)
+2019-12-21 09:10:09.396  INFO 22488 --- [main] com.usc.Application                      : com.usc.conf.runner.ModelData2RedisRunner  [Init Success]
+2019-12-21 09:10:09.615  INFO 22488 --- [main] com.usc.Application                      : com.usc.conf.runner.UserInfo2RedisRunner  [UserInfo Init Success]
+2019-12-21 09:10:09.654  INFO 22488 --- [main] com.usc.Application                      : TranslateData2RedisRunner  [Init Success]
+2019-12-21 09:10:11.292  INFO 22488 --- [main] com.usc.Application                      : com.usc.server.init.InitJurisdictionData [Init Success]
+2019-12-21 09:17:33.395  WARN 22488 --- [qtp1133617880-32] com.usc.interceptor.OnlineInterceptor    : /sysModelToWbeClient/getModelData consume 2620 millis
+2019-12-21 09:47:52.233  WARN 22488 --- [qtp1133617880-28] com.usc.interceptor.OnlineInterceptor    : /sysModelItem/packet consume 858 millis
+2019-12-21 09:57:39.433  WARN 22488 --- [qtp1133617880-30] com.usc.interceptor.OnlineInterceptor    : /dcm/access consume 637 millis
+2019-12-21 10:11:44.320  WARN 22488 --- [qtp1133617880-27] com.usc.interceptor.OnlineInterceptor    : /sysModelToWbeClient/getModelData consume 527 millis
+2019-12-21 10:12:28.073  WARN 22488 --- [qtp1133617880-33] com.usc.interceptor.OnlineInterceptor    : /sysModelToWbeClient/getModelData consume 506 millis
+2019-12-21 10:14:07.543  WARN 22488 --- [qtp1133617880-153] com.usc.interceptor.OnlineInterceptor    : /sysModelToWbeClient/getModelData consume 554 millis
+2019-12-21 10:14:20.035  WARN 22488 --- [qtp1133617880-163] com.usc.interceptor.OnlineInterceptor    : /sysModelToWbeClient/getModelData consume 511 millis
+2019-12-21 10:15:34.042  WARN 22488 --- [qtp1133617880-163] com.usc.interceptor.OnlineInterceptor    : /dcm/access consume 37857 millis
+2019-12-21 10:16:43.260  WARN 22488 --- [qtp1133617880-162] com.usc.interceptor.OnlineInterceptor    : /sysModelToWbeClient/getModelData consume 578 millis
+2019-12-21 10:18:11.760  WARN 22488 --- [qtp1133617880-153] com.usc.interceptor.OnlineInterceptor    : /sysModelToWbeClient/getModelData consume 648 millis
+2019-12-21 10:30:15.689  INFO 22488 --- [Thread-38] o.a.e.i.a.AbstractAsyncJobExecutor       : Shutting down the default async job executor [org.activiti.spring.SpringAsyncExecutor].
+2019-12-21 10:30:15.689  INFO 22488 --- [Thread-33] o.a.e.i.a.AcquireAsyncJobsDueRunnable    : stopped async job due acquisition
+2019-12-21 10:30:15.689  INFO 22488 --- [Thread-32] o.a.e.i.a.AcquireTimerJobsRunnable       : stopped async job due acquisition
+2019-12-21 10:30:15.691  INFO 22488 --- [Thread-38] o.s.s.c.ThreadPoolTaskScheduler          : Shutting down ExecutorService 'threadPoolTaskScheduler'
+2019-12-21 10:30:15.695  INFO 22488 --- [Thread-38] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2019-12-21 10:30:15.721  INFO 22488 --- [Thread-38] o.e.jetty.server.AbstractConnector       : Stopped ServerConnector@18b6d3c1{HTTP/1.1,[http/1.1]}{0.0.0.0:8898}
+2019-12-21 10:30:15.721  INFO 22488 --- [Thread-38] org.eclipse.jetty.server.session         : node0 Stopped scavenging
+2019-12-21 10:30:15.726  INFO 22488 --- [Thread-38] o.e.j.s.h.ContextHandler.application     : Destroying Spring FrameworkServlet 'messageDispatcherServlet'
+2019-12-21 10:30:15.726  INFO 22488 --- [Thread-38] o.e.j.s.h.ContextHandler.application     : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2019-12-21 10:30:15.728  INFO 22488 --- [Thread-38] o.e.jetty.server.handler.ContextHandler  : Stopped o.s.b.w.e.j.JettyEmbeddedWebAppContext@76a7fcbd{application,/,[file:///C:/Users/lwp/AppData/Local/Temp/jetty-docbase.5769021456415820407.8898/],UNAVAILABLE}
+2019-12-21 10:30:19.041  INFO 7704 --- [main] com.usc.Application2_1_1                 : Starting Application2_1_1 on DESKTOP-K459OHT with PID 7704 (F:\UnismartCore\USCQMS2.1.1\server\target\classes started by lwp in F:\UnismartCore\USCQMS2.1.1\server)
+2019-12-21 10:30:19.045  INFO 7704 --- [main] com.usc.Application2_1_1                 : No active profile set, falling back to default profiles: default
+2019-12-21 10:30:20.488  WARN 7704 --- [main] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.usc, com.usc.conf.cf]' package. Please check your configuration.
+2019-12-21 10:30:20.567  INFO 7704 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2019-12-21 10:30:20.569  INFO 7704 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
+2019-12-21 10:30:20.645  INFO 7704 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 59ms. Found 0 repository interfaces.
+2019-12-21 10:30:21.029  INFO 7704 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$EnhancerBySpringCGLIB$$9c3eed8e] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-12-21 10:30:21.083  INFO 7704 --- [main] .w.s.a.s.AnnotationActionEndpointMapping : Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2019-12-21 10:30:21.131  INFO 7704 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$f7a7288f] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-12-21 10:30:21.491  INFO 7704 --- [main] org.eclipse.jetty.util.log               : Logging initialized @4894ms to org.eclipse.jetty.util.log.Slf4jLog
+2019-12-21 10:30:21.685  INFO 7704 --- [main] o.s.b.w.e.j.JettyServletWebServerFactory : Server initialized with port: 8898
+2019-12-21 10:30:21.687  INFO 7704 --- [main] org.eclipse.jetty.server.Server          : jetty-9.4.19.v20190610; built: 2019-06-10T16:30:51.723Z; git: afcf563148970e98786327af5e07c261fda175d3; jvm 1.8.0_192-b12
+2019-12-21 10:30:21.724  INFO 7704 --- [main] o.e.j.s.h.ContextHandler.application     : Initializing Spring embedded WebApplicationContext
+2019-12-21 10:30:21.724  INFO 7704 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 2599 ms
+2019-12-21 10:30:21.901  INFO 7704 --- [main] org.eclipse.jetty.server.session         : DefaultSessionIdManager workerName=node0
+2019-12-21 10:30:21.902  INFO 7704 --- [main] org.eclipse.jetty.server.session         : No SessionScavenger set, using defaults
+2019-12-21 10:30:21.904  INFO 7704 --- [main] org.eclipse.jetty.server.session         : node0 Scavenging every 600000ms
+2019-12-21 10:30:21.920  INFO 7704 --- [main] o.e.jetty.server.handler.ContextHandler  : Started o.s.b.w.e.j.JettyEmbeddedWebAppContext@79957f11{application,/,[file:///C:/Users/lwp/AppData/Local/Temp/jetty-docbase.4349634913036764752.8898/],AVAILABLE}
+2019-12-21 10:30:21.921  INFO 7704 --- [main] org.eclipse.jetty.server.Server          : Started @5324ms
+2019-12-21 10:30:22.024  INFO 7704 --- [main] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2019-12-21 10:30:27.878  INFO 7704 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2019-12-21 10:30:28.004  INFO 7704 --- [main] o.s.aop.framework.CglibAopProxy          : Unable to proxy interface-implementing method [public final void org.springframework.dao.support.DaoSupport.afterPropertiesSet() throws java.lang.IllegalArgumentException,org.springframework.beans.factory.BeanInitializationException] because it is marked as final: Consider using interface-based JDK proxies instead!
+2019-12-21 10:30:28.072  INFO 7704 --- [main] com.usc.conf.cf.polltask.PollTaskConfig  : ST-创建任务调度池-START
+2019-12-21 10:30:28.073  INFO 7704 --- [main] com.usc.conf.cf.polltask.PollTaskConfig  : ST-创建任务调度池-END
+2019-12-21 10:30:28.075  INFO 7704 --- [main] o.s.s.c.ThreadPoolTaskScheduler          : Initializing ExecutorService 'threadPoolTaskScheduler'
+2019-12-21 10:30:28.872  INFO 7704 --- [main] o.a.engine.impl.ProcessEngineImpl        : ProcessEngine default created
+2019-12-21 10:30:28.874  INFO 7704 --- [main] o.a.e.i.a.AbstractAsyncJobExecutor       : Starting up the default async job executor [org.activiti.spring.SpringAsyncExecutor].
+2019-12-21 10:30:28.877  INFO 7704 --- [Thread-33] o.a.e.i.a.AcquireTimerJobsRunnable       : starting to acquire async jobs due
+2019-12-21 10:30:28.878  INFO 7704 --- [Thread-34] o.a.e.i.a.AcquireAsyncJobsDueRunnable    : starting to acquire async jobs due
+2019-12-21 10:30:29.024  INFO 7704 --- [main] com.usc.conf.cf.polltask.PollTaskConfig  : 开始初始化POLLTASK
+2019-12-21 10:30:29.035  INFO 7704 --- [main] com.usc.conf.cf.polltask.PollTaskConfig  : 初始化POLLTASK结束
+2019-12-21 10:30:30.033  INFO 7704 --- [main] o.e.j.s.h.ContextHandler.application     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2019-12-21 10:30:30.033  INFO 7704 --- [main] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2019-12-21 10:30:30.041  INFO 7704 --- [main] o.s.web.servlet.DispatcherServlet        : Completed initialization in 7 ms
+2019-12-21 10:30:30.041  INFO 7704 --- [main] o.e.j.s.h.ContextHandler.application     : Initializing Spring MessageDispatcherServlet 'messageDispatcherServlet'
+2019-12-21 10:30:30.041  INFO 7704 --- [main] o.s.w.t.http.MessageDispatcherServlet    : Initializing Servlet 'messageDispatcherServlet'
+2019-12-21 10:30:30.044  INFO 7704 --- [main] o.s.ws.soap.saaj.SaajSoapMessageFactory  : Creating SAAJ 1.3 MessageFactory with SOAP 1.1 Protocol
+2019-12-21 10:30:30.054  INFO 7704 --- [main] o.s.w.t.http.MessageDispatcherServlet    : Completed initialization in 13 ms
+2019-12-21 10:30:30.078  INFO 7704 --- [main] o.e.jetty.server.AbstractConnector       : Started ServerConnector@30bf26df{HTTP/1.1,[http/1.1]}{0.0.0.0:8898}
+2019-12-21 10:30:30.080  INFO 7704 --- [main] o.s.b.web.embedded.jetty.JettyWebServer  : Jetty started on port(s) 8898 (http/1.1) with context path '/'
+2019-12-21 10:30:30.083  INFO 7704 --- [main] com.usc.Application2_1_1                 : Started Application2_1_1 in 11.843 seconds (JVM running for 13.486)
+2019-12-21 10:30:56.067  INFO 7704 --- [main] com.usc.Application                      : com.usc.conf.runner.ModelData2RedisRunner  [Init Success]
+2019-12-21 10:30:56.180  INFO 7704 --- [main] com.usc.Application                      : com.usc.conf.runner.UserInfo2RedisRunner  [UserInfo Init Success]
+2019-12-21 10:30:56.184  INFO 7704 --- [main] com.usc.Application                      : TranslateData2RedisRunner  [Init Success]
+2019-12-21 10:30:57.265  INFO 7704 --- [main] com.usc.Application                      : com.usc.server.init.InitJurisdictionData [Init Success]
+2019-12-21 10:50:08.610  WARN 7704 --- [qtp1731406622-28] com.usc.interceptor.OnlineInterceptor    : /sysModelToWbeClient/getModelData consume 542 millis
+2019-12-21 10:51:08.520  WARN 7704 --- [qtp1731406622-33] com.usc.interceptor.OnlineInterceptor    : /sysModelToWbeClient/getModelData consume 520 millis
+2019-12-21 10:54:22.017  INFO 7704 --- [Thread-37] o.a.e.i.a.AbstractAsyncJobExecutor       : Shutting down the default async job executor [org.activiti.spring.SpringAsyncExecutor].
+2019-12-21 10:54:22.018  INFO 7704 --- [Thread-34] o.a.e.i.a.AcquireAsyncJobsDueRunnable    : stopped async job due acquisition
+2019-12-21 10:54:22.018  INFO 7704 --- [Thread-33] o.a.e.i.a.AcquireTimerJobsRunnable       : stopped async job due acquisition
+2019-12-21 10:54:22.019  INFO 7704 --- [Thread-37] o.s.s.c.ThreadPoolTaskScheduler          : Shutting down ExecutorService 'threadPoolTaskScheduler'
+2019-12-21 10:54:22.022  INFO 7704 --- [Thread-37] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2019-12-21 10:54:22.027  INFO 7704 --- [Thread-37] o.e.jetty.server.AbstractConnector       : Stopped ServerConnector@30bf26df{HTTP/1.1,[http/1.1]}{0.0.0.0:8898}
+2019-12-21 10:54:22.027  INFO 7704 --- [Thread-37] org.eclipse.jetty.server.session         : node0 Stopped scavenging
+2019-12-21 10:54:22.029  INFO 7704 --- [Thread-37] o.e.j.s.h.ContextHandler.application     : Destroying Spring FrameworkServlet 'messageDispatcherServlet'
+2019-12-21 10:54:22.029  INFO 7704 --- [Thread-37] o.e.j.s.h.ContextHandler.application     : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2019-12-21 10:54:22.030  INFO 7704 --- [Thread-37] o.e.jetty.server.handler.ContextHandler  : Stopped o.s.b.w.e.j.JettyEmbeddedWebAppContext@79957f11{application,/,[file:///C:/Users/lwp/AppData/Local/Temp/jetty-docbase.4349634913036764752.8898/],UNAVAILABLE}
+2019-12-21 10:54:25.383  INFO 24436 --- [main] com.usc.Application2_1_1                 : Starting Application2_1_1 on DESKTOP-K459OHT with PID 24436 (F:\UnismartCore\USCQMS2.1.1\server\target\classes started by lwp in F:\UnismartCore\USCQMS2.1.1\server)
+2019-12-21 10:54:25.387  INFO 24436 --- [main] com.usc.Application2_1_1                 : No active profile set, falling back to default profiles: default
+2019-12-21 10:54:26.754  WARN 24436 --- [main] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.usc, com.usc.conf.cf]' package. Please check your configuration.
+2019-12-21 10:54:26.847  INFO 24436 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2019-12-21 10:54:26.849  INFO 24436 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
+2019-12-21 10:54:26.937  INFO 24436 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 71ms. Found 0 repository interfaces.
+2019-12-21 10:54:27.355  INFO 24436 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$EnhancerBySpringCGLIB$$18dbc9eb] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-12-21 10:54:27.404  INFO 24436 --- [main] .w.s.a.s.AnnotationActionEndpointMapping : Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2019-12-21 10:54:27.455  INFO 24436 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$744404ec] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-12-21 10:54:27.842  INFO 24436 --- [main] org.eclipse.jetty.util.log               : Logging initialized @5000ms to org.eclipse.jetty.util.log.Slf4jLog
+2019-12-21 10:54:28.010  INFO 24436 --- [main] o.s.b.w.e.j.JettyServletWebServerFactory : Server initialized with port: 8898
+2019-12-21 10:54:28.012  INFO 24436 --- [main] org.eclipse.jetty.server.Server          : jetty-9.4.19.v20190610; built: 2019-06-10T16:30:51.723Z; git: afcf563148970e98786327af5e07c261fda175d3; jvm 1.8.0_192-b12
+2019-12-21 10:54:28.042  INFO 24436 --- [main] o.e.j.s.h.ContextHandler.application     : Initializing Spring embedded WebApplicationContext
+2019-12-21 10:54:28.042  INFO 24436 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 2565 ms
+2019-12-21 10:54:28.234  INFO 24436 --- [main] org.eclipse.jetty.server.session         : DefaultSessionIdManager workerName=node0
+2019-12-21 10:54:28.234  INFO 24436 --- [main] org.eclipse.jetty.server.session         : No SessionScavenger set, using defaults
+2019-12-21 10:54:28.236  INFO 24436 --- [main] org.eclipse.jetty.server.session         : node0 Scavenging every 600000ms
+2019-12-21 10:54:28.247  INFO 24436 --- [main] o.e.jetty.server.handler.ContextHandler  : Started o.s.b.w.e.j.JettyEmbeddedWebAppContext@2d7637e6{application,/,[file:///C:/Users/lwp/AppData/Local/Temp/jetty-docbase.7820118688455832778.8898/],AVAILABLE}
+2019-12-21 10:54:28.248  INFO 24436 --- [main] org.eclipse.jetty.server.Server          : Started @5406ms
+2019-12-21 10:54:28.323  INFO 24436 --- [main] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2019-12-21 10:54:32.042  INFO 24436 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2019-12-21 10:54:32.178  INFO 24436 --- [main] o.s.aop.framework.CglibAopProxy          : Unable to proxy interface-implementing method [public final void org.springframework.dao.support.DaoSupport.afterPropertiesSet() throws java.lang.IllegalArgumentException,org.springframework.beans.factory.BeanInitializationException] because it is marked as final: Consider using interface-based JDK proxies instead!
+2019-12-21 10:54:32.244  INFO 24436 --- [main] com.usc.conf.cf.polltask.PollTaskConfig  : ST-创建任务调度池-START
+2019-12-21 10:54:32.245  INFO 24436 --- [main] com.usc.conf.cf.polltask.PollTaskConfig  : ST-创建任务调度池-END
+2019-12-21 10:54:32.247  INFO 24436 --- [main] o.s.s.c.ThreadPoolTaskScheduler          : Initializing ExecutorService 'threadPoolTaskScheduler'
+2019-12-21 10:54:33.048  INFO 24436 --- [main] o.a.engine.impl.ProcessEngineImpl        : ProcessEngine default created
+2019-12-21 10:54:33.051  INFO 24436 --- [main] o.a.e.i.a.AbstractAsyncJobExecutor       : Starting up the default async job executor [org.activiti.spring.SpringAsyncExecutor].
+2019-12-21 10:54:33.054  INFO 24436 --- [Thread-30] o.a.e.i.a.AcquireAsyncJobsDueRunnable    : starting to acquire async jobs due
+2019-12-21 10:54:33.054  INFO 24436 --- [Thread-29] o.a.e.i.a.AcquireTimerJobsRunnable       : starting to acquire async jobs due
+2019-12-21 10:54:33.198  INFO 24436 --- [main] com.usc.conf.cf.polltask.PollTaskConfig  : 开始初始化POLLTASK
+2019-12-21 10:54:33.210  INFO 24436 --- [main] com.usc.conf.cf.polltask.PollTaskConfig  : 初始化POLLTASK结束
+2019-12-21 10:54:34.152  INFO 24436 --- [main] o.e.j.s.h.ContextHandler.application     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2019-12-21 10:54:34.152  INFO 24436 --- [main] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2019-12-21 10:54:34.159  INFO 24436 --- [main] o.s.web.servlet.DispatcherServlet        : Completed initialization in 7 ms
+2019-12-21 10:54:34.160  INFO 24436 --- [main] o.e.j.s.h.ContextHandler.application     : Initializing Spring MessageDispatcherServlet 'messageDispatcherServlet'
+2019-12-21 10:54:34.160  INFO 24436 --- [main] o.s.w.t.http.MessageDispatcherServlet    : Initializing Servlet 'messageDispatcherServlet'
+2019-12-21 10:54:34.162  INFO 24436 --- [main] o.s.ws.soap.saaj.SaajSoapMessageFactory  : Creating SAAJ 1.3 MessageFactory with SOAP 1.1 Protocol
+2019-12-21 10:54:34.173  INFO 24436 --- [main] o.s.w.t.http.MessageDispatcherServlet    : Completed initialization in 13 ms
+2019-12-21 10:54:34.195  INFO 24436 --- [main] o.e.jetty.server.AbstractConnector       : Started ServerConnector@48eaf42f{HTTP/1.1,[http/1.1]}{0.0.0.0:8898}
+2019-12-21 10:54:34.198  INFO 24436 --- [main] o.s.b.web.embedded.jetty.JettyWebServer  : Jetty started on port(s) 8898 (http/1.1) with context path '/'
+2019-12-21 10:54:34.201  INFO 24436 --- [main] com.usc.Application2_1_1                 : Started Application2_1_1 in 9.591 seconds (JVM running for 11.359)
+2019-12-21 10:54:56.612  INFO 24436 --- [main] com.usc.Application                      : com.usc.conf.runner.ModelData2RedisRunner  [Init Success]
+2019-12-21 10:54:56.685  INFO 24436 --- [main] com.usc.Application                      : com.usc.conf.runner.UserInfo2RedisRunner  [UserInfo Init Success]
+2019-12-21 10:54:56.690  INFO 24436 --- [main] com.usc.Application                      : TranslateData2RedisRunner  [Init Success]
+2019-12-21 10:54:57.154 ERROR 24436 --- [main] com.usc.Application                      : InitJurisdictionDataInit Failed
+2019-12-21 10:54:57.155  INFO 24436 --- [main] com.usc.Application                      : com.usc.server.init.InitJurisdictionData [Init Success]
+2019-12-21 10:59:27.201  WARN 24436 --- [qtp1508750581-32] com.usc.interceptor.OnlineInterceptor    : /sysModelToWbeClient/getModelData consume 572 millis
+2019-12-21 11:00:44.578  WARN 24436 --- [qtp1508750581-32] com.usc.interceptor.OnlineInterceptor    : /dcm/access consume 39702 millis
+2019-12-21 11:01:34.386  WARN 24436 --- [qtp1508750581-110] com.usc.interceptor.OnlineInterceptor    : /dcm/access consume 3916 millis
+2019-12-21 11:02:19.352  WARN 24436 --- [qtp1508750581-111] com.usc.interceptor.OnlineInterceptor    : /sysModelToWbeClient/getModelData consume 530 millis
+2019-12-21 11:04:25.108  WARN 24436 --- [qtp1508750581-32] com.usc.interceptor.OnlineInterceptor    : /dcm/access consume 52019 millis
+2019-12-21 11:11:31.059  WARN 24436 --- [qtp1508750581-113] com.usc.interceptor.OnlineInterceptor    : /dcm/access consume 11207 millis
+2019-12-21 11:12:11.404  WARN 24436 --- [qtp1508750581-35] com.usc.interceptor.OnlineInterceptor    : /dcm/access consume 10033 millis
+2019-12-21 11:13:22.559  WARN 24436 --- [qtp1508750581-36] com.usc.interceptor.OnlineInterceptor    : /dcm/access consume 61562 millis
+2019-12-21 11:13:45.916  WARN 24436 --- [qtp1508750581-31] com.usc.interceptor.OnlineInterceptor    : /dcm/access consume 5833 millis
+2019-12-21 11:14:29.088  WARN 24436 --- [qtp1508750581-117] com.usc.interceptor.OnlineInterceptor    : /dcm/access consume 13285 millis
+2019-12-21 11:18:10.151  WARN 24436 --- [qtp1508750581-35] com.usc.interceptor.OnlineInterceptor    : /sysModelToWbeClient/getModelData consume 612 millis
+2019-12-21 11:19:17.746  WARN 24436 --- [qtp1508750581-121] com.usc.interceptor.OnlineInterceptor    : /sysModelToWbeClient/getModelData consume 537 millis
+2019-12-21 11:21:59.555  WARN 24436 --- [qtp1508750581-120] com.usc.interceptor.OnlineInterceptor    : /dcm/access consume 115934 millis
+2019-12-21 11:22:10.734  WARN 24436 --- [qtp1508750581-120] com.usc.interceptor.OnlineInterceptor    : /dcm/access consume 2636 millis
+2019-12-21 11:23:08.848  WARN 24436 --- [qtp1508750581-36] com.usc.interceptor.OnlineInterceptor    : /dcm/access consume 60749 millis
+2019-12-21 11:31:02.731  WARN 24436 --- [qtp1508750581-126] com.usc.interceptor.OnlineInterceptor    : /sysModelToWbeClient/getModelData consume 516 millis
+2019-12-21 13:12:08.417  INFO 24436 --- [Thread-33] o.a.e.i.a.AbstractAsyncJobExecutor       : Shutting down the default async job executor [org.activiti.spring.SpringAsyncExecutor].
+2019-12-21 13:12:08.419  INFO 24436 --- [Thread-30] o.a.e.i.a.AcquireAsyncJobsDueRunnable    : stopped async job due acquisition
+2019-12-21 13:12:08.419  INFO 24436 --- [Thread-29] o.a.e.i.a.AcquireTimerJobsRunnable       : stopped async job due acquisition
+2019-12-21 13:12:08.422  INFO 24436 --- [Thread-33] o.s.s.c.ThreadPoolTaskScheduler          : Shutting down ExecutorService 'threadPoolTaskScheduler'
+2019-12-21 13:12:08.427  INFO 24436 --- [Thread-33] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2019-12-21 13:12:08.433  INFO 24436 --- [Thread-33] o.e.jetty.server.AbstractConnector       : Stopped ServerConnector@48eaf42f{HTTP/1.1,[http/1.1]}{0.0.0.0:8898}
+2019-12-21 13:12:08.433  INFO 24436 --- [Thread-33] org.eclipse.jetty.server.session         : node0 Stopped scavenging
+2019-12-21 13:12:10.411  INFO 24436 --- [Thread-33] o.e.j.s.h.ContextHandler.application     : Destroying Spring FrameworkServlet 'messageDispatcherServlet'
+2019-12-21 13:12:10.411  INFO 24436 --- [Thread-33] o.e.j.s.h.ContextHandler.application     : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2019-12-21 13:12:10.414  INFO 24436 --- [Thread-33] o.e.jetty.server.handler.ContextHandler  : Stopped o.s.b.w.e.j.JettyEmbeddedWebAppContext@2d7637e6{application,/,[file:///C:/Users/lwp/AppData/Local/Temp/jetty-docbase.7820118688455832778.8898/],UNAVAILABLE}
+2019-12-21 13:12:16.598  INFO 18024 --- [main] com.usc.Application2_1_1                 : Starting Application2_1_1 on DESKTOP-K459OHT with PID 18024 (F:\UnismartCore\USCQMS2.1.1\server\target\classes started by lwp in F:\UnismartCore\USCQMS2.1.1\server)
+2019-12-21 13:12:16.601  INFO 18024 --- [main] com.usc.Application2_1_1                 : No active profile set, falling back to default profiles: default
+2019-12-21 13:12:17.571  WARN 18024 --- [main] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.usc, com.usc.conf.cf]' package. Please check your configuration.
+2019-12-21 13:12:17.638  INFO 18024 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2019-12-21 13:12:17.640  INFO 18024 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
+2019-12-21 13:12:17.708  INFO 18024 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 53ms. Found 0 repository interfaces.
+2019-12-21 13:12:18.024  INFO 18024 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$EnhancerBySpringCGLIB$$b0f17c82] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-12-21 13:12:18.061  INFO 18024 --- [main] .w.s.a.s.AnnotationActionEndpointMapping : Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2019-12-21 13:12:18.107  INFO 18024 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$c59b783] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-12-21 13:12:18.395  INFO 18024 --- [main] org.eclipse.jetty.util.log               : Logging initialized @3710ms to org.eclipse.jetty.util.log.Slf4jLog
+2019-12-21 13:12:18.527  INFO 18024 --- [main] o.s.b.w.e.j.JettyServletWebServerFactory : Server initialized with port: 8898
+2019-12-21 13:12:18.529  INFO 18024 --- [main] org.eclipse.jetty.server.Server          : jetty-9.4.19.v20190610; built: 2019-06-10T16:30:51.723Z; git: afcf563148970e98786327af5e07c261fda175d3; jvm 1.8.0_192-b12
+2019-12-21 13:12:18.553  INFO 18024 --- [main] o.e.j.s.h.ContextHandler.application     : Initializing Spring embedded WebApplicationContext
+2019-12-21 13:12:18.553  INFO 18024 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1886 ms
+2019-12-21 13:12:18.675  INFO 18024 --- [main] org.eclipse.jetty.server.session         : DefaultSessionIdManager workerName=node0
+2019-12-21 13:12:18.675  INFO 18024 --- [main] org.eclipse.jetty.server.session         : No SessionScavenger set, using defaults
+2019-12-21 13:12:18.676  INFO 18024 --- [main] org.eclipse.jetty.server.session         : node0 Scavenging every 660000ms
+2019-12-21 13:12:18.685  INFO 18024 --- [main] o.e.jetty.server.handler.ContextHandler  : Started o.s.b.w.e.j.JettyEmbeddedWebAppContext@224c7de4{application,/,[file:///C:/Users/lwp/AppData/Local/Temp/jetty-docbase.3754628514853362250.8898/],AVAILABLE}
+2019-12-21 13:12:18.686  INFO 18024 --- [main] org.eclipse.jetty.server.Server          : Started @4000ms
+2019-12-21 13:12:18.737  INFO 18024 --- [main] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2019-12-21 13:12:36.836  INFO 18024 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2019-12-21 13:12:37.002  INFO 18024 --- [main] o.s.aop.framework.CglibAopProxy          : Unable to proxy interface-implementing method [public final void org.springframework.dao.support.DaoSupport.afterPropertiesSet() throws java.lang.IllegalArgumentException,org.springframework.beans.factory.BeanInitializationException] because it is marked as final: Consider using interface-based JDK proxies instead!
+2019-12-21 13:12:37.081  INFO 18024 --- [main] com.usc.conf.cf.polltask.PollTaskConfig  : ST-创建任务调度池-START
+2019-12-21 13:12:37.081  INFO 18024 --- [main] com.usc.conf.cf.polltask.PollTaskConfig  : ST-创建任务调度池-END
+2019-12-21 13:12:37.084  INFO 18024 --- [main] o.s.s.c.ThreadPoolTaskScheduler          : Initializing ExecutorService 'threadPoolTaskScheduler'
+2019-12-21 13:12:38.369  INFO 18024 --- [main] o.a.engine.impl.ProcessEngineImpl        : ProcessEngine default created
+2019-12-21 13:12:38.371  INFO 18024 --- [main] o.a.e.i.a.AbstractAsyncJobExecutor       : Starting up the default async job executor [org.activiti.spring.SpringAsyncExecutor].
+2019-12-21 13:12:38.373  INFO 18024 --- [Thread-56] o.a.e.i.a.AcquireTimerJobsRunnable       : starting to acquire async jobs due
+2019-12-21 13:12:38.374  INFO 18024 --- [Thread-57] o.a.e.i.a.AcquireAsyncJobsDueRunnable    : starting to acquire async jobs due
+2019-12-21 13:12:38.534  INFO 18024 --- [main] com.usc.conf.cf.polltask.PollTaskConfig  : 开始初始化POLLTASK
+2019-12-21 13:12:38.559  INFO 18024 --- [main] com.usc.conf.cf.polltask.PollTaskConfig  : 初始化POLLTASK结束
+2019-12-21 13:12:39.591  INFO 18024 --- [main] o.e.j.s.h.ContextHandler.application     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2019-12-21 13:12:39.591  INFO 18024 --- [main] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2019-12-21 13:12:39.598  INFO 18024 --- [main] o.s.web.servlet.DispatcherServlet        : Completed initialization in 7 ms
+2019-12-21 13:12:39.599  INFO 18024 --- [main] o.e.j.s.h.ContextHandler.application     : Initializing Spring MessageDispatcherServlet 'messageDispatcherServlet'
+2019-12-21 13:12:39.599  INFO 18024 --- [main] o.s.w.t.http.MessageDispatcherServlet    : Initializing Servlet 'messageDispatcherServlet'
+2019-12-21 13:12:39.601  INFO 18024 --- [main] o.s.ws.soap.saaj.SaajSoapMessageFactory  : Creating SAAJ 1.3 MessageFactory with SOAP 1.1 Protocol
+2019-12-21 13:12:39.612  INFO 18024 --- [main] o.s.w.t.http.MessageDispatcherServlet    : Completed initialization in 13 ms
+2019-12-21 13:12:39.635  INFO 18024 --- [main] o.e.jetty.server.AbstractConnector       : Started ServerConnector@59498d94{HTTP/1.1,[http/1.1]}{0.0.0.0:8898}
+2019-12-21 13:12:39.638  INFO 18024 --- [main] o.s.b.web.embedded.jetty.JettyWebServer  : Jetty started on port(s) 8898 (http/1.1) with context path '/'
+2019-12-21 13:12:39.641  INFO 18024 --- [main] com.usc.Application2_1_1                 : Started Application2_1_1 in 23.679 seconds (JVM running for 24.955)
+2019-12-21 13:13:48.043  INFO 18024 --- [main] com.usc.Application                      : com.usc.conf.runner.ModelData2RedisRunner  [Init Success]
+2019-12-21 13:13:48.159  INFO 18024 --- [main] com.usc.Application                      : com.usc.conf.runner.UserInfo2RedisRunner  [UserInfo Init Success]
+2019-12-21 13:13:48.163  INFO 18024 --- [main] com.usc.Application                      : TranslateData2RedisRunner  [Init Success]
+2019-12-21 13:13:51.138  INFO 18024 --- [main] com.usc.Application                      : com.usc.server.init.InitJurisdictionData [Init Success]
+2019-12-21 13:15:59.383  WARN 18024 --- [qtp1401034827-28] com.usc.interceptor.OnlineInterceptor    : /sysModelToWbeClient/getClassViewModelData consume 696 millis
+2019-12-21 13:16:20.654  INFO 18024 --- [Thread-61] o.a.e.i.a.AbstractAsyncJobExecutor       : Shutting down the default async job executor [org.activiti.spring.SpringAsyncExecutor].
+2019-12-21 13:16:20.654  INFO 18024 --- [Thread-56] o.a.e.i.a.AcquireTimerJobsRunnable       : stopped async job due acquisition
+2019-12-21 13:16:20.655  INFO 18024 --- [Thread-57] o.a.e.i.a.AcquireAsyncJobsDueRunnable    : stopped async job due acquisition
+2019-12-21 13:16:20.656  INFO 18024 --- [Thread-61] o.s.s.c.ThreadPoolTaskScheduler          : Shutting down ExecutorService 'threadPoolTaskScheduler'
+2019-12-21 13:16:20.675  INFO 18024 --- [Thread-61] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2019-12-21 13:16:20.681  INFO 18024 --- [Thread-61] o.e.jetty.server.AbstractConnector       : Stopped ServerConnector@59498d94{HTTP/1.1,[http/1.1]}{0.0.0.0:8898}
+2019-12-21 13:16:20.681  INFO 18024 --- [Thread-61] org.eclipse.jetty.server.session         : node0 Stopped scavenging
+2019-12-21 13:16:20.684  INFO 18024 --- [Thread-61] o.e.j.s.h.ContextHandler.application     : Destroying Spring FrameworkServlet 'messageDispatcherServlet'
+2019-12-21 13:16:20.684  INFO 18024 --- [Thread-61] o.e.j.s.h.ContextHandler.application     : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2019-12-21 13:16:20.685  INFO 18024 --- [Thread-61] o.e.jetty.server.handler.ContextHandler  : Stopped o.s.b.w.e.j.JettyEmbeddedWebAppContext@224c7de4{application,/,[file:///C:/Users/lwp/AppData/Local/Temp/jetty-docbase.3754628514853362250.8898/],UNAVAILABLE}
+2019-12-21 13:16:26.542  INFO 12264 --- [main] com.usc.Application2_1_1                 : Starting Application2_1_1 on DESKTOP-K459OHT with PID 12264 (F:\UnismartCore\USCQMS2.1.1\server\target\classes started by lwp in F:\UnismartCore\USCQMS2.1.1\server)
+2019-12-21 13:16:26.545  INFO 12264 --- [main] com.usc.Application2_1_1                 : No active profile set, falling back to default profiles: default
+2019-12-21 13:16:27.763  WARN 12264 --- [main] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.usc, com.usc.conf.cf]' package. Please check your configuration.
+2019-12-21 13:16:27.838  INFO 12264 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2019-12-21 13:16:27.840  INFO 12264 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
+2019-12-21 13:16:27.910  INFO 12264 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 55ms. Found 0 repository interfaces.
+2019-12-21 13:16:28.261  INFO 12264 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$EnhancerBySpringCGLIB$$6cde69ea] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-12-21 13:16:28.298  INFO 12264 --- [main] .w.s.a.s.AnnotationActionEndpointMapping : Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2019-12-21 13:16:28.344  INFO 12264 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$c846a4eb] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-12-21 13:16:28.632  INFO 12264 --- [main] org.eclipse.jetty.util.log               : Logging initialized @3874ms to org.eclipse.jetty.util.log.Slf4jLog
+2019-12-21 13:16:28.771  INFO 12264 --- [main] o.s.b.w.e.j.JettyServletWebServerFactory : Server initialized with port: 8898
+2019-12-21 13:16:28.773  INFO 12264 --- [main] org.eclipse.jetty.server.Server          : jetty-9.4.19.v20190610; built: 2019-06-10T16:30:51.723Z; git: afcf563148970e98786327af5e07c261fda175d3; jvm 1.8.0_192-b12
+2019-12-21 13:16:28.797  INFO 12264 --- [main] o.e.j.s.h.ContextHandler.application     : Initializing Spring embedded WebApplicationContext
+2019-12-21 13:16:28.797  INFO 12264 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 2196 ms
+2019-12-21 13:16:28.919  INFO 12264 --- [main] org.eclipse.jetty.server.session         : DefaultSessionIdManager workerName=node0
+2019-12-21 13:16:28.919  INFO 12264 --- [main] org.eclipse.jetty.server.session         : No SessionScavenger set, using defaults
+2019-12-21 13:16:28.921  INFO 12264 --- [main] org.eclipse.jetty.server.session         : node0 Scavenging every 660000ms
+2019-12-21 13:16:28.928  INFO 12264 --- [main] o.e.jetty.server.handler.ContextHandler  : Started o.s.b.w.e.j.JettyEmbeddedWebAppContext@3e26482{application,/,[file:///C:/Users/lwp/AppData/Local/Temp/jetty-docbase.4550254156435575601.8898/],AVAILABLE}
+2019-12-21 13:16:28.928  INFO 12264 --- [main] org.eclipse.jetty.server.Server          : Started @4170ms
+2019-12-21 13:16:28.983  INFO 12264 --- [main] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2019-12-21 13:16:33.171  INFO 12264 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2019-12-21 13:16:33.323  INFO 12264 --- [main] o.s.aop.framework.CglibAopProxy          : Unable to proxy interface-implementing method [public final void org.springframework.dao.support.DaoSupport.afterPropertiesSet() throws java.lang.IllegalArgumentException,org.springframework.beans.factory.BeanInitializationException] because it is marked as final: Consider using interface-based JDK proxies instead!
+2019-12-21 13:16:33.393  INFO 12264 --- [main] com.usc.conf.cf.polltask.PollTaskConfig  : ST-创建任务调度池-START
+2019-12-21 13:16:33.394  INFO 12264 --- [main] com.usc.conf.cf.polltask.PollTaskConfig  : ST-创建任务调度池-END
+2019-12-21 13:16:33.396  INFO 12264 --- [main] o.s.s.c.ThreadPoolTaskScheduler          : Initializing ExecutorService 'threadPoolTaskScheduler'
+2019-12-21 13:16:34.271  INFO 12264 --- [main] o.a.engine.impl.ProcessEngineImpl        : ProcessEngine default created
+2019-12-21 13:16:34.273  INFO 12264 --- [main] o.a.e.i.a.AbstractAsyncJobExecutor       : Starting up the default async job executor [org.activiti.spring.SpringAsyncExecutor].
+2019-12-21 13:16:34.276  INFO 12264 --- [Thread-29] o.a.e.i.a.AcquireTimerJobsRunnable       : starting to acquire async jobs due
+2019-12-21 13:16:34.276  INFO 12264 --- [Thread-30] o.a.e.i.a.AcquireAsyncJobsDueRunnable    : starting to acquire async jobs due
+2019-12-21 13:16:34.420  INFO 12264 --- [main] com.usc.conf.cf.polltask.PollTaskConfig  : 开始初始化POLLTASK
+2019-12-21 13:16:34.432  INFO 12264 --- [main] com.usc.conf.cf.polltask.PollTaskConfig  : 初始化POLLTASK结束
+2019-12-21 13:16:35.386  INFO 12264 --- [main] o.e.j.s.h.ContextHandler.application     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2019-12-21 13:16:35.387  INFO 12264 --- [main] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2019-12-21 13:16:35.394  INFO 12264 --- [main] o.s.web.servlet.DispatcherServlet        : Completed initialization in 7 ms
+2019-12-21 13:16:35.394  INFO 12264 --- [main] o.e.j.s.h.ContextHandler.application     : Initializing Spring MessageDispatcherServlet 'messageDispatcherServlet'
+2019-12-21 13:16:35.394  INFO 12264 --- [main] o.s.w.t.http.MessageDispatcherServlet    : Initializing Servlet 'messageDispatcherServlet'
+2019-12-21 13:16:35.397  INFO 12264 --- [main] o.s.ws.soap.saaj.SaajSoapMessageFactory  : Creating SAAJ 1.3 MessageFactory with SOAP 1.1 Protocol
+2019-12-21 13:16:35.409  INFO 12264 --- [main] o.s.w.t.http.MessageDispatcherServlet    : Completed initialization in 15 ms
+2019-12-21 13:16:35.434  INFO 12264 --- [main] o.e.jetty.server.AbstractConnector       : Started ServerConnector@6f5d0190{HTTP/1.1,[http/1.1]}{0.0.0.0:8898}
+2019-12-21 13:16:35.437  INFO 12264 --- [main] o.s.b.web.embedded.jetty.JettyWebServer  : Jetty started on port(s) 8898 (http/1.1) with context path '/'
+2019-12-21 13:16:35.440  INFO 12264 --- [main] com.usc.Application2_1_1                 : Started Application2_1_1 in 9.43 seconds (JVM running for 10.683)
+2019-12-21 13:17:07.044  INFO 12264 --- [main] com.usc.Application                      : com.usc.conf.runner.ModelData2RedisRunner  [Init Success]
+2019-12-21 13:17:07.170  INFO 12264 --- [main] com.usc.Application                      : com.usc.conf.runner.UserInfo2RedisRunner  [UserInfo Init Success]
+2019-12-21 13:17:07.174  INFO 12264 --- [main] com.usc.Application                      : TranslateData2RedisRunner  [Init Success]
+2019-12-21 13:17:08.542  INFO 12264 --- [main] com.usc.Application                      : com.usc.server.init.InitJurisdictionData [Init Success]
+2019-12-21 13:19:22.731  WARN 12264 --- [qtp989896315-31] com.usc.interceptor.OnlineInterceptor    : /sysModelToWbeClient/getModelData consume 514 millis
+2019-12-21 14:04:21.086  WARN 12264 --- [qtp989896315-31] com.usc.interceptor.OnlineInterceptor    : /modelSynchronous/single consume 620 millis
+2019-12-21 14:04:28.633  WARN 12264 --- [qtp989896315-140] com.usc.interceptor.OnlineInterceptor    : /modelSynchronous/single consume 506 millis
+2019-12-21 14:06:24.115  INFO 12264 --- [Thread-33] o.a.e.i.a.AbstractAsyncJobExecutor       : Shutting down the default async job executor [org.activiti.spring.SpringAsyncExecutor].
+2019-12-21 14:06:24.116  INFO 12264 --- [Thread-30] o.a.e.i.a.AcquireAsyncJobsDueRunnable    : stopped async job due acquisition
+2019-12-21 14:06:24.116  INFO 12264 --- [Thread-29] o.a.e.i.a.AcquireTimerJobsRunnable       : stopped async job due acquisition
+2019-12-21 14:06:24.118  INFO 12264 --- [Thread-33] o.s.s.c.ThreadPoolTaskScheduler          : Shutting down ExecutorService 'threadPoolTaskScheduler'
+2019-12-21 14:06:24.122  INFO 12264 --- [Thread-33] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2019-12-21 14:06:24.130  INFO 12264 --- [Thread-33] o.e.jetty.server.AbstractConnector       : Stopped ServerConnector@6f5d0190{HTTP/1.1,[http/1.1]}{0.0.0.0:8898}
+2019-12-21 14:06:24.130  INFO 12264 --- [Thread-33] org.eclipse.jetty.server.session         : node0 Stopped scavenging
+2019-12-21 14:06:24.135  INFO 12264 --- [Thread-33] o.e.j.s.h.ContextHandler.application     : Destroying Spring FrameworkServlet 'messageDispatcherServlet'
+2019-12-21 14:06:24.135  INFO 12264 --- [Thread-33] o.e.j.s.h.ContextHandler.application     : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2019-12-21 14:06:24.137  INFO 12264 --- [Thread-33] o.e.jetty.server.handler.ContextHandler  : Stopped o.s.b.w.e.j.JettyEmbeddedWebAppContext@3e26482{application,/,[file:///C:/Users/lwp/AppData/Local/Temp/jetty-docbase.4550254156435575601.8898/],UNAVAILABLE}
+2019-12-21 14:06:31.355  INFO 12672 --- [main] com.usc.Application2_1_1                 : Starting Application2_1_1 on DESKTOP-K459OHT with PID 12672 (F:\UnismartCore\USCQMS2.1.1\server\target\classes started by lwp in F:\UnismartCore\USCQMS2.1.1\server)
+2019-12-21 14:06:31.359  INFO 12672 --- [main] com.usc.Application2_1_1                 : No active profile set, falling back to default profiles: default
+2019-12-21 14:06:32.392  WARN 12672 --- [main] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.usc, com.usc.conf.cf]' package. Please check your configuration.
+2019-12-21 14:06:32.458  INFO 12672 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2019-12-21 14:06:32.460  INFO 12672 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
+2019-12-21 14:06:32.528  INFO 12672 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 53ms. Found 0 repository interfaces.
+2019-12-21 14:06:32.881  INFO 12672 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$EnhancerBySpringCGLIB$$3bbaf79f] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-12-21 14:06:32.919  INFO 12672 --- [main] .w.s.a.s.AnnotationActionEndpointMapping : Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2019-12-21 14:06:32.967  INFO 12672 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$972332a0] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-12-21 14:06:33.266  INFO 12672 --- [main] org.eclipse.jetty.util.log               : Logging initialized @4101ms to org.eclipse.jetty.util.log.Slf4jLog
+2019-12-21 14:06:33.413  INFO 12672 --- [main] o.s.b.w.e.j.JettyServletWebServerFactory : Server initialized with port: 8898
+2019-12-21 14:06:33.415  INFO 12672 --- [main] org.eclipse.jetty.server.Server          : jetty-9.4.19.v20190610; built: 2019-06-10T16:30:51.723Z; git: afcf563148970e98786327af5e07c261fda175d3; jvm 1.8.0_192-b12
+2019-12-21 14:06:33.438  INFO 12672 --- [main] o.e.j.s.h.ContextHandler.application     : Initializing Spring embedded WebApplicationContext
+2019-12-21 14:06:33.439  INFO 12672 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 2008 ms
+2019-12-21 14:06:33.568  INFO 12672 --- [main] org.eclipse.jetty.server.session         : DefaultSessionIdManager workerName=node0
+2019-12-21 14:06:33.568  INFO 12672 --- [main] org.eclipse.jetty.server.session         : No SessionScavenger set, using defaults
+2019-12-21 14:06:33.569  INFO 12672 --- [main] org.eclipse.jetty.server.session         : node0 Scavenging every 600000ms
+2019-12-21 14:06:33.577  INFO 12672 --- [main] o.e.jetty.server.handler.ContextHandler  : Started o.s.b.w.e.j.JettyEmbeddedWebAppContext@77524ca7{application,/,[file:///C:/Users/lwp/AppData/Local/Temp/jetty-docbase.5884102526516688119.8898/],AVAILABLE}
+2019-12-21 14:06:33.578  INFO 12672 --- [main] org.eclipse.jetty.server.Server          : Started @4413ms
+2019-12-21 14:06:33.639  INFO 12672 --- [main] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2019-12-21 14:06:37.512  INFO 12672 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2019-12-21 14:06:37.667  INFO 12672 --- [main] o.s.aop.framework.CglibAopProxy          : Unable to proxy interface-implementing method [public final void org.springframework.dao.support.DaoSupport.afterPropertiesSet() throws java.lang.IllegalArgumentException,org.springframework.beans.factory.BeanInitializationException] because it is marked as final: Consider using interface-based JDK proxies instead!
+2019-12-21 14:06:37.736  INFO 12672 --- [main] com.usc.conf.cf.polltask.PollTaskConfig  : ST-创建任务调度池-START
+2019-12-21 14:06:37.736  INFO 12672 --- [main] com.usc.conf.cf.polltask.PollTaskConfig  : ST-创建任务调度池-END
+2019-12-21 14:06:37.740  INFO 12672 --- [main] o.s.s.c.ThreadPoolTaskScheduler          : Initializing ExecutorService 'threadPoolTaskScheduler'
+2019-12-21 14:06:38.594  INFO 12672 --- [main] o.a.engine.impl.ProcessEngineImpl        : ProcessEngine default created
+2019-12-21 14:06:38.596  INFO 12672 --- [main] o.a.e.i.a.AbstractAsyncJobExecutor       : Starting up the default async job executor [org.activiti.spring.SpringAsyncExecutor].
+2019-12-21 14:06:38.599  INFO 12672 --- [Thread-29] o.a.e.i.a.AcquireAsyncJobsDueRunnable    : starting to acquire async jobs due
+2019-12-21 14:06:38.599  INFO 12672 --- [Thread-28] o.a.e.i.a.AcquireTimerJobsRunnable       : starting to acquire async jobs due
+2019-12-21 14:06:38.756  INFO 12672 --- [main] com.usc.conf.cf.polltask.PollTaskConfig  : 开始初始化POLLTASK
+2019-12-21 14:06:38.769  INFO 12672 --- [main] com.usc.conf.cf.polltask.PollTaskConfig  : 初始化POLLTASK结束
+2019-12-21 14:06:39.754  INFO 12672 --- [main] o.e.j.s.h.ContextHandler.application     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2019-12-21 14:06:39.754  INFO 12672 --- [main] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2019-12-21 14:06:39.762  INFO 12672 --- [main] o.s.web.servlet.DispatcherServlet        : Completed initialization in 8 ms
+2019-12-21 14:06:39.762  INFO 12672 --- [main] o.e.j.s.h.ContextHandler.application     : Initializing Spring MessageDispatcherServlet 'messageDispatcherServlet'
+2019-12-21 14:06:39.762  INFO 12672 --- [main] o.s.w.t.http.MessageDispatcherServlet    : Initializing Servlet 'messageDispatcherServlet'
+2019-12-21 14:06:39.765  INFO 12672 --- [main] o.s.ws.soap.saaj.SaajSoapMessageFactory  : Creating SAAJ 1.3 MessageFactory with SOAP 1.1 Protocol
+2019-12-21 14:06:39.778  INFO 12672 --- [main] o.s.w.t.http.MessageDispatcherServlet    : Completed initialization in 16 ms
+2019-12-21 14:06:39.798  INFO 12672 --- [main] o.e.jetty.server.AbstractConnector       : Started ServerConnector@28cd2c2{HTTP/1.1,[http/1.1]}{0.0.0.0:8898}
+2019-12-21 14:06:39.801  INFO 12672 --- [main] o.s.b.web.embedded.jetty.JettyWebServer  : Jetty started on port(s) 8898 (http/1.1) with context path '/'
+2019-12-21 14:06:39.803  INFO 12672 --- [main] com.usc.Application2_1_1                 : Started Application2_1_1 in 9.148 seconds (JVM running for 10.639)
+2019-12-21 14:07:05.978  INFO 12672 --- [main] com.usc.Application                      : com.usc.conf.runner.ModelData2RedisRunner  [Init Success]
+2019-12-21 14:07:06.047  INFO 12672 --- [main] com.usc.Application                      : com.usc.conf.runner.UserInfo2RedisRunner  [UserInfo Init Success]
+2019-12-21 14:07:06.051  INFO 12672 --- [main] com.usc.Application                      : TranslateData2RedisRunner  [Init Success]
+2019-12-21 14:07:07.081  INFO 12672 --- [main] com.usc.Application                      : com.usc.server.init.InitJurisdictionData [Init Success]
+2019-12-21 14:11:40.005  WARN 12672 --- [qtp897303688-28] com.usc.interceptor.OnlineInterceptor    : /sysModelToWbeClient/getModelData consume 540 millis
+2019-12-21 14:21:01.796  INFO 12672 --- [Thread-32] o.a.e.i.a.AbstractAsyncJobExecutor       : Shutting down the default async job executor [org.activiti.spring.SpringAsyncExecutor].
+2019-12-21 14:21:01.796  INFO 12672 --- [Thread-28] o.a.e.i.a.AcquireTimerJobsRunnable       : stopped async job due acquisition
+2019-12-21 14:21:01.796  INFO 12672 --- [Thread-29] o.a.e.i.a.AcquireAsyncJobsDueRunnable    : stopped async job due acquisition
