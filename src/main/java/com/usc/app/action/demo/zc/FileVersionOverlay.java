@@ -40,9 +40,9 @@ public class FileVersionOverlay implements ExecutionListener {
         } catch (Exception e) {
             System.err.println(e);
         }
+        HashMap restore = new HashMap();
         for (HashMap<String, Object> objectMap : list) {
             USCObject uscObject = new GeneralObject(itemNo, objectMap);
-            HashMap restore = new HashMap();
             restore.put("VER", uscObject.getFieldValueToInteger("VER") + 1);
             ApplicationContext applicationContext = new ApplicationContext(null, uscObject);
             uscObject.setObjectFieldValues(restore);

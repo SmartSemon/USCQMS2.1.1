@@ -29,7 +29,7 @@ public class ChatInitUsers extends AbstractAction {
         //0表示成功，其它表示失败
         dto.put("code", 0);
         //错误信息
-        dto.put("msg", "发生错误咯！");
+        dto.put("msg", "获取成功！");
 
         //获取个人信息
         mine.put("username", userName);
