@@ -3,6 +3,11 @@ package com.usc.conf.cf.polltask.task;
 import java.sql.Timestamp;
 import java.util.Date;
 
+import com.usc.app.wxdd.WxDdMessageService;
+import com.usc.obj.api.USCObject;
+import com.usc.obj.util.USCObjectQueryHelper;
+import com.usc.util.SpringContextUtil;
+
 public class MyTask1 extends PollTaskJob
 {
 
