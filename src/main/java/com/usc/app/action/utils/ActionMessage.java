@@ -13,8 +13,7 @@ import lombok.ToString;
 
 @Data
 @ToString
-public class ActionMessage implements ResultMessage
-{
+public class ActionMessage implements ResultMessage {
 	/**
 	 *
 	 */
@@ -29,6 +28,11 @@ public class ActionMessage implements ResultMessage
 	{
 	}
 
+	public static ActionMessage creator(boolean flag, RetSignEnum sign, String info, Object dataList,
+			String... errCode) {
+		return new ActionMessage(flag, sign, info, dataList, errCode);
+	}
+
 	/**
 	 * @param flag     事件操作成功与否
 	 * @param sign     事件特殊标记
@@ -41,13 +45,9 @@ public class ActionMessage implements ResultMessage
 		this.flag = flag;
 		this.info = info;
 		if (sign != null)
-		{
-			this.sign = sign.code;
-		}
+		{ this.sign = sign.code; }
 		if (ObjectHelperUtils.isNotEmpty(errCode))
-		{
-			this.errCode = errCode.toString();
-		}
+		{ this.errCode = errCode.toString(); }
 	}
 
 	/**
@@ -62,23 +62,17 @@ public class ActionMessage implements ResultMessage
 		this.flag = flag;
 		this.info = info;
 		if (sign != null)
-		{
-			this.sign = sign.code;
-		}
+		{ this.sign = sign.code; }
 		if (ObjectHelperUtils.isNotEmpty(errCode))
-		{
-			this.errCode = errCode.toString();
-		}
+		{ this.errCode = errCode.toString(); }
 		setDataList(dataList);
 	}
 
-	public List<Object> getDataList()
-	{
+	public List<Object> getDataList() {
 		return dataList;
 	}
 
-	public void setDataList(Object objs)
-	{
+	public void setDataList(Object objs) {
 		if (ObjectHelperUtils.isNotEmpty(objs))
 		{
 			this.dataList = new ArrayList<Object>();
@@ -88,9 +82,7 @@ public class ActionMessage implements ResultMessage
 				if (objects[0] instanceof USCObject)
 				{
 					for (Object object : objects)
-					{
-						dataList.add(((USCObject) object).getFieldValuesJSON(true));
-					}
+					{ dataList.add(((USCObject) object).getFieldValuesJSON(true)); }
 					return;
 				}
 			}
@@ -100,9 +92,7 @@ public class ActionMessage implements ResultMessage
 				if (objects.get(0) instanceof USCObject)
 				{
 					for (Object object : objects)
-					{
-						dataList.add(((USCObject) object).getFieldValuesJSON(true));
-					}
+					{ dataList.add(((USCObject) object).getFieldValuesJSON(true)); }
 					return;
 				}
 			}

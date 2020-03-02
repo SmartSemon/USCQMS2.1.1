@@ -25,51 +25,42 @@ import com.usc.server.md.ItemMenu;
 import com.usc.server.md.MenuLibrary;
 import com.usc.server.util.LoggerFactory;
 
-public class DefaultEventProcessor
-{
+public class DefaultEventProcessor {
 	private Object resultJson = new Object();
 
 	private MultipartFile file;
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 
-	public HttpServletRequest getRequest()
-	{
+	public HttpServletRequest getRequest() {
 		return request;
 	}
 
-	public void setRequest(HttpServletRequest request)
-	{
+	public void setRequest(HttpServletRequest request) {
 		this.request = request;
 	}
 
-	public HttpServletResponse getResponse()
-	{
+	public HttpServletResponse getResponse() {
 		return response;
 	}
 
-	public void setResponse(HttpServletResponse response)
-	{
+	public void setResponse(HttpServletResponse response) {
 		this.response = response;
 	}
 
-	public MultipartFile getFile()
-	{
+	public MultipartFile getFile() {
 		return this.file;
 	}
 
-	public void setFile(MultipartFile file)
-	{
+	public void setFile(MultipartFile file) {
 		this.file = file;
 	}
 
-	public Object getResultJson()
-	{
+	public Object getResultJson() {
 		return resultJson;
 	}
 
-	public void setResultJson(Object obj)
-	{
+	public void setResultJson(Object obj) {
 		if (obj == null)
 		{
 			this.resultJson = StandardResultTranslate.successfulOperation();
@@ -97,7 +88,7 @@ public class DefaultEventProcessor
 			return;
 		}
 
-		this.resultJson = new ActionMessage(true, null, StandardResultTranslate.translate("Action_Default"), obj);
+		this.resultJson = ActionMessage.creator(true, null, StandardResultTranslate.translate("Action_Default"), obj);
 	}
 
 	public DefaultEventProcessor(MultipartFile file, HttpServletRequest request, HttpServletResponse response)
@@ -124,8 +115,7 @@ public class DefaultEventProcessor
 
 	}
 
-	private void action(ApplicationContext context, ActionRequestJSONBean jsonBean) throws Exception
-	{
+	private void action(ApplicationContext context, ActionRequestJSONBean jsonBean) throws Exception {
 		String impl = jsonBean.getImplclass();
 		Object clazz = null;
 		if (impl != null)
@@ -146,8 +136,7 @@ public class DefaultEventProcessor
 		}
 	}
 
-	private void execute(AppAction action, ApplicationContext context)
-	{
+	private void execute(AppAction action, ApplicationContext context) {
 		Object object = null;
 		try
 		{
@@ -163,14 +152,12 @@ public class DefaultEventProcessor
 		}
 	}
 
-	private Object executeAction(AppAction action, ApplicationContext context) throws Exception
-	{
+	private Object executeAction(AppAction action, ApplicationContext context) throws Exception {
 		action.setApplicationContext(context);
 		return action.action();
 	}
 
-	private boolean doBeforeAction(ApplicationContext context, AppAction action)
-	{
+	private boolean doBeforeAction(ApplicationContext context, AppAction action) {
 		String implString = action.getClass().getName();
 		ItemMenu menu = context.getItemInfo().getItemMenu(implString);
 		if (menu != null)
@@ -195,8 +182,7 @@ public class DefaultEventProcessor
 		return true;
 	}
 
-	private void doAfterAction(ApplicationContext context, AppAction action) throws Exception
-	{
+	private void doAfterAction(ApplicationContext context, AppAction action) throws Exception {
 		String implString = action.getClass().getName();
 		ItemMenu menu = context.getItemInfo().getItemMenu(implString);
 		if (menu != null)
@@ -213,17 +199,13 @@ public class DefaultEventProcessor
 		}
 	}
 
-	private void doAction(ApplicationContext context, String impl) throws Exception
-	{
+	private void doAction(ApplicationContext context, String impl) throws Exception {
 		AppAction action = AppActionFactory.getAction(impl);
 		if (action != null)
-		{
-			executeAction(action, context);
-		}
+		{ executeAction(action, context); }
 	}
 
-	private ApplicationContext createContext(ActionRequestJSONBean jsonBean)
-	{
+	private ApplicationContext createContext(ActionRequestJSONBean jsonBean) {
 		ApplicationContext applicationContext = new ApplicationContext(jsonBean);
 		applicationContext.setContext();
 		ItemInfo info = applicationContext.getItemInfo();
@@ -233,9 +215,7 @@ public class DefaultEventProcessor
 		} else
 		{
 			if (info.getType() == 1)
-			{
-				applicationContext = new AppFileContext(jsonBean, getFile());
-			}
+			{ applicationContext = new AppFileContext(jsonBean, getFile()); }
 		}
 		applicationContext.setServletRequest(getRequest());
 		applicationContext.setServletResponse(getResponse());
@@ -243,17 +223,12 @@ public class DefaultEventProcessor
 		return applicationContext;
 	}
 
-	private void handException(Exception e)
-	{
+	private void handException(Exception e) {
 		Object object = null;
 		if (!(e instanceof ApplicationException))
-		{
-			e.printStackTrace();
-		}
+		{ e.printStackTrace(); }
 		if (e instanceof ApplicationException)
-		{
-			object = ((ApplicationException) e).toActionMessage();
-		}
+		{ object = ((ApplicationException) e).toActionMessage(); }
 		if (e instanceof RuntimeException)
 		{
 			object = (new ApplicationException(e)).toActionMessage();
