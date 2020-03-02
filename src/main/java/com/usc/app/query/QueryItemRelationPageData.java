@@ -17,7 +17,7 @@ public class QueryItemRelationPageData extends AbstractRelationAction implements
 		String itemB = context.getItemNo();
 		String rel = MateFactory.getItemInfo(getRelationShip().getRelationItem()).getTableName();
 		String condition = "DEL=0 and exists(select 1 from " + rel + " where DEL=0 and ITEMA='" + itemA + "' and "
-				+ "ITEMB='" + itemB + "' and ITEMBID=" + itemB + ".ID and ITEMAID='" + itemAID + ")";
+				+ "ITEMB='" + itemB + "' and ITEMBID=" + itemB + ".ID and ITEMAID='" + itemAID + "')";
 		USCObject[] objects = USCObjectQueryHelper.getObjectsByConditionLimit(itemB, condition, getDataPage(context));
 //		List dataList = DBUtil.getRelationItemResult(itemA, MateFactory.getItemInfo(itemB), rel, itemAID, 1);
 		return new ActionMessage(flagTrue, RetSignEnum.QUERY, "", objects);
