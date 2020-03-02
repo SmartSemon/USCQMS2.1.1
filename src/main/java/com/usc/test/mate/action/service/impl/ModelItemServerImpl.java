@@ -19,21 +19,18 @@ import com.usc.test.mate.action.service.ModelItemServer;
 import com.usc.util.ObjectHelperUtils;
 
 @Service("modelItemServer")
-public class ModelItemServerImpl implements ModelItemServer
-{
+public class ModelItemServerImpl implements ModelItemServer {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
 	@Override
-	public Object createItem(String params)
-	{
+	public Object createItem(String params) {
 
 		return MCreateAction.createModelObj(params);
 	}
 
 	@Override
-	public Object updateItem(String params)
-	{
+	public Object updateItem(String params) {
 		try
 		{
 			return MUpdateAction.update(params);
@@ -45,36 +42,27 @@ public class ModelItemServerImpl implements ModelItemServer
 	}
 
 	@Override
-	public Object deleteItem(String params)
-	{
+	public Object deleteItem(String params) {
 		JSONObject jsonObject = JSONObject.parseObject(params);
 		String user = jsonObject.getString("userName");
 		JSONObject map = new JSONObject();
 		if (isModelingUser(user))
 		{
 			String tableName = jsonObject.getString("tableName");
-			String state = jsonObject.getString("STATE");
+			String state = jsonObject.getString("STATE") != null ? jsonObject.getString("STATE")
+					: jsonObject.getString("state");
 			List<JSONObject> jsonArray = JSONArray.parseArray(jsonObject.getString("data"), JSONObject.class);
 			for (JSONObject object : jsonArray)
 			{
-				if (state == null)
-				{
-					state = object.getString("STATE");
-				}
+				state = state != null ? state : object.getString("STATE");
 				String id = object.getString("ID");
 
 				if ("C".equals(state))
-				{
-					deleteC(tableName, id);
-				}
+				{ deleteC(tableName, id); }
 				if ("U".equals(state))
-				{
-					deleteU(tableName, id, object.getIntValue("VER"));
-				}
+				{ deleteU(tableName, id, object.getIntValue("VER")); }
 				if ("F".equals(state))
-				{
-					deleteF(tableName, id, user);
-				}
+				{ deleteF(tableName, id, user); }
 			}
 
 			map.put("flag", true);
@@ -91,8 +79,7 @@ public class ModelItemServerImpl implements ModelItemServer
 	}
 
 	@Override
-	public Object recoveryItem(String params)
-	{
+	public Object recoveryItem(String params) {
 		JSONObject jsonObject = JSONObject.parseObject(params);
 		String table = jsonObject.getString("tableName");
 		List<JSONObject> jsonArray = JSONArray.parseArray(jsonObject.getString("data"), JSONObject.class);
@@ -112,8 +99,7 @@ public class ModelItemServerImpl implements ModelItemServer
 		return new ActionMessage(true, RetSignEnum.DELETE, "恢复成功", null);
 	}
 
-	private void deleteC(String tableName, String id)
-	{
+	private void deleteC(String tableName, String id) {
 		String[] sqls = null;
 		if (tableName.equals("usc_model_field") || tableName.equals("usc_model_navigation")
 				|| tableName.equals("usc_model_grid_field") || tableName.equals("usc_model_property_field")
@@ -141,8 +127,7 @@ public class ModelItemServerImpl implements ModelItemServer
 		}
 		if (tableName.equals("usc_model_item"))
 		{
-			sqls = new String[]
-			{ "DELETE FROM usc_model_item WHERE id='" + id + "'",
+			sqls = new String[] { "DELETE FROM usc_model_item WHERE id='" + id + "'",
 					"DELETE FROM usc_model_field WHERE itemid='" + id + "'",
 					"DELETE FROM usc_model_itemmenu WHERE itemid='" + id + "'",
 					"DELETE FROM usc_model_grid WHERE itemid='" + id + "'",
@@ -154,26 +139,21 @@ public class ModelItemServerImpl implements ModelItemServer
 		}
 		if (tableName.equals("usc_model_relationship") || tableName.equals("usc_model_queryview"))
 		{
-			sqls = new String[]
-			{ "DELETE FROM " + tableName + " WHERE id='" + id + "'",
+			sqls = new String[] { "DELETE FROM " + tableName + " WHERE id='" + id + "'",
 					"DELETE FROM usc_model_itemmenu WHERE itemid='" + id + "'" };
 		}
 		if (tableName.equals("usc_model_classview"))
 		{
-			sqls = new String[]
-			{ "DELETE FROM usc_model_classview WHERE id='" + id + "'",
+			sqls = new String[] { "DELETE FROM usc_model_classview WHERE id='" + id + "'",
 					"DELETE FROM usc_model_classview_node WHERE itemid='" + id + "'",
 					"DELETE FROM usc_model_itemmenu WHERE itemid='" + id + "'" };
 		}
 		if (sqls != null)
-		{
-			jdbcTemplate.batchUpdate(sqls);
-		}
+		{ jdbcTemplate.batchUpdate(sqls); }
 
 	}
 
-	private void deleteU(String tableName, String id, int ver)
-	{
+	private void deleteU(String tableName, String id, int ver) {
 		if (tableName.equals("usc_model_field") || tableName.equals("usc_model_itemmenu")
 				|| tableName.equals("usc_model_grid_") || tableName.equals("usc_model_grid_field")
 				|| tableName.equals("usc_model_property") || tableName.equals("usc_model_property_field")
@@ -197,19 +177,16 @@ public class ModelItemServerImpl implements ModelItemServer
 		deleteC(tableName, id);
 	}
 
-	private void deleteF(String tableName, String itemID, String user)
-	{
+	private void deleteF(String tableName, String itemID, String user) {
 		jdbcTemplate.batchUpdate("UPDATE " + tableName + " SET del=1, state='HS', duser='" + user
 				+ "',dtime=(select now()) WHERE id='" + itemID + "'");
 	}
 
-	private void recovery(String tableName, String id)
-	{
+	private void recovery(String tableName, String id) {
 		String[] sqls = null;
 		if (tableName.equals("usc_model_item"))
 		{
-			sqls = new String[]
-			{ "UPDATE usc_model_item SET state='F', del=0, effective=-2 WHERE id='" + id + "'",
+			sqls = new String[] { "UPDATE usc_model_item SET state='F', del=0, effective=-2 WHERE id='" + id + "'",
 					"UPDATE usc_model_itemmenu SET state='F', del=0 WHERE itemid='" + id + "'",
 					"UPDATE usc_model_grid SET state='F', del=0 WHERE itemid='" + id + "'",
 					"UPDATE usc_model_grid_field SET state='F', del=0 WHERE itemid='" + id + "'",
@@ -220,14 +197,12 @@ public class ModelItemServerImpl implements ModelItemServer
 		}
 		if (tableName.equals("usc_model_relationship") || tableName.equals("usc_model_queryview"))
 		{
-			sqls = new String[]
-			{ "UPDATE " + tableName + " SET state='F', del=0, effective=-2 WHERE id='" + id + "'",
+			sqls = new String[] { "UPDATE " + tableName + " SET state='F', del=0, effective=-2 WHERE id='" + id + "'",
 					"UPDATE usc_model_itemmenu SET state='F', del=0 WHERE itemid='" + id + "'" };
 		}
 		if (tableName.equals("usc_model_classview"))
 		{
-			sqls = new String[]
-			{ "UPDATE " + tableName + " SET state='F', del=0, effective=-2 WHERE id='" + id + "'",
+			sqls = new String[] { "UPDATE " + tableName + " SET state='F', del=0, effective=-2 WHERE id='" + id + "'",
 					"UPDATE usc_model_node SET state='F', del=0 WHERE itemid='" + id + "'",
 					"UPDATE usc_model_itemmenu SET state='F', del=0 WHERE itemid='" + id + "'" };
 		}
@@ -235,8 +210,7 @@ public class ModelItemServerImpl implements ModelItemServer
 		jdbcTemplate.batchUpdate(sqls);
 	}
 
-	private void deleteMenus(String pid)
-	{
+	private void deleteMenus(String pid) {
 		List<Map<String, Object>> chrildMensList = jdbcTemplate
 				.queryForList("SELECT id,mtype FROM usc_model_itemmenu WHERE del=0 AND pid='" + pid + "'");
 		if (ObjectHelperUtils.isNotEmpty(chrildMensList))
@@ -246,24 +220,19 @@ public class ModelItemServerImpl implements ModelItemServer
 				String cid = (String) map.get("id");
 				Integer mt = (Integer) map.get("mtype");
 				if (mt == 1)
-				{
-					deleteMenus(cid);
-				}
+				{ deleteMenus(cid); }
 				jdbcTemplate.batchUpdate("DELETE FROM usc_model_itemmenu WHERE id='" + cid + "'");
 			}
 		}
 	}
 
-	public boolean isModelingUser(String userName)
-	{
+	public boolean isModelingUser(String userName) {
 		if (userName != null)
 		{
 			RedisUtil redis = RedisUtil.getInstanceOfObject();
 			String user = (String) redis.hget("OPENMODEL", userName);
 			if (user != null)
-			{
-				return true;
-			}
+			{ return true; }
 		}
 
 		return false;

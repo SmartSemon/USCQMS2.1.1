@@ -6,8 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
 
-public class MD5Utils
-{
+public class MD5Utils {
 
 	private static final String HEX_NUMS_STR = "0123456789ABCDEF";
 	private static final Integer SALT_LENGTH = 18;
@@ -18,8 +17,7 @@ public class MD5Utils
 	 * @param hex
 	 * @return
 	 */
-	public static byte[] hexStringToByte(String hex)
-	{
+	public static byte[] hexStringToByte(String hex) {
 		int len = (hex.length() / 2);
 		byte[] result = new byte[len];
 		char[] hexChars = hex.toCharArray();
@@ -37,16 +35,13 @@ public class MD5Utils
 	 * @param b
 	 * @return
 	 */
-	public static String byteToHexString(byte[] b)
-	{
+	public static String byteToHexString(byte[] b) {
 		StringBuffer hexString = new StringBuffer();
 		for (int i = 0; i < b.length; i++)
 		{
 			String hex = Integer.toHexString(b[i] & 0xFF);
 			if (hex.length() == 1)
-			{
-				hex = '0' + hex;
-			}
+			{ hex = '0' + hex; }
 			hexString.append(hex.toUpperCase());
 		}
 		return hexString.toString();
@@ -61,8 +56,7 @@ public class MD5Utils
 	 * @throws NoSuchAlgorithmException
 	 * @throws UnsupportedEncodingException
 	 */
-	public static boolean validCiphertext(String inputString, String ciphertext) throws Exception
-	{
+	public static boolean validCiphertext(String inputString, String ciphertext) throws Exception {
 		// 将16进制字符串格式口令转换成字节数组
 		byte[] ciphertextInDb = hexStringToByte(ciphertext);
 		// 声明盐变量
@@ -102,8 +96,7 @@ public class MD5Utils
 	 * @throws NoSuchAlgorithmException
 	 * @throws UnsupportedEncodingException
 	 */
-	public static String getEncryptedPwd(String str) throws NoSuchAlgorithmException, UnsupportedEncodingException
-	{
+	public static String getEncryptedPwd(String str) throws NoSuchAlgorithmException, UnsupportedEncodingException {
 		String string = getMd5Encoder(str);
 		// 声明加密后的口令数组变量
 		byte[] pwd = null;
@@ -137,14 +130,10 @@ public class MD5Utils
 
 	/**
 	 * @description md5散列算法对字符串进行加密
-	 * @author caochengde
 	 * @param str
 	 * @return
-	 * @throws NoSuchAlgorithmException
-	 * @throws UnsupportedEncodingException
 	 */
-	public static String getMd5Encoder(String str)
-	{
+	public static String getMd5Encoder(String str) {
 		try
 		{
 			MessageDigest md = MessageDigest.getInstance("MD5");
@@ -155,9 +144,7 @@ public class MD5Utils
 			{
 				String hex = Integer.toHexString(bytes[i] & 0xFF);
 				if (hex.length() < 2)
-				{
-					sb.append(0);
-				}
+				{ sb.append(0); }
 				sb.append(hex);
 			}
 

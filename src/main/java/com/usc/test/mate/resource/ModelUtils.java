@@ -19,11 +19,9 @@ import com.usc.util.ObjectHelperUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class ModelUtils
-{
+public class ModelUtils {
 	public static void getAllPageData(Map<String, Object> resultMap, ItemInfo info, String itemGridNo,
-			String itemPropertyNo, String itemRelationPageNo, int faceType)
-	{
+			String itemPropertyNo, String itemRelationPageNo, int faceType) {
 
 		resultMap.put("itemID", info.getId());
 		resultMap.put("itemNo", info.getItemNo());
@@ -33,9 +31,7 @@ public class ModelUtils
 		resultMap.put("itemGrid", info.getItemGrid(itemGridNo));
 		resultMap.put("itemPropertyPage", info.getItemPage(itemPropertyNo));
 		if (faceType == -1 || faceType == 0)
-		{
-			return;
-		}
+		{ return; }
 		ItemRelationPage itemRelationPage = info.getItemRelationPage(itemRelationPageNo);
 		if (itemRelationPage == null)
 		{
@@ -48,17 +44,12 @@ public class ModelUtils
 		}
 	}
 
-	private static void getRelationModleData(ItemInfo info, ItemRelationPage itemRelationPage, int faceType)
-	{
+	private static void getRelationModleData(ItemInfo info, ItemRelationPage itemRelationPage, int faceType) {
 		if (itemRelationPage == null)
-		{
-			return;
-		}
+		{ return; }
 		List<ItemRelationPageSign> itemRelationPageSigns = itemRelationPage.getItemRelationPageSignList();
 		if (ObjectHelperUtils.isEmpty(itemRelationPageSigns))
-		{
-			return;
-		}
+		{ return; }
 		for (ItemRelationPageSign itemRelationPageSign : itemRelationPageSigns)
 		{
 			String rType = itemRelationPageSign.getRType();
@@ -135,8 +126,7 @@ public class ModelUtils
 	}
 
 	public static void getClientAllPageData(UserInformation userInformation, Map<String, Object> resultMap,
-			ItemInfo info, String itemGridNo, String itemPropertyNo, String itemRelationPageNo, int faceType)
-	{
+			ItemInfo info, String itemGridNo, String itemPropertyNo, String itemRelationPageNo, int faceType) {
 
 		resultMap.put("itemID", info.getId());
 		resultMap.put("itemNo", info.getItemNo());
@@ -150,9 +140,7 @@ public class ModelUtils
 		resultMap.put("itemPropertyPage", info.getItemPage(itemPropertyNo));
 		resultMap.put("itemColor", info.getColors());
 		if (faceType == -1 || faceType == 0 || faceType == 1)
-		{
-			return;
-		}
+		{ return; }
 		ItemRelationPage itemRelationPage = info.getItemRelationPage(itemRelationPageNo);
 		if (itemRelationPage == null)
 		{
@@ -166,17 +154,12 @@ public class ModelUtils
 	}
 
 	private static void getClientRelationModleData(UserInformation userInformation, ItemInfo info,
-			ItemRelationPage itemRelationPage, int faceType)
-	{
+			ItemRelationPage itemRelationPage, int faceType) {
 		if (itemRelationPage == null)
-		{
-			return;
-		}
+		{ return; }
 		List<ItemRelationPageSign> itemRelationPageSigns = itemRelationPage.getItemRelationPageSignList();
 		if (ObjectHelperUtils.isEmpty(itemRelationPageSigns))
-		{
-			return;
-		}
+		{ return; }
 		for (ItemRelationPageSign itemRelationPageSign : itemRelationPageSigns)
 		{
 			String rType = itemRelationPageSign.getRType();
@@ -273,6 +256,7 @@ public class ModelUtils
 					itemRelationPageSign.setModelClassView(classView);
 				}
 				break;
+			case "dynamicRelationPage":
 
 			default:
 				break;
