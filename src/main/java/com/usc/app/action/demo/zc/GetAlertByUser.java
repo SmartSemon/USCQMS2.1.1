@@ -10,7 +10,7 @@ import java.util.*;
 /**
  * @Author: lwp
  * @DATE: 2020/2/26 15:18
- * @Description:
+ * @Description: 根据用户获取报警
  **/
 public class GetAlertByUser extends AbstractAction implements QueryReturnRequest {
     @Override

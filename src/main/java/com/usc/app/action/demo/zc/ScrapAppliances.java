@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * @Author: lwp
  * @DATE: 2020/2/26 10:44
- * @Description:
+ * @Description: 器具报废修改申请单数据状态为已归档，修改申请单下的器具为报废
  **/
 public class ScrapAppliances implements ExecutionListener {
 
