@@ -28,7 +28,9 @@ public class ConfirmReviewFileAction extends AbstractAction {
 
 	@Override
 	public boolean disable() throws Exception {
-		return context.getSelectedObj().getFieldValueToBoolen("ISCONSULT") ? true : false;
+		USCObject object = context.getSelectedObj();
+		return (object.getFieldValueToBoolen("ISCONSULT")
+				|| !object.getFieldValueToString("LOWERRUNNER").equals(context.getUserName())) ? true : false;
 	}
 
 }
