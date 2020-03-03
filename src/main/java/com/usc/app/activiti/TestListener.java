@@ -16,7 +16,7 @@ public class TestListener implements ExecutionListener {
 
     @Override
     public void notify(DelegateExecution execution) throws Exception {
-        System.err.println("执行");
+        System.err.println("执行啊啊啊");
         System.err.println(execution.getVariable("itemNo"));
         execution.setVariable("pass",true);
         System.err.println(execution);
