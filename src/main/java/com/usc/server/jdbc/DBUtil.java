@@ -50,11 +50,9 @@ import com.usc.util.ObjectHelperUtils;
  * @version
  * @since JDK 1.8
  */
-public class DBUtil
-{
+public class DBUtil {
 
-	private static JdbcTemplate getJdbcTemplate()
-	{
+	private static JdbcTemplate getJdbcTemplate() {
 		try
 		{
 			return new JdbcTemplate(DBConnecter.getDataSource());
@@ -65,15 +63,12 @@ public class DBUtil
 		return null;
 	}
 
-	public static boolean dropTable(String tableName)
-	{
+	public static boolean dropTable(String tableName) {
 		ItemInfo info = USCModelMate.getItemInfoByTable(tableName);
 		if (info != null)
 		{
 			if (info.getSitem() == 1)
-			{
-				ThrowException.throwException(new Throwable(tableName + " is System table , do not drop!"));
-			}
+			{ ThrowException.throwException(new Throwable(tableName + " is System table , do not drop!")); }
 		}
 		String sql = "DROP TABLE " + tableName;
 		try
@@ -86,8 +81,7 @@ public class DBUtil
 		}
 	}
 
-	public static Map<String, Object> insertRecord(Object itemObject, Object values, String user) throws Exception
-	{
+	public static Map<String, Object> insertRecord(Object itemObject, Object values, String user) throws Exception {
 		if (itemObject == null || values == null)
 			return null;
 		ItemInfo itemInfo = null;
@@ -95,13 +89,9 @@ public class DBUtil
 		{
 			itemInfo = (ItemInfo) itemObject;
 		} else if (itemObject instanceof String)
-		{
-			itemInfo = MateFactory.getItemInfo(String.valueOf(itemObject));
-		}
+		{ itemInfo = MateFactory.getItemInfo(String.valueOf(itemObject)); }
 		if (itemInfo == null)
-		{
-			throw new Exception("ItemInfo of " + itemObject + " UNFIND");
-		}
+		{ throw new Exception("ItemInfo of " + itemObject + " UNFIND"); }
 //		Map valueMap = getValueMapByValues(values, 1, user);
 		Map<String, Object> valueMap = new HashMap<String, Object>();
 		valueMap.putAll((Map<String, Object>) values);
@@ -109,9 +99,7 @@ public class DBUtil
 		List<ItemField> fieldList = itemInfo.getItemFieldList();
 		int nCount = 0;
 		if (fieldList == null || fieldList.size() < 1)
-		{
-			throw new Exception("Fields infomation of table(" + tableName + ") has not been registed");
-		}
+		{ throw new Exception("Fields infomation of table(" + tableName + ") has not been registed"); }
 		StringBuffer strSQL = new StringBuffer("INSERT INTO " + tableName + " (");
 		for (ItemField field : fieldList)
 		{
@@ -120,9 +108,7 @@ public class DBUtil
 			{
 				nCount++;
 				if (nCount > 1)
-				{
-					strSQL.append(",");
-				}
+				{ strSQL.append(","); }
 				strSQL.append(field.getFieldName());
 			}
 		}
@@ -130,9 +116,7 @@ public class DBUtil
 		for (int i = 0; i < nCount; i++)
 		{
 			if (i > 0)
-			{
-				strSQL.append(",");
-			}
+			{ strSQL.append(","); }
 			strSQL.append("?");
 		}
 		strSQL.append(")");
@@ -143,13 +127,9 @@ public class DBUtil
 		{
 			connection = DBConnecter.getConnection();
 			if (strSQL == null || strSQL.toString() == null)
-			{
-				return null;
-			}
+			{ return null; }
 			if (connection == null)
-			{
-				return null;
-			}
+			{ return null; }
 			ps = connection.prepareStatement(strSQL.toString());
 			int idx = 1;
 			for (ItemField field : fieldList)
@@ -160,9 +140,7 @@ public class DBUtil
 				{
 					value = valueMap.get(fieldNo);
 					if ((value != null) && ((value instanceof Date)) && (!(value instanceof Timestamp)))
-					{
-						value = new Timestamp(((Date) value).getTime());
-					}
+					{ value = new Timestamp(((Date) value).getTime()); }
 					setObjValueByFieldType(ps, value, idx, field.getFType());
 					idx++;
 				}
@@ -179,14 +157,11 @@ public class DBUtil
 		}
 
 		if (row != 1)
-		{
-			throw new Exception("create failed");
-		}
+		{ throw new Exception("create failed"); }
 		return valueMap;
 	}
 
-	public static List<Map> bathInsertRecords(Object itemObject, List<Map> list, String user) throws Exception
-	{
+	public static List<Map> bathInsertRecords(Object itemObject, List<Map> list, String user) throws Exception {
 		if (itemObject == null || list == null)
 			return null;
 		ItemInfo itemInfo = null;
@@ -194,21 +169,15 @@ public class DBUtil
 		{
 			itemInfo = (ItemInfo) itemObject;
 		} else if (itemObject instanceof String)
-		{
-			itemInfo = MateFactory.getItemInfo(String.valueOf(itemObject));
-		}
+		{ itemInfo = MateFactory.getItemInfo(String.valueOf(itemObject)); }
 		if (itemInfo == null)
-		{
-			throw new Exception("ItemInfo of " + itemObject + " UNFIND");
-		}
+		{ throw new Exception("ItemInfo of " + itemObject + " UNFIND"); }
 
 		String tableName = itemInfo.getTableName();
 		List<ItemField> fieldList = itemInfo.getItemFieldList();
 		int nCount = 0;
 		if (fieldList == null || fieldList.size() < 1)
-		{
-			throw new Exception("Fields infomation of table(" + tableName + ") has not been registed");
-		}
+		{ throw new Exception("Fields infomation of table(" + tableName + ") has not been registed"); }
 
 		StringBuffer strSQL = new StringBuffer("INSERT INTO " + tableName + " (");
 		list = getNewMapList(list, 1, user);
@@ -219,9 +188,7 @@ public class DBUtil
 			{
 				nCount++;
 				if (nCount > 1)
-				{
-					strSQL.append(",");
-				}
+				{ strSQL.append(","); }
 				strSQL.append(field.getFieldName());
 
 			}
@@ -230,9 +197,7 @@ public class DBUtil
 		for (int i = 0; i < nCount; i++)
 		{
 			if (i > 0)
-			{
-				strSQL.append(",");
-			}
+			{ strSQL.append(","); }
 			strSQL.append("?");
 		}
 		strSQL.append(")");
@@ -248,8 +213,7 @@ public class DBUtil
 		return row != null ? list : null;
 	}
 
-	private static List<Map> getNewMapList(List<Map> list, int sign, String user) throws Exception
-	{
+	private static List<Map> getNewMapList(List<Map> list, int sign, String user) throws Exception {
 		List<Map> maps = new ArrayList<Map>();
 		for (Map map : list)
 		{
@@ -260,8 +224,7 @@ public class DBUtil
 		return maps;
 	}
 
-	static class MyBPSetter implements BatchPreparedStatementSetter
-	{
+	static class MyBPSetter implements BatchPreparedStatementSetter {
 		List<Map> maps = null;
 		ItemInfo itemInfo = null;
 
@@ -272,8 +235,7 @@ public class DBUtil
 		}
 
 		@Override
-		public void setValues(PreparedStatement ps, int i) throws SQLException
-		{
+		public void setValues(PreparedStatement ps, int i) throws SQLException {
 			int idx = 1;
 			for (ItemField field : itemInfo.getItemFieldList())
 			{
@@ -284,9 +246,7 @@ public class DBUtil
 				{
 					value = newMap.get(fieldNo);
 					if ((value != null) && ((value instanceof Date)) && (!(value instanceof Timestamp)))
-					{
-						value = new Timestamp(((Date) value).getTime());
-					}
+					{ value = new Timestamp(((Date) value).getTime()); }
 					setObjValueByFieldType(ps, value, idx, field.getFType());
 					idx++;
 				}
@@ -295,14 +255,12 @@ public class DBUtil
 		}
 
 		@Override
-		public int getBatchSize()
-		{
+		public int getBatchSize() {
 			return (this.maps == null || this.maps.isEmpty()) ? 0 : maps.size();
 		}
 	}
 
-	public static boolean deleteRecord(Object itemObject, Object[] values) throws Exception
-	{
+	public static boolean deleteRecord(Object itemObject, Object[] values) throws Exception {
 		if (itemObject == null || values == null)
 			return false;
 		ItemInfo itemInfo = null;
@@ -310,13 +268,9 @@ public class DBUtil
 		{
 			itemInfo = (ItemInfo) itemObject;
 		} else if (itemObject instanceof String)
-		{
-			itemInfo = MateFactory.getItemInfo(String.valueOf(itemObject));
-		}
+		{ itemInfo = MateFactory.getItemInfo(String.valueOf(itemObject)); }
 		if (itemInfo == null)
-		{
-			throw new Exception("ItemInfo of " + itemObject + " UNFIND");
-		}
+		{ throw new Exception("ItemInfo of " + itemObject + " UNFIND"); }
 
 		try
 		{
@@ -330,9 +284,7 @@ public class DBUtil
 			JdbcTemplate jdbcTemplate = new JdbcTemplate(DBConnecter.getDataSource());
 			int row = jdbcTemplate.update(strSql, objs, types);
 			if (row != 1)
-			{
-				return false;
-			}
+			{ return false; }
 		} catch (Exception e)
 		{
 			throw new Exception("update failed");
@@ -346,8 +298,7 @@ public class DBUtil
 	}
 
 	public static boolean deleteRecord(JdbcTemplate jdbcTemplate, Object itemObject, String user, String id)
-			throws Exception
-	{
+			throws Exception {
 		if (itemObject == null || id == null)
 			return false;
 		ItemInfo itemInfo = null;
@@ -355,13 +306,9 @@ public class DBUtil
 		{
 			itemInfo = (ItemInfo) itemObject;
 		} else if (itemObject instanceof String)
-		{
-			itemInfo = MateFactory.getItemInfo(String.valueOf(itemObject));
-		}
+		{ itemInfo = MateFactory.getItemInfo(String.valueOf(itemObject)); }
 		if (itemInfo == null)
-		{
-			throw new Exception("ItemInfo of " + itemObject + " UNFIND");
-		}
+		{ throw new Exception("ItemInfo of " + itemObject + " UNFIND"); }
 		try
 		{
 			Object[] objs = new Object[3];
@@ -378,9 +325,7 @@ public class DBUtil
 			JdbcTemplate jdbcTemplate1 = new JdbcTemplate(DBConnecter.getDataSource());
 			int row = jdbcTemplate1.update(strSql, objs, types);
 			if (row != 1)
-			{
-				return false;
-			}
+			{ return false; }
 		} catch (Exception e)
 		{
 			throw new Exception("update failed");
@@ -390,8 +335,7 @@ public class DBUtil
 
 	}
 
-	public static boolean PhysicalDeleteRecord(JdbcTemplate jdbcTemplate, String tableName, String id)
-	{
+	public static boolean PhysicalDeleteRecord(JdbcTemplate jdbcTemplate, String tableName, String id) {
 		Connection connection = null;
 		PreparedStatement ps = null;
 		try
@@ -403,9 +347,7 @@ public class DBUtil
 			int row = ps.executeUpdate();
 //			int row = jdbcTemplate.update(strSql, id, Types.VARCHAR);
 			if (row != 1)
-			{
-				return false;
-			}
+			{ return false; }
 		} catch (Exception e)
 		{
 			LoggerFactory.logError("delete failed", e);
@@ -420,8 +362,7 @@ public class DBUtil
 	}
 
 	public static boolean saveRecord(JdbcTemplate jdbcTemplate, Object itemObject, String strID, Object values,
-			String user) throws Exception
-	{
+			String user) throws Exception {
 		if (itemObject == null || values == null)
 			return false;
 		ItemInfo itemInfo = null;
@@ -429,21 +370,15 @@ public class DBUtil
 		{
 			itemInfo = (ItemInfo) itemObject;
 		} else if (itemObject instanceof String)
-		{
-			itemInfo = MateFactory.getItemInfo(String.valueOf(itemObject));
-		}
+		{ itemInfo = MateFactory.getItemInfo(String.valueOf(itemObject)); }
 		if (itemInfo == null)
-		{
-			throw new Exception("ItemInfo of " + itemObject + " UNFIND");
-		}
+		{ throw new Exception("ItemInfo of " + itemObject + " UNFIND"); }
 		Map valueMap = getValueMapByValues(values, 2, user);
 		String tableName = itemInfo.getTableName();
 		List<ItemField> fieldList = itemInfo.getItemFieldList();
 		int nCount = 0;
 		if (fieldList == null || fieldList.size() < 1)
-		{
-			throw new Exception("Fields infomation of table(" + tableName + ") has not been registed");
-		}
+		{ throw new Exception("Fields infomation of table(" + tableName + ") has not been registed"); }
 		StringBuffer strSQL = new StringBuffer("UPDATE " + tableName + " SET ");
 		for (ItemField field : fieldList)
 		{
@@ -454,9 +389,7 @@ public class DBUtil
 				{
 					nCount++;
 					if (nCount > 1)
-					{
-						strSQL.append(",");
-					}
+					{ strSQL.append(","); }
 					strSQL.append(field.getFieldName() + "=?");
 				}
 			}
@@ -486,9 +419,7 @@ public class DBUtil
 						{
 							String editor = field.getEditor();
 							if (FieldEditor.MAPVALUELIST.equals(editor))
-							{
-								value = FieldMappingConverter.getValue2Key(field, value);
-							}
+							{ value = FieldMappingConverter.getValue2Key(field, value); }
 						}
 						setObjValueByFieldType(ps, value, idx, field.getFType());
 						idx++;
@@ -509,8 +440,7 @@ public class DBUtil
 
 	}
 
-	public static boolean saveDBRecord(Object itemObject, String strID, Map<String, Object> values) throws Exception
-	{
+	public static boolean saveDBRecord(Object itemObject, String strID, Map<String, Object> values) throws Exception {
 		if (itemObject == null || values == null)
 			return false;
 		ItemInfo itemInfo = null;
@@ -518,13 +448,9 @@ public class DBUtil
 		{
 			itemInfo = (ItemInfo) itemObject;
 		} else if (itemObject instanceof String)
-		{
-			itemInfo = MateFactory.getItemInfo(String.valueOf(itemObject));
-		}
+		{ itemInfo = MateFactory.getItemInfo(String.valueOf(itemObject)); }
 		if (itemInfo == null)
-		{
-			throw new Exception("ItemInfo of " + itemObject + " UNFIND");
-		}
+		{ throw new Exception("ItemInfo of " + itemObject + " UNFIND"); }
 		Map valueMap = values;
 		String tableName = itemInfo.getTableName();
 		List<ItemField> fieldList = itemInfo.getItemFieldList();
@@ -544,9 +470,7 @@ public class DBUtil
 				{
 					nCount++;
 					if (nCount > 1)
-					{
-						strSQL.append(",");
-					}
+					{ strSQL.append(","); }
 					strSQL.append(field.getFieldName() + "=?");
 				}
 			}
@@ -600,8 +524,7 @@ public class DBUtil
 	}
 
 	public static boolean BathSaveRecord(JdbcTemplate jdbcTemplate, Object itemObject, String strID,
-			List<Object[]> values, String user) throws Exception
-	{
+			List<Object[]> values, String user) throws Exception {
 		if (itemObject == null || values == null)
 			return false;
 		ItemInfo itemInfo = null;
@@ -609,21 +532,15 @@ public class DBUtil
 		{
 			itemInfo = (ItemInfo) itemObject;
 		} else if (itemObject instanceof String)
-		{
-			itemInfo = MateFactory.getItemInfo(String.valueOf(itemObject));
-		}
+		{ itemInfo = MateFactory.getItemInfo(String.valueOf(itemObject)); }
 		if (itemInfo == null)
-		{
-			throw new Exception("ItemInfo of " + itemObject + " UNFIND");
-		}
+		{ throw new Exception("ItemInfo of " + itemObject + " UNFIND"); }
 		Map valueMap = getValueMapByValues(values, 2, user);
 		String tableName = itemInfo.getTableName();
 		List<ItemField> fieldList = itemInfo.getItemFieldList();
 		int nCount = 0;
 		if (fieldList == null || fieldList.size() < 1)
-		{
-			throw new Exception("Fields infomation of table(" + tableName + ") has not been registed");
-		}
+		{ throw new Exception("Fields infomation of table(" + tableName + ") has not been registed"); }
 		StringBuffer strSQL = new StringBuffer("UPDATE " + tableName + " SET ");
 		for (ItemField field : fieldList)
 		{
@@ -634,9 +551,7 @@ public class DBUtil
 				{
 					nCount++;
 					if (nCount > 1)
-					{
-						strSQL.append(",");
-					}
+					{ strSQL.append(","); }
 					strSQL.append(tableField + "=?");
 				}
 			}
@@ -666,9 +581,7 @@ public class DBUtil
 						{
 							String editor = field.getEditor();
 							if (FieldEditor.MAPVALUELIST.equals(editor))
-							{
-								value = FieldMappingConverter.getValue2Key(field, value);
-							}
+							{ value = FieldMappingConverter.getValue2Key(field, value); }
 						}
 						setObjValueByFieldType(ps, value, idx, field.getFType());
 						idx++;
@@ -688,20 +601,15 @@ public class DBUtil
 
 	}
 
-	public static Map getObjValuesByID(Object itemObject, String strID) throws Exception
-	{
+	public static Map getObjValuesByID(Object itemObject, String strID) throws Exception {
 		ItemInfo itemInfo = null;
 		if (itemObject instanceof ItemInfo)
 		{
 			itemInfo = (ItemInfo) itemObject;
 		} else if (itemObject instanceof String)
-		{
-			itemInfo = MateFactory.getItemInfo(String.valueOf(itemObject));
-		}
+		{ itemInfo = MateFactory.getItemInfo(String.valueOf(itemObject)); }
 		if (itemInfo == null)
-		{
-			throw new Exception("ItemInfo of " + itemObject + " UNFIND");
-		}
+		{ throw new Exception("ItemInfo of " + itemObject + " UNFIND"); }
 		String tableName = itemInfo.getTableName();
 		StringBuffer strSQL = new StringBuffer("SELECT ");
 		List<ItemField> fields = itemInfo.getItemFieldList();
@@ -723,9 +631,7 @@ public class DBUtil
 			ps.setObject(1, strID);
 			ResultSet rs = ps.executeQuery();
 			if (rs != null)
-			{
-				return (Map) getResultSet(itemInfo, rs).get(0);
-			}
+			{ return (Map) getResultSet(itemInfo, rs).get(0); }
 		} finally
 		{
 			DatabaseUtil.cleanUp(connection);
@@ -735,20 +641,15 @@ public class DBUtil
 
 	}
 
-	public static List<Map> getObjValues(Object itemObject, String condition, Object... objects) throws Exception
-	{
+	public static List<Map> getObjValues(Object itemObject, String condition, Object... objects) throws Exception {
 		ItemInfo itemInfo = null;
 		if (itemObject instanceof ItemInfo)
 		{
 			itemInfo = (ItemInfo) itemObject;
 		} else if (itemObject instanceof String)
-		{
-			itemInfo = MateFactory.getItemInfo(String.valueOf(itemObject));
-		}
+		{ itemInfo = MateFactory.getItemInfo(String.valueOf(itemObject)); }
 		if (itemInfo == null)
-		{
-			throw new Exception("ItemInfo of " + itemObject + " UNFIND");
-		}
+		{ throw new Exception("ItemInfo of " + itemObject + " UNFIND"); }
 		String tableName = itemInfo.getTableName();
 		StringBuffer strSQL = new StringBuffer("SELECT ");
 		List<ItemField> fields = itemInfo.getItemFieldList();
@@ -776,9 +677,7 @@ public class DBUtil
 		{
 			ps = connection.prepareStatement(sql);
 			for (int j = 0; j < objects.length; j++)
-			{
-				ps.setObject(j + 1, objects[j]);
-			}
+			{ ps.setObject(j + 1, objects[j]); }
 			rs = ps.executeQuery();
 			return convertList(rs, fields);
 		} catch (Exception e)
@@ -793,8 +692,7 @@ public class DBUtil
 
 	}
 
-	private static List convertList(ResultSet rs, List<ItemField> fields) throws Exception
-	{
+	private static List convertList(ResultSet rs, List<ItemField> fields) throws Exception {
 		List list = new Vector();
 		ResultSetMetaData md = rs.getMetaData();
 		while (rs.next())
@@ -810,8 +708,7 @@ public class DBUtil
 		return list.isEmpty() ? null : list;
 	}
 
-	private static Map getValueMapByValues(Object values, int sign, String user) throws Exception
-	{
+	private static Map getValueMapByValues(Object values, int sign, String user) throws Exception {
 		Map<String, Object> valueMap = new HashMap<String, Object>();
 		if (values instanceof Map)
 		{
@@ -861,8 +758,7 @@ public class DBUtil
 	}
 
 	private static void setObjValueByFieldType(PreparedStatement ps, Object value, int idx, String fType)
-			throws SQLException
-	{
+			throws SQLException {
 
 		String ft = fType.trim().toUpperCase();
 		if (value == null)
@@ -899,17 +795,14 @@ public class DBUtil
 				boolean b = ((Boolean) value).booleanValue();
 				value = new Integer(0);
 				if (b)
-				{
-					value = new Integer(1);
-				}
+				{ value = new Integer(1); }
 			}
 			ps.setObject(idx, value);
 		}
 
 	}
 
-	public static Object getMapValue(ItemField field, Object value)
-	{
+	public static Object getMapValue(ItemField field, Object value) {
 		if (value == null)
 			return null;
 		String param = field.getEditParams();
@@ -921,15 +814,11 @@ public class DBUtil
 		{
 			Map vMap = JSONArray.parseObject(param, Map.class);
 			if (vMap.containsKey(value))
-			{
-				return value;
-			}
+			{ return value; }
 			for (Object object2 : vMap.keySet())
 			{
 				if (value.equals(vMap.get(object2).toString()))
-				{
-					return object2;
-				}
+				{ return object2; }
 			}
 		} catch (Exception e)
 		{
@@ -938,13 +827,10 @@ public class DBUtil
 		return value;
 	}
 
-	public static String getItemQueryFieldsSql(ItemInfo info, String queryWord) throws Exception
-	{
+	public static String getItemQueryFieldsSql(ItemInfo info, String queryWord) throws Exception {
 		String queryFields = info.getQueryFields();
 		if (queryFields == null)
-		{
-			return null;
-		}
+		{ return null; }
 		String[] fields = queryFields.split(",");
 		StringBuffer buffer = new StringBuffer(" (");
 		int nCount = 0;
@@ -955,9 +841,7 @@ public class DBUtil
 			{
 				nCount++;
 				if (nCount > 1)
-				{
-					buffer.append(" OR ");
-				}
+				{ buffer.append(" OR "); }
 				String tableField = field.getFieldName();
 				String objString = setObjValueByFieldType(field, queryWord);
 				buffer.append(tableField + " " + objString);
@@ -967,8 +851,7 @@ public class DBUtil
 		return buffer.toString();
 	}
 
-	public static String setObjValueByFieldType(ItemField field, String value)
-	{
+	public static String setObjValueByFieldType(ItemField field, String value) {
 		String vString = null;
 		String editor = field.getEditor();
 		if ("MapValueList".equals(editor))
@@ -1007,21 +890,16 @@ public class DBUtil
 					}
 				}
 			} else if (FieldAdapter.isDateTime(ft))
-			{
-			} else
-			{
-			}
+			{} else
+			{}
 		}
 		return vString;
 
 	}
 
-	public static List getSQLResult(String itemNo, String sql, List paramList)
-	{
+	public static List getSQLResult(String itemNo, String sql, List paramList) {
 		if (itemNo == null || sql == null)
-		{
-			return null;
-		}
+		{ return null; }
 		PreparedStatement localPreparedStatement = null;
 		Connection connection = null;
 		try
@@ -1030,13 +908,9 @@ public class DBUtil
 			localPreparedStatement = DBConnecter.getDataSource().getConnection().prepareStatement(sql);
 			ItemInfo info = MateFactory.getItemInfo(itemNo);
 			if (ObjectHelperUtils.isEmpty(paramList))
-			{
-				paramList = info.getItemFieldList();
-			}
+			{ paramList = info.getItemFieldList(); }
 			if (!sql.toLowerCase().contains("order"))
-			{
-				sql += " ORDER BY id DESC";
-			}
+			{ sql += " ORDER BY id DESC"; }
 			ResultSet localResultSet = DatabaseUtil.executeQuery(localPreparedStatement, sql);
 			return getResultSet(info, localResultSet);
 		} catch (Exception localException)
@@ -1050,14 +924,12 @@ public class DBUtil
 		return null;
 	}
 
-	public static List getSQLResultByCondition(Object param, String paramCondition)
-	{
+	public static List getSQLResultByCondition(Object param, String paramCondition) {
 
 		PreparedStatement localPreparedStatement = null;
 		Connection connection = null;
 		try
 		{
-
 			ItemInfo itemInfo = null;
 			if (param instanceof ItemInfo)
 			{
@@ -1089,8 +961,7 @@ public class DBUtil
 	}
 
 	public static List<Map<String, Object>> getSQLResultByCondition(Object param, String paramCondition,
-			Object[] objects, int[] types)
-	{
+			Object[] objects, int[] types) {
 
 		PreparedStatement localPreparedStatement = null;
 		Connection connection = null;
@@ -1117,9 +988,7 @@ public class DBUtil
 				if (types == null)
 				{
 					for (int j = 0; j < objects.length; j++)
-					{
-						localPreparedStatement.setObject(j + 1, "'%" + objects[j] + "%'");
-					}
+					{ localPreparedStatement.setObject(j + 1, "'%" + objects[j] + "%'"); }
 				} else
 				{
 					if (types.length != objects.length)
@@ -1129,9 +998,7 @@ public class DBUtil
 						return null;
 					}
 					for (int j = 0; j < objects.length; j++)
-					{
-						localPreparedStatement.setObject(j + 1, objects[j], types[j]);
-					}
+					{ localPreparedStatement.setObject(j + 1, objects[j], types[j]); }
 				}
 			}
 			ResultSet localResultSet = localPreparedStatement.executeQuery();
@@ -1148,8 +1015,7 @@ public class DBUtil
 	}
 
 	public static List getSQLResultByConditionLimit(Object param, String paramCondition, Object[] objects, int[] types,
-			int page)
-	{
+			int page) {
 
 		String sql2 = paramCondition == null ? "" : paramCondition;
 		if (!sql2.toLowerCase().contains("limit") && !sql2.toLowerCase().contains("order"))
@@ -1163,8 +1029,7 @@ public class DBUtil
 		return getSQLResultByCondition(param, paramCondition, objects, types);
 	}
 
-	public static List getSQLResultByConditionLimit(Object param, String paramCondition, int page)
-	{
+	public static List getSQLResultByConditionLimit(Object param, String paramCondition, int page) {
 
 		String sql2 = paramCondition == null ? "" : paramCondition;
 		if (!sql2.toLowerCase().contains("limit") && !sql2.toLowerCase().contains("order"))
@@ -1178,8 +1043,7 @@ public class DBUtil
 		return getSQLResultByCondition(param, sql2);
 	}
 
-	public static List getResultSet(ItemInfo info, ResultSet resultSet) throws SQLException, Exception
-	{
+	public static List getResultSet(ItemInfo info, ResultSet resultSet) throws SQLException, Exception {
 		List<ItemField> fieldList = info.getItemFieldList();
 		int i = fieldList.size();
 		List<Map<String, Object>> resultList = new Vector<Map<String, Object>>();
@@ -1194,7 +1058,7 @@ public class DBUtil
 				String str2 = field.getNo();
 				if ((localObject1 instanceof String))
 				{
-					localHashMap.put(str2, ((String) localObject1));
+					localHashMap.put(str2, (localObject1));
 				} else
 				{
 					localHashMap.put(str2, localObject1);
@@ -1207,8 +1071,7 @@ public class DBUtil
 
 	}
 
-	public static List getSQLResultByOnlyFieldObject(ItemInfo itemInfo, Map map) throws Exception
-	{
+	public static List getSQLResultByOnlyFieldObject(ItemInfo itemInfo, Map map) throws Exception {
 		List<ItemField> fields = itemInfo.getItemFieldList();
 		StringBuffer sfields = new StringBuffer("SELECT ");
 		StringBuffer condition = new StringBuffer(" del=0 ");
@@ -1222,9 +1085,7 @@ public class DBUtil
 			{
 				objects[i] = getFieldValueByFieldType(itemField, map);
 				if (i != 0)
-				{
-					sfields.append(",");
-				}
+				{ sfields.append(","); }
 				sfields.append(itemField.getFieldName()).append(" AS ").append(itemField.getNo());
 				i++;
 				condition.append("AND " + itemField.getFieldName() + "=? ");
@@ -1239,8 +1100,7 @@ public class DBUtil
 		return null;
 	}
 
-	private static Object getFieldValueByFieldType(ItemField itemField, Object paramObject) throws Exception
-	{
+	private static Object getFieldValueByFieldType(ItemField itemField, Object paramObject) throws Exception {
 		if (paramObject == null)
 			return null;
 		Object object = null;
@@ -1256,30 +1116,23 @@ public class DBUtil
 	}
 
 	public static List getRelationItemResult(ItemInfo itemA, ItemInfo itemB, ItemInfo relationItemInfo, String itemAID,
-			int page)
-	{
+			int page) {
 		if (itemA == null || itemB == null || relationItemInfo == null)
-		{
-			return null;
-		}
+		{ return null; }
 		List<ItemField> fields = itemB.getItemFieldList();
 
 		return getRelationItemResult(itemA.getTableName(), itemB, relationItemInfo.getTableName(), itemAID, page);
 	}
 
-	public static List getRelationItemResult(String tableA, ItemInfo itemB, String relTable, String itemAID, int page)
-	{
+	public static List getRelationItemResult(String tableA, ItemInfo itemB, String relTable, String itemAID, int page) {
 		String querySql = "del=0 AND EXISTS(SELECT 1 FROM " + relTable + " WHERE " + "del=0 AND itema=? AND itemb=? "
 				+ "AND itembid=" + itemB.getTableName() + ".id AND itemaid=?)";
-		Object[] objects = new Object[]
-		{ tableA, itemB.getTableName(), itemAID };
-		int[] types =
-		{ Types.VARCHAR, Types.VARCHAR, Types.VARCHAR };
+		Object[] objects = new Object[] { tableA, itemB.getTableName(), itemAID };
+		int[] types = { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR };
 		return getSQLResultByConditionLimit(itemB, querySql, objects, types, page);
 	}
 
-	public static List<Map<String, Object>> queryForList(String table, String condition, Object... objects)
-	{
+	public static List<Map<String, Object>> queryForList(String table, String condition, Object... objects) {
 		JdbcTemplate jdbcTemplate = null;
 		try
 		{
@@ -1293,8 +1146,7 @@ public class DBUtil
 		return list;
 	}
 
-	public static Map<String, Object> queryForMap(String table, String condition, Object... objects)
-	{
+	public static Map<String, Object> queryForMap(String table, String condition, Object... objects) {
 		JdbcTemplate jdbcTemplate = null;
 		try
 		{
@@ -1308,15 +1160,7 @@ public class DBUtil
 		return data;
 	}
 
-	public static Map<String, Object> queryForMap(String sql, Object... objects)
-	{
-		try
-		{
-			Assert.notNull(sql);
-		} catch (Exception e)
-		{
-			return null;
-		}
+	public static Map<String, Object> queryForMap(String sql, Object... objects) {
 		JdbcTemplate jdbcTemplate = null;
 		try
 		{
@@ -1329,8 +1173,7 @@ public class DBUtil
 		return data;
 	}
 
-	public static List<Map<String, Object>> queryForList(@NotNull String sql, Object... objects)
-	{
+	public static List<Map<String, Object>> queryForList(@NotNull String sql, Object... objects) {
 		JdbcTemplate jdbcTemplate = null;
 		try
 		{
@@ -1343,8 +1186,7 @@ public class DBUtil
 		return dataList;
 	}
 
-	public static boolean insertOrUpdate(String insertSql, Object[] objects)
-	{
+	public static boolean insertOrUpdate(String insertSql, Object[] objects) {
 		Connection connection = null;
 		PreparedStatement ps = null;
 		try
@@ -1352,9 +1194,7 @@ public class DBUtil
 			connection = DBConnecter.getConnection();
 			ps = connection.prepareStatement(insertSql);
 			for (int j = 0; j < objects.length; j++)
-			{
-				ps.setObject(j + 1, objects[j]);
-			}
+			{ ps.setObject(j + 1, objects[j]); }
 			return ps.executeUpdate() > 0;
 
 		} catch (Exception e)
@@ -1368,8 +1208,7 @@ public class DBUtil
 		return false;
 	}
 
-	public static boolean BathInsertOrUpdate(String sql, List<Object[]> objects)
-	{
+	public static boolean BathInsertOrUpdate(String sql, List<Object[]> objects) {
 		JdbcTemplate jdbcTemplate = null;
 		try
 		{
@@ -1383,33 +1222,28 @@ public class DBUtil
 		return false;
 	}
 
-	public static String getSelectSql(ItemInfo itemInfo)
-	{
+	public static String getSelectSql(ItemInfo itemInfo) {
 		List<ItemField> fieldList = itemInfo.getItemFieldList();
+		Assert.notNull(fieldList, "item fieldList must not be null");
 		int i = fieldList.size();
 		StringBuffer sqlBuffer = new StringBuffer("SELECT ");
 		for (int m = 0; m < i; m++)
 		{
 			sqlBuffer.append(fieldList.get(m).getFieldName());
 			if (m != (i - 1))
-			{
-				sqlBuffer.append(",");
-			}
+			{ sqlBuffer.append(","); }
 		}
 		sqlBuffer.append(" FROM " + itemInfo.getTableName());
 		return sqlBuffer.toString();
 	}
 
-	public static String getSelectSql(ItemInfo itemInfo, String paramCondition)
-	{
+	public static String getSelectSql(ItemInfo itemInfo, String paramCondition) {
 		String sql = getSelectSql(itemInfo);
 		if (paramCondition != null && !"".equals(paramCondition.replace("null", "")))
 		{
 			if (!paramCondition.trim().toLowerCase().startsWith("limit")
 					&& !paramCondition.trim().toLowerCase().startsWith("order"))
-			{
-				sql += " WHERE ";
-			}
+			{ sql += " WHERE "; }
 			sql += paramCondition;
 		}
 		return sql;

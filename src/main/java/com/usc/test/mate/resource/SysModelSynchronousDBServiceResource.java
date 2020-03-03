@@ -39,8 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping(value = "/modelSynchronous", produces = "application/json;charset=UTF-8")
 @Slf4j
-public class SysModelSynchronousDBServiceResource
-{
+public class SysModelSynchronousDBServiceResource {
 
 	private static RedisUtil redis = null;
 	@Autowired
@@ -68,8 +67,7 @@ public class SysModelSynchronousDBServiceResource
 
 	@Transactional
 	@PostMapping("/all")
-	public Object synchronous(@RequestBody String params)
-	{
+	public Object synchronous(@RequestBody String params) {
 		RedisUtil redis = RedisUtil.getInstanceOfString();
 		String user = JSONObject.parseObject(params).getString("userName");
 		JSONObject map = new JSONObject();
@@ -93,8 +91,7 @@ public class SysModelSynchronousDBServiceResource
 	}
 
 	@Transactional
-	private synchronized Object synchronousDBRedis()
-	{
+	private synchronized Object synchronousDBRedis() {
 		JSONObject map = new JSONObject();
 		LoggerFactory.logInfo("----------开始同步数据库相关数据----------");
 		synchronousItemC();
@@ -110,22 +107,18 @@ public class SysModelSynchronousDBServiceResource
 		return map;
 	}
 
-	private void synchronousOthers()
-	{
+	private void synchronousOthers() {
 		jdbcTemplate.batchUpdate("UPDATE USC_MODEL_NAVIGATION SET state='F' WHERE del=0 AND state='C'",
 				"UPDATE USC_MODEL_MENU SET state='F' WHERE del=0 AND state='C'");
 	}
 
-	private void synchronousItemHS()
-	{
+	private void synchronousItemHS() {
 		List<Map<String, Object>> itemsM = jdbcTemplate
 				.queryForList("SELECT * FROM usc_model_item WHERE del=0 AND state='HS' AND effective=1");
 		if (!ObjectHelperUtils.isEmpty(itemsM))
 		{
 			for (Map<String, Object> map : itemsM)
-			{
-				SynchItemHS("usc_model_item", map);
-			}
+			{ SynchItemHS("usc_model_item", map); }
 		}
 	}
 
@@ -133,8 +126,7 @@ public class SysModelSynchronousDBServiceResource
 	 * <P>
 	 * 同步已生效的业务对象修改后的所有信息（业务对象，字段，菜单，属性页，表格）
 	 */
-	private void synchronousItemU()
-	{
+	private void synchronousItemU() {
 		String[] modelTables = getModelTables();
 		for (String table : modelTables)
 		{
@@ -143,9 +135,7 @@ public class SysModelSynchronousDBServiceResource
 			if (!ObjectHelperUtils.isEmpty(itemsM))
 			{
 				for (Map<String, Object> itemMap : itemsM)
-				{
-					SynchItemU(table, itemMap);
-				}
+				{ SynchItemU(table, itemMap); }
 			}
 
 		}
@@ -155,24 +145,19 @@ public class SysModelSynchronousDBServiceResource
 	 * <P>
 	 * 同步已生效的业务对象新建的关联信息（字段，菜单，属性页，表格）
 	 */
-	private void synchronousItemF()
-	{
+	private void synchronousItemF() {
 		LoggerFactory.logInfo("----------开始同步新增字段对线数据库相关数据----------");
 		String[] modelTables = getModelTables();
 		for (String table : modelTables)
 		{
 			String sql = "SELECT * FROM " + table + " WHERE del=0 AND state='F'";
 			if (!"USC_MODEL_GRID_GLOBAL".equals(table))
-			{
-				sql += " AND effective<>1";
-			}
+			{ sql += " AND effective<>1"; }
 			List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
 			if (!ObjectHelperUtils.isEmpty(maps))
 			{
 				for (Map<String, Object> map : maps)
-				{
-					SynchItemF(table, map);
-				}
+				{ SynchItemF(table, map); }
 			}
 		}
 	}
@@ -183,8 +168,7 @@ public class SysModelSynchronousDBServiceResource
 	 */
 
 	@Transactional(rollbackFor = Exception.class)
-	private void synchronousItemC()
-	{
+	private void synchronousItemC() {
 		String[] modelTables = getModelTables();
 		for (String table : modelTables)
 		{
@@ -193,17 +177,14 @@ public class SysModelSynchronousDBServiceResource
 			if (itemC != null && itemC.size() > 0)
 			{
 				for (Map<String, Object> itemMap : itemC)
-				{
-					SynchItemC(table, itemMap);
-				}
+				{ SynchItemC(table, itemMap); }
 			}
 		}
 
 	}
 
 	@PostMapping("/single")
-	public Object singleSynchronization(@RequestBody String param)
-	{
+	public Object singleSynchronization(@RequestBody String param) {
 		JSONObject jsonObject = JSONObject.parseObject(param);
 		String userName = jsonObject.getString("userName");
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -230,13 +211,9 @@ public class SysModelSynchronousDBServiceResource
 		} else
 		{
 			if ("U".equals(state))
-			{
-				b = SynchItemU(table, object);
-			}
+			{ b = SynchItemU(table, object); }
 			if ("C".equals(state))
-			{
-				b = SynchItemC(table, object);
-			}
+			{ b = SynchItemC(table, object); }
 			if ("HS".equals(state))
 			{
 				b = SynchItemHS(table, object);
@@ -245,9 +222,7 @@ public class SysModelSynchronousDBServiceResource
 			if ("F".equals(state))
 			{
 				if (0 == object.getIntValue("EFFECTIVE"))
-				{
-					b = SynchItemF(table, object);
-				}
+				{ b = SynchItemF(table, object); }
 			}
 		}
 
@@ -264,8 +239,7 @@ public class SysModelSynchronousDBServiceResource
 
 	}
 
-	private boolean SynchClassView()
-	{
+	private boolean SynchClassView() {
 		jdbcTemplate.batchUpdate("UPDATE USC_MODEL_NAVIGATION SET state='F' WHERE del=0 AND state<>'F'",
 				"UPDATE USC_MODEL_ITEMMENU SET state='F' WHERE del=0 AND EXISTS(SELECT 1 FROM USC_MODEL_NAVIGATION WHERE "
 						+ "del=0 AND id = USC_MODEL_ITEMMENU.itemid) AND state<>'F'");
@@ -273,8 +247,7 @@ public class SysModelSynchronousDBServiceResource
 		return true;
 	}
 
-	private boolean SynchItemC(String table, Map<String, Object> object)
-	{
+	private boolean SynchItemC(String table, Map<String, Object> object) {
 		boolean b = false;
 		String id = (String) object.get("ID");
 		if ("USC_MODEL_ITEM".equals(table))
@@ -297,7 +270,8 @@ public class SysModelSynchronousDBServiceResource
 					return initModel(table, id);
 				} catch (Exception e)
 				{
-
+					e.printStackTrace();
+					return b;
 				}
 
 			}
@@ -305,10 +279,10 @@ public class SysModelSynchronousDBServiceResource
 
 		if ("USC_MODEL_CLASSVIEW".equals(table))
 		{
-			int[] is = jdbcTemplate.batchUpdate(new String[]
-			{ "UPDATE " + table + " SET state='F' ,effective=1 WHERE id='" + id + "'",
-					"UPDATE usc_model_itemmenu SET state='F' WHERE del=0 AND itemid='" + id + "'",
-					"UPDATE usc_model_classview_node SET state='F'  WHERE del=0 AND itemid='" + id + "'" });
+			int[] is = jdbcTemplate
+					.batchUpdate(new String[] { "UPDATE " + table + " SET state='F' ,effective=1 WHERE id='" + id + "'",
+							"UPDATE usc_model_itemmenu SET state='F' WHERE del=0 AND itemid='" + id + "'",
+							"UPDATE usc_model_classview_node SET state='F'  WHERE del=0 AND itemid='" + id + "'" });
 			b = 1 == is[0];
 
 			return b ? initModel(table, id) : false;
@@ -316,22 +290,20 @@ public class SysModelSynchronousDBServiceResource
 
 		if ("USC_MODEL_GRID_GLOBAL".equals(table))
 		{
-			jdbcTemplate.batchUpdate(new String[]
-			{ "UPDATE " + table + " SET state='F'  WHERE id='" + id + "'",
+			jdbcTemplate.batchUpdate(new String[] { "UPDATE " + table + " SET state='F'  WHERE id='" + id + "'",
 					"UPDATE usc_model_grid_field SET state='F' WHERE del=0 AND rootid='" + id + "'" });
 			return initModel(table, id);
 		}
 
-		int[] is = jdbcTemplate.batchUpdate(new String[]
-		{ "UPDATE " + table + " SET state='F' ,effective=1 WHERE id='" + id + "'",
-				"UPDATE usc_model_itemmenu SET state='F' WHERE del=0 AND itemid='" + id + "'" });
+		int[] is = jdbcTemplate
+				.batchUpdate(new String[] { "UPDATE " + table + " SET state='F' ,effective=1 WHERE id='" + id + "'",
+						"UPDATE usc_model_itemmenu SET state='F' WHERE del=0 AND itemid='" + id + "'" });
 		b = 1 == is[0];
 
 		return b ? initModel(table, id) : false;
 	}
 
-	private boolean SynchItemU(String table, Map<String, Object> object)
-	{
+	private boolean SynchItemU(String table, Map<String, Object> object) {
 		List<String> sqls = new Vector<String>();
 		boolean b = true;
 		String id = (String) object.get("ID");
@@ -344,16 +316,12 @@ public class SysModelSynchronousDBServiceResource
 			List<Map<String, Object>> fieldC = jdbcTemplate.queryForList("SELECT * FROM USC_MODEL_FIELD WHERE "
 					+ "del=0 AND state='C' AND itemid='" + id + "' ORDER BY SORT");
 			if (!CollectionUtils.isEmpty(fieldC))
-			{
-				b = addFields(sqls, tableName, fieldC);
-			}
+			{ b = addFields(sqls, tableName, fieldC); }
 
 			List<Map<String, Object>> fieldM = jdbcTemplate.queryForList("SELECT * FROM USC_MODEL_FIELD WHERE "
 					+ "del=0 AND state='U' AND mysm='M' AND itemid='" + id + "' ORDER BY SORT");
 			if (!CollectionUtils.isEmpty(fieldM))
-			{
-				b = modifiyFields(sqls, tableName, fieldM);
-			}
+			{ b = modifiyFields(sqls, tableName, fieldM); }
 
 			sqls.add("UPDATE USC_MODEL_ITEM SET state='HS',effective=0,del=0 WHERE del=0 AND ver<>" + ver
 					+ " AND tablename='" + tableName + "'");
@@ -366,29 +334,28 @@ public class SysModelSynchronousDBServiceResource
 				+ " AND no='" + object.get("no") + "') T)";
 		if ("USC_MODEL_CLASSVIEW".equals(table))
 		{
-			int[] is = jdbcTemplate.batchUpdate(new String[]
-			{ "UPDATE " + table + " SET state='F' ,effective=1 WHERE id='" + id + "'",
-					"UPDATE USC_MODEL_ITEMMENU SET state='F' WHERE del=0 AND itemid='" + id + "'",
-					"UPDATE USC_MODEL_CLASSVIEW_NODE SET state='F'  WHERE del=0 AND itemid='" + id + "'",
-					"UPDATE " + table + " SET state='HS',effective=0 WHERE id=" + oldVerID,
-					"UPDATE USC_MODEL_ITEMMENU SET state='HS' WHERE del=0 AND itemid=" + oldVerID,
-					"UPDATE USC_MODEL_CLASSVIEW_NODE SET state='HS'  WHERE del=0 AND itemid=" + oldVerID });
+			int[] is = jdbcTemplate
+					.batchUpdate(new String[] { "UPDATE " + table + " SET state='F' ,effective=1 WHERE id='" + id + "'",
+							"UPDATE USC_MODEL_ITEMMENU SET state='F' WHERE del=0 AND itemid='" + id + "'",
+							"UPDATE USC_MODEL_CLASSVIEW_NODE SET state='F'  WHERE del=0 AND itemid='" + id + "'",
+							"UPDATE " + table + " SET state='HS',effective=0 WHERE id=" + oldVerID,
+							"UPDATE USC_MODEL_ITEMMENU SET state='HS' WHERE del=0 AND itemid=" + oldVerID,
+							"UPDATE USC_MODEL_CLASSVIEW_NODE SET state='HS'  WHERE del=0 AND itemid=" + oldVerID });
 			b = 1 == is[0];
 			return b ? initModel(table, id) : false;
 		}
 
-		int[] is = jdbcTemplate.batchUpdate(new String[]
-		{ "UPDATE " + table + " SET state='F' ,effective=1 WHERE id='" + id + "'",
-				"UPDATE USC_MODEL_ITEMMENU SET state='F' WHERE del=0 AND itemid='" + id + "'",
-				"UPDATE " + table + " SET state='HS',effective=0 WHERE id=" + oldVerID,
-				"UPDATE USC_MODEL_ITEMMENU SET state='HS' WHERE del=0 AND itemid=" + oldVerID });
+		int[] is = jdbcTemplate
+				.batchUpdate(new String[] { "UPDATE " + table + " SET state='F' ,effective=1 WHERE id='" + id + "'",
+						"UPDATE USC_MODEL_ITEMMENU SET state='F' WHERE del=0 AND itemid='" + id + "'",
+						"UPDATE " + table + " SET state='HS',effective=0 WHERE id=" + oldVerID,
+						"UPDATE USC_MODEL_ITEMMENU SET state='HS' WHERE del=0 AND itemid=" + oldVerID });
 		b = 1 == is[0];
 
 		return b ? initModel(table, id) : false;
 	}
 
-	private boolean SynchItemHS(String table, Map<String, Object> object)
-	{
+	private boolean SynchItemHS(String table, Map<String, Object> object) {
 		RedisUtil redis = RedisUtil.getInstanceOfObject();
 		boolean b = true;
 		String id = (String) object.get("ID");
@@ -400,16 +367,16 @@ public class SysModelSynchronousDBServiceResource
 			{
 				String itemNo = (String) object.get("ITEMNO");
 				String tableName = (String) object.get("TABLENAME");
-				int[] is = jdbcTemplate.batchUpdate(new String[]
-				{ "UPDATE USC_MODEL_ITEM SET state='HS' ,del=0,effective=0 WHERE id='" + id + "'",
-						"UPDATE USC_MODEL_ITEMMENU SET state='HS' ,del=0 WHERE itemid='" + id + "'",
-						"UPDATE USC_MODEL_FIELD SET state='HS' ,del=0 WHERE itemid='" + id + "'",
-						"UPDATE USC_MODEL_GRID SET state='HS' ,del=0 WHERE itemid='" + id + "'",
-						"UPDATE USC_MODEL_GRID_FIELD SET state='HS' ,del=0 WHERE itemid='" + id + "'",
-						"UPDATE USC_MODEL_PROPERTY SET state='HS' ,del=0 WHERE itemid='" + id + "'",
-						"UPDATE USC_MODEL_PROPERTY_FIELD SET state='HS' ,del=0 WHERE itemid='" + id + "'",
-						"UPDATE USC_MODEL_RELATIONPAGE SET state='HS' ,del=0 WHERE itemid='" + id + "'",
-						"UPDATE USC_MODEL_RELATIONPAGE_SIGN SET state='HS' ,del=0 WHERE itemid='" + id + "'" });
+				int[] is = jdbcTemplate.batchUpdate(
+						new String[] { "UPDATE USC_MODEL_ITEM SET state='HS' ,del=0,effective=0 WHERE id='" + id + "'",
+								"UPDATE USC_MODEL_ITEMMENU SET state='HS' ,del=0 WHERE itemid='" + id + "'",
+								"UPDATE USC_MODEL_FIELD SET state='HS' ,del=0 WHERE itemid='" + id + "'",
+								"UPDATE USC_MODEL_GRID SET state='HS' ,del=0 WHERE itemid='" + id + "'",
+								"UPDATE USC_MODEL_GRID_FIELD SET state='HS' ,del=0 WHERE itemid='" + id + "'",
+								"UPDATE USC_MODEL_PROPERTY SET state='HS' ,del=0 WHERE itemid='" + id + "'",
+								"UPDATE USC_MODEL_PROPERTY_FIELD SET state='HS' ,del=0 WHERE itemid='" + id + "'",
+								"UPDATE USC_MODEL_RELATIONPAGE SET state='HS' ,del=0 WHERE itemid='" + id + "'",
+								"UPDATE USC_MODEL_RELATIONPAGE_SIGN SET state='HS' ,del=0 WHERE itemid='" + id + "'" });
 				if (1 == is[0])
 				{
 					ItemInfo itemInfo = jdbcTemplate
@@ -423,69 +390,62 @@ public class SysModelSynchronousDBServiceResource
 			}
 			if ("USC_MODEL_CLASSVIEW".equals(table))
 			{
-				int[] is = jdbcTemplate.batchUpdate(new String[]
-				{ "UPDATE " + table + " SET state='HS' ,effective=0 WHERE id='" + id + "'",
+				int[] is = jdbcTemplate.batchUpdate(new String[] {
+						"UPDATE " + table + " SET state='HS' ,effective=0 WHERE id='" + id + "'",
 						"UPDATE USC_MODEL_ITEMMENU SET state='HS' WHERE del=0 AND itemid='" + id + "'",
 						"UPDATE USC_MODEL_CLASSVIEW_NODE SET state='HS'  WHERE del=0 AND itemid='" + id + "'", });
 				b = (1 == is[0]);
 				if (b)
-				{
-					redis.hdel("MODEL_QUERYVIEWDATA", object.get("NO"));
-				}
+				{ redis.hdel("MODEL_QUERYVIEWDATA", object.get("NO")); }
 				return b;
 			}
 
-			int[] is = jdbcTemplate.batchUpdate(new String[]
-			{ "UPDATE " + table + " SET state='HS' ,effective=0 WHERE id='" + id + "'",
-					"UPDATE USC_MODEL_ITEMMENU SET state='HS' WHERE del=0 AND itemid='" + id + "'" });
+			int[] is = jdbcTemplate.batchUpdate(
+					new String[] { "UPDATE " + table + " SET state='HS' ,effective=0 WHERE id='" + id + "'",
+							"UPDATE USC_MODEL_ITEMMENU SET state='HS' WHERE del=0 AND itemid='" + id + "'" });
 			b = (1 == is[0]);
 			if ("USC_MODEL_RELATIONSHIP".equals(table))
 			{
 
 				if (b)
-				{
-					redis.hdel("MODEL_RELATIONSHIPDATA", object.get("NO"));
-				}
+				{ redis.hdel("MODEL_RELATIONSHIPDATA", object.get("NO")); }
 			}
 			if ("USC_MODEL_QUERYVIEW".equals(table))
 			{
 				if (b)
-				{
-					redis.hdel("MODEL_QUERYVIEWDATA", object.get("NO"));
-				}
+				{ redis.hdel("MODEL_QUERYVIEWDATA", object.get("NO")); }
 			}
 		}
 		return false;
 
 	}
 
-	private boolean SynchItemF(String table, Map<String, Object> object)
-	{
+	private boolean SynchItemF(String table, Map<String, Object> object) {
 		boolean b = true;
 		String id = (String) object.get("ID");
 
 		if ("USC_MODEL_ITEM".equals(table))
 		{
-			int[] is = jdbcTemplate.batchUpdate(new String[]
-			{ "UPDATE USC_MODEL_ITEM SET state='F' ,del=0,effective=1 WHERE id='" + id + "'",
-					"UPDATE USC_MODEL_ITEMMENU SET state='F' ,del=0 WHERE itemid='" + id + "'",
-					"UPDATE USC_MODEL_FIELD SET state='F' ,del=0 WHERE itemid='" + id + "'",
-					"UPDATE USC_MODEL_GRID SET state='F' ,del=0 WHERE itemid='" + id + "'",
-					"UPDATE USC_MODEL_GRID_FIELD SET state='F' ,del=0 WHERE itemid='" + id + "'",
-					"UPDATE USC_MODEL_PROPERTY SET state='F' ,del=0 WHERE itemid='" + id + "'",
-					"UPDATE USC_MODEL_PROPERTY_FIELD SET state='F' ,del=0 WHERE itemid='" + id + "'",
-					"UPDATE USC_MODEL_RELATIONPAGE SET state='F' ,del=0 WHERE itemid='" + id + "'",
-					"UPDATE USC_MODEL_RELATIONPAGE_SIGN SET state='F' ,del=0 WHERE itemid='" + id + "'" });
+			int[] is = jdbcTemplate.batchUpdate(
+					new String[] { "UPDATE USC_MODEL_ITEM SET state='F' ,del=0,effective=1 WHERE id='" + id + "'",
+							"UPDATE USC_MODEL_ITEMMENU SET state='F' ,del=0 WHERE itemid='" + id + "'",
+							"UPDATE USC_MODEL_FIELD SET state='F' ,del=0 WHERE itemid='" + id + "'",
+							"UPDATE USC_MODEL_GRID SET state='F' ,del=0 WHERE itemid='" + id + "'",
+							"UPDATE USC_MODEL_GRID_FIELD SET state='F' ,del=0 WHERE itemid='" + id + "'",
+							"UPDATE USC_MODEL_PROPERTY SET state='F' ,del=0 WHERE itemid='" + id + "'",
+							"UPDATE USC_MODEL_PROPERTY_FIELD SET state='F' ,del=0 WHERE itemid='" + id + "'",
+							"UPDATE USC_MODEL_RELATIONPAGE SET state='F' ,del=0 WHERE itemid='" + id + "'",
+							"UPDATE USC_MODEL_RELATIONPAGE_SIGN SET state='F' ,del=0 WHERE itemid='" + id + "'" });
 			b = (1 == is[0]);
 			return b ? initModel(table, id) : false;
 		}
 
 		if ("USC_MODEL_CLASSVIEW".equals(table))
 		{
-			int[] is = jdbcTemplate.batchUpdate(new String[]
-			{ "UPDATE " + table + " SET state='F' ,effective=1 WHERE id='" + id + "'",
-					"UPDATE usc_model_itemmenu SET state='F' WHERE del=0 AND itemid='" + id + "'",
-					"UPDATE usc_model_classview_node SET state='F'  WHERE del=0 AND itemid='" + id + "'" });
+			int[] is = jdbcTemplate
+					.batchUpdate(new String[] { "UPDATE " + table + " SET state='F' ,effective=1 WHERE id='" + id + "'",
+							"UPDATE usc_model_itemmenu SET state='F' WHERE del=0 AND itemid='" + id + "'",
+							"UPDATE usc_model_classview_node SET state='F'  WHERE del=0 AND itemid='" + id + "'" });
 			b = (1 == is[0]);
 
 			return b ? initModel(table, id) : false;
@@ -493,26 +453,22 @@ public class SysModelSynchronousDBServiceResource
 
 		if ("USC_MODEL_GRID_GLOBAL".equals(table))
 		{
-			jdbcTemplate.batchUpdate(new String[]
-			{ "UPDATE " + table + " SET state='F'  WHERE id='" + id + "'",
+			jdbcTemplate.batchUpdate(new String[] { "UPDATE " + table + " SET state='F'  WHERE id='" + id + "'",
 					"UPDATE usc_model_grid_field SET state='F' WHERE del=0 AND rootid='" + id + "'" });
 			return initModel(table, id);
 		}
 
-		int[] is = jdbcTemplate.batchUpdate(new String[]
-		{ "UPDATE " + table + " SET state='F' ,effective=1 WHERE id='" + id + "'",
-				"UPDATE usc_model_itemmenu SET state='F' WHERE del=0 AND itemid='" + id + "'" });
+		int[] is = jdbcTemplate
+				.batchUpdate(new String[] { "UPDATE " + table + " SET state='F' ,effective=1 WHERE id='" + id + "'",
+						"UPDATE usc_model_itemmenu SET state='F' WHERE del=0 AND itemid='" + id + "'" });
 		b = (1 == is[0]);
 
 		return b ? initModel(table, id) : false;
 	}
 
-	private boolean addFields(List<String> slqs, String tableName, List<Map<String, Object>> fieldsC)
-	{
+	private boolean addFields(List<String> slqs, String tableName, List<Map<String, Object>> fieldsC) {
 		if (ObjectHelperUtils.isEmpty(tableName) || ObjectHelperUtils.isEmpty(fieldsC))
-		{
-			return false;
-		}
+		{ return false; }
 		String alterTable = "ALTER TABLE ";
 		String add = " ADD ";
 		for (Map<String, Object> addField : fieldsC)
@@ -526,12 +482,9 @@ public class SysModelSynchronousDBServiceResource
 		return true;
 	}
 
-	private boolean modifiyFields(List<String> sqls, String tableName, List<Map<String, Object>> fieldsM)
-	{
+	private boolean modifiyFields(List<String> sqls, String tableName, List<Map<String, Object>> fieldsM) {
 		if (ObjectHelperUtils.isEmpty(tableName) || ObjectHelperUtils.isEmpty(fieldsM))
-		{
-			return false;
-		}
+		{ return false; }
 		String alterTable = "ALTER TABLE ";
 		String modify = " MODIFY ";
 		for (Map<String, Object> modifyField : fieldsM)
@@ -554,8 +507,7 @@ public class SysModelSynchronousDBServiceResource
 		return true;
 	}
 
-	protected void execute(String setString, String itemID, String condition)
-	{
+	protected void execute(String setString, String itemID, String condition) {
 		condition = (condition != null) ? (" AND state='" + condition + "'") : "";
 		String item = "UPDATE USC_MODEL_ITEM SET effective=1," + setString + " WHERE id ='" + itemID + "'" + condition;
 		String field = "UPDATE USC_MODEL_FIELD SET " + setString + " WHERE del=0  AND itemid ='" + itemID + "'"
@@ -588,8 +540,7 @@ public class SysModelSynchronousDBServiceResource
 
 	}
 
-	private String getCreateTableSql(Map<String, Object> itemMap)
-	{
+	private String getCreateTableSql(Map<String, Object> itemMap) {
 		String itemid = (String) itemMap.get("ID");
 		List<Map<String, Object>> fieldC = jdbcTemplate.queryForList("SELECT * FROM USC_MODEL_FIELD WHERE "
 				+ "del=0 AND state='C' AND itemid='" + itemid + "' ORDER BY SORT");
@@ -631,8 +582,7 @@ public class SysModelSynchronousDBServiceResource
 
 	}
 
-	private String getFieldSql(Map<String, Object> fieldMap)
-	{
+	private String getFieldSql(Map<String, Object> fieldMap) {
 		String fname = (String) fieldMap.get("FIELDNAME"); // 字段名
 		String name = (String) fieldMap.get("NAME"); // 字段名
 		String ftype = (String) fieldMap.get("FTYPE"); // 字段类型
@@ -651,9 +601,7 @@ public class SysModelSynchronousDBServiceResource
 		{
 			String type = "LONGTEXT";
 			if (DBConnecter.isOracle())
-			{
-				type = "CLOB";
-			}
+			{ type = "CLOB"; }
 			sql = (fname + " " + type + " DEFAULT NULL ");
 		} else if (ftype.equals(INT))
 		{
@@ -675,22 +623,17 @@ public class SysModelSynchronousDBServiceResource
 			Object _accuracy = accuracy == null ? 4 : accuracy;
 			sql = fname + " NUMERIC(" + _flength + "," + _accuracy + ") DEFAULT NULL ";
 		} else if (ftype.equals(BOOLEAN))
-		{
-			sql = fname + " INT(1) DEFAULT NULL ";
-		}
+		{ sql = fname + " INT(1) DEFAULT NULL "; }
 		return sql + " COMMENT '" + name + "'";
 
 	}
 
-	private String[] getModelTables()
-	{
-		return new String[]
-		{ "USC_MODEL_ITEM", "USC_MODEL_RELATIONSHIP", "USC_MODEL_QUERYVIEW", "USC_MODEL_CLASSVIEW",
+	private String[] getModelTables() {
+		return new String[] { "USC_MODEL_ITEM", "USC_MODEL_RELATIONSHIP", "USC_MODEL_QUERYVIEW", "USC_MODEL_CLASSVIEW",
 				"USC_MODEL_GRID_GLOBAL" };
 	}
 
-	private boolean initModel(String table, String id)
-	{
+	private boolean initModel(String table, String id) {
 		redis = RedisUtil.getInstanceOfObject();
 		boolean b = true;
 		if ("USC_MODEL_ITEM".equals(table))
@@ -723,8 +666,7 @@ public class SysModelSynchronousDBServiceResource
 
 	}
 
-	private boolean doItemInfo(String id)
-	{
+	private boolean doItemInfo(String id) {
 		boolean b = false;
 		ItemInfo itemInfo = jdbcTemplate.queryForObject("SELECT * FROM usc_model_item WHERE id='" + id + "'",
 				new ItemRowMapper());
@@ -734,32 +676,28 @@ public class SysModelSynchronousDBServiceResource
 		return b;
 	}
 
-	private boolean doModelRelationShip(String id)
-	{
+	private boolean doModelRelationShip(String id) {
 		ModelRelationShip relationShipInfo = jdbcTemplate.queryForObject(
 				"SELECT * FROM USC_MODEL_RELATIONSHIP WHERE id='" + id + "'", new RelationShipRowMapper());
 		MateFactory.removeRelationShipCache(relationShipInfo.getNo());
 		return redis.hset("MODEL_RELATIONSHIPDATA", relationShipInfo.getNo(), relationShipInfo);
 	}
 
-	private boolean doModelClassView(String id)
-	{
+	private boolean doModelClassView(String id) {
 		ModelClassView modelClassView = jdbcTemplate.queryForObject(
 				"SELECT * FROM USC_MODEL_CLASSVIEW WHERE id='" + id + "'", new ModelClassViewRowMapper());
 		MateFactory.removClassViewCache(modelClassView.getNo());
 		return redis.hset("MODEL_QUERYVIEWDATA", modelClassView.getNo(), modelClassView);
 	}
 
-	private boolean doModelQueryView(String id)
-	{
+	private boolean doModelQueryView(String id) {
 		ModelQueryView modelQueryView = jdbcTemplate.queryForObject(
 				"SELECT * FROM USC_MODEL_QUERYVIEW WHERE id='" + id + "'", new ModelQueryViewRowMapper());
 		MateFactory.removQueryViewCache(modelQueryView.getNo());
 		return redis.hset("MODEL_QUERYVIEWDATA", modelQueryView.getNo(), modelQueryView);
 	}
 
-	private boolean doGlobalGrid(String id)
-	{
+	private boolean doGlobalGrid(String id) {
 		GlobalGrid globalGrid = jdbcTemplate.queryForObject("SELECT * FROM USC_MODEL_GRID_GLOBAL WHERE id='" + id + "'",
 				new GlobalGridRowMapper());
 		MateFactory.remoGlobalGridCache(globalGrid.getNo());
