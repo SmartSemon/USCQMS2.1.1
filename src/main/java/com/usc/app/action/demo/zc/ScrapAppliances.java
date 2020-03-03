@@ -18,6 +18,8 @@ import java.util.Map;
  **/
 public class ScrapAppliances implements ExecutionListener {
 
+    private static final long serialVersionUID = 3019812586115473555L;
+
     @Override
     public void notify(DelegateExecution execution) throws Exception {
 

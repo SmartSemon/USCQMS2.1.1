@@ -12,6 +12,8 @@ import org.activiti.engine.delegate.TaskListener;
  **/
 public class TestListener implements ExecutionListener {
 
+    private static final long serialVersionUID = -1434028747523419381L;
+
     @Override
     public void notify(DelegateExecution execution) throws Exception {
         System.err.println("执行");
