@@ -21,8 +21,7 @@ import com.usc.util.ObjectHelperUtils;
  * @date 2019年9月17日
  * @author PuTianXiong
  */
-public class UserAuthority
-{
+public class UserAuthority {
 
 	/**
 	 * <p>
@@ -34,13 +33,10 @@ public class UserAuthority
 
 	private static Map<String, ConcurrentHashMap<String, String>> userAuthMenus = new ConcurrentHashMap<String, ConcurrentHashMap<String, String>>();
 
-	public static Map<String, String> getUserRightMenus(String uID)
-	{
+	public static Map<String, String> getUserRightMenus(String uID) {
 		ConcurrentHashMap<String, String> userMenuIDS = userAuthMenus.get(uID);
 		if (userMenuIDS != null)
-		{
-			return userMenuIDS;
-		}
+		{ return userMenuIDS; }
 		List<Map<String, Object>> allAuthority = SDBUtils.getUserAuthAllData(uID);
 		if (!ObjectHelperUtils.isEmpty(allAuthority))
 		{
@@ -65,13 +61,10 @@ public class UserAuthority
 	/**
 	 * @param userName
 	 */
-	public static void removeUserRightMenus(String userName)
-	{
+	public static void removeUserRightMenus(String userName) {
 		UserInfoObject user = UserInfoUtils.getUserInfoObject(userName);
 		if (user != null)
-		{
-			userAuthMenus.remove(user.getUserID());
-		}
+		{ userAuthMenus.remove(user.getUserID()); }
 	}
 
 	/**
@@ -81,12 +74,9 @@ public class UserAuthority
 	 *
 	 * @param user :用户信息 @param itemMenus :菜单集合 @return @throws
 	 */
-	public static void authorityMenus(UserInformation user, List<ItemMenu> itemMenus)
-	{
+	public static void authorityMenus(UserInformation user, List<ItemMenu> itemMenus) {
 		if (ObjectHelperUtils.isEmpty(itemMenus))
-		{
-			return;
-		}
+		{ return; }
 		if (!UserAuthority.getSuperUsers().contains(user.getUserName()))
 		{
 			String userID = user.getUserID();
@@ -112,13 +102,11 @@ public class UserAuthority
 		}
 	}
 
-	public static List<String> getSuperUsers()
-	{
+	public static List<String> getSuperUsers() {
 		List<String> users = new ArrayList<String>();
 		users.add("admin");
 		users.add("hjh");
 		users.add("lwp");
-		users.add("wy");
 		return users;
 	}
 }
