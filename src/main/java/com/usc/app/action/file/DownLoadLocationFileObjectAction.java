@@ -24,12 +24,10 @@ import com.usc.obj.api.type.file.IFile;
 import com.usc.server.syslog.LOGActionEnum;
 import com.usc.util.ObjectHelperUtils;
 
-public class DownLoadLocationFileObjectAction extends AbstractFileObjAction
-{
+public class DownLoadLocationFileObjectAction extends AbstractFileObjAction {
 
 	@Override
-	public Object executeAction() throws Exception
-	{
+	public Object executeAction() throws Exception {
 		AppFileContext fileContext = (AppFileContext) context;
 		USCObject[] objects = context.getSelectObjs();
 		if (objects.length == 1)
@@ -37,13 +35,9 @@ public class DownLoadLocationFileObjectAction extends AbstractFileObjAction
 			IFile file = (IFile) objects[0];
 			FileObject fileObject = (FileObject) file;
 			if (!fileObject.hasFile())
-			{
-				return StandardResultTranslate.getResult("Action_DownLoad_3", false);
-			}
+			{ return StandardResultTranslate.getResult("Action_DownLoad_3", false); }
 			if (!fileObject.downLoadFile(fileContext))
-			{
-				return StandardResultTranslate.getResult(StandardResultTranslate.translate("Action_DownLoad_3"), false);
-			}
+			{ return StandardResultTranslate.getResult(StandardResultTranslate.translate("Action_DownLoad_3"), false); }
 		} else
 		{
 			bathDownloadFile(objects, null, fileContext.getServletRequest(), fileContext.getServletResponse());
@@ -53,24 +47,24 @@ public class DownLoadLocationFileObjectAction extends AbstractFileObjAction
 	}
 
 	@Override
-	public boolean disable() throws Exception
-	{
+	public boolean disable() throws Exception {
 
 		return false;
 	}
 
 	public boolean bathDownloadFile(USCObject[] fileObjects, String locaton, HttpServletRequest request,
-			HttpServletResponse response) throws UnsupportedEncodingException
-	{
+			HttpServletResponse response) throws UnsupportedEncodingException {
 		File tmpFile = FileObjUtil.getTmpFile();
 		String tmpFileName = tmpFile.getName();
 		String outFileName = tmpFileName + "." + "zip";
 		String outPath = tmpFile.getPath() + File.separator + outFileName;
 		List<File> files = new ArrayList<File>();
-		FileObject[] fileObjects2 = new FileObject[fileObjects.length];
+		int cont = fileObjects.length;
+		FileObject[] fileObjects2 = new FileObject[cont];
 		try
 		{
-			for (int i = 0; i < fileObjects.length; i++)
+			List<String> ofns = new ArrayList<String>(cont);
+			for (int i = 0; i < cont; i++)
 			{
 				if (fileObjects[i] instanceof FileObject)
 				{
@@ -78,33 +72,31 @@ public class DownLoadLocationFileObjectAction extends AbstractFileObjAction
 					if (fileObject.hasFile())
 					{
 						String id = fileObject.getID();
-						String fileName = (String) fileObject.getFieldValue("fname");
-						String flocation = (String) fileObject.getFieldValue("flocation");
-						String ftype = fileObject.getFieldValueToString("ftype");
+						String fileName = (String) fileObject.getFieldValue("FNAME");
+						String flocation = (String) fileObject.getFieldValue("FLOCATION");
+						String ftype = fileObject.getFieldValueToString("FTYPE");
 						String serverFilePath = fileObject.getLocation() + flocation + File.separator + id + ftype;
 						File serFile = new File(serverFilePath);
 						if (serFile.exists())
 						{
 							FileInputStream tmpserFile = new FileInputStream(serFile);
-							File tf = new File(tmpFile.getPath() + File.separator + fileName + ftype);
+							String ofn = fileName + ftype;
+							if (ofns.contains(ofn))
+							{ ofn = fileName + "(" + i + ")" + ftype; }
+							ofns.add(ofn);
+							File tf = new File(tmpFile.getPath() + File.separator + ofn);
 							Path tpPath = tf.toPath();
 							if (FileObjUtil.copyFile(tmpserFile, tpPath) != 0L)
-							{
-								fileObjects2[i] = fileObject;
-							}
+							{ fileObjects2[i] = fileObject; }
 							if (tf.exists())
-							{
-								files.add(tf);
-							}
+							{ files.add(tf); }
 						}
 
 					}
 				}
 			}
 			if (ObjectHelperUtils.isEmpty(files))
-			{
-				return false;
-			}
+			{ return false; }
 
 			FileOutputStream outputStream = new FileOutputStream(outPath);
 			ZipUtil.toZip(files, outputStream);
@@ -120,9 +112,7 @@ public class DownLoadLocationFileObjectAction extends AbstractFileObjAction
 		} finally
 		{
 			if (tmpFile.exists())
-			{
-				FileUtil.deleteRecursivelyFolder(tmpFile);
-			}
+			{ FileUtil.deleteRecursivelyFolder(tmpFile); }
 		}
 		return false;
 	}
