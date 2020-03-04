@@ -36,8 +36,7 @@ import com.usc.util.ObjectHelperUtils;
 import lombok.Data;
 
 @Data
-public class ApplicationContext extends DefaultInvokeContext
-{
+public class ApplicationContext extends DefaultInvokeContext {
 	private JSONBean bean;
 	private String userName;
 	private HttpServletRequest servletRequest;
@@ -62,8 +61,7 @@ public class ApplicationContext extends DefaultInvokeContext
 		setUserName(userName);
 	}
 
-	public void setContext()
-	{
+	public void setContext() {
 		String itemNo = bean.getItemNo();
 		if (itemNo == null)
 		{
@@ -71,7 +69,6 @@ public class ApplicationContext extends DefaultInvokeContext
 			itemNo = classItemNo != null ? classItemNo : null;
 		}
 		setItemNo(itemNo);
-		setItemInfo(MateFactory.getItemInfo(itemNo));
 		Assert.notNull(getItemNo(), "itemNo must not be null");
 		setItemInfo(MateFactory.getItemInfo(getItemNo()));
 		HashMap<String, Object> data = bean.getData();
@@ -109,7 +106,7 @@ public class ApplicationContext extends DefaultInvokeContext
 				} else
 				{
 					objectType = (String) hMap.get("USC_OBJECT");
-					objects[i] = NewUSCObjectHelper.newObject(objectType, hMap);
+					objects[i] = NewUSCObjectHelper.newObject(objectType == null ? getItemNo() : objectType, hMap);
 				}
 
 			}
@@ -121,39 +118,32 @@ public class ApplicationContext extends DefaultInvokeContext
 		setEX(bean);
 	}
 
-	public void setFormData(Map<String, Object> map)
-	{
+	@Override
+	public void setFormData(Map<String, Object> map) {
 		super.setContextFormData(map, this.itemInfo);
 	}
 
-	public String getModelNo()
-	{
+	public String getModelNo() {
 		return this.bean.getMNo();
 	}
 
-	private void setBean(JSONBean bean)
-	{
+	private void setBean(JSONBean bean) {
 		this.bean = bean;
 	}
 
 	private ItemInfo itemInfo;
 
-	public ItemInfo getItemInfo()
-	{
+	public ItemInfo getItemInfo() {
 		if (itemInfo == null)
-		{
-			return MateFactory.getItemInfo(getItemNo());
-		}
+		{ return MateFactory.getItemInfo(getItemNo()); }
 		return itemInfo;
 	}
 
-	private void setItemInfo(ItemInfo itemInfo)
-	{
+	private void setItemInfo(ItemInfo itemInfo) {
 		this.itemInfo = itemInfo;
 	}
 
-	private void setEX(JSONBean bean)
-	{
+	private void setEX(JSONBean bean) {
 		String username = bean.getUserName();
 		setUserName(username);
 
@@ -180,8 +170,7 @@ public class ApplicationContext extends DefaultInvokeContext
 		}
 	}
 
-	private Object getResult(Object fieldName, JSONBean bean)
-	{
+	private Object getResult(Object fieldName, JSONBean bean) {
 		try
 		{
 			Class<?> aClass = JSONBean.class;
@@ -207,8 +196,7 @@ public class ApplicationContext extends DefaultInvokeContext
 		return null;
 	}
 
-	public ItemPage getItemPage()
-	{
+	public ItemPage getItemPage() {
 		String pageNo = bean.getItemPropertyPageNo();
 		if (bean instanceof ActionRequestJSONBean)
 		{
@@ -222,8 +210,7 @@ public class ApplicationContext extends DefaultInvokeContext
 	}
 
 	@Override
-	public InvokeContext cloneContext()
-	{
+	public InvokeContext cloneContext() {
 		ApplicationContext applicationContext = new ApplicationContext(getUserName(), getSelectObjs());
 		applicationContext.setFormData(getFormData());
 		applicationContext.setActionObjType(getActionObjType());
@@ -235,32 +222,27 @@ public class ApplicationContext extends DefaultInvokeContext
 	}
 
 	@Override
-	public UserInformation getUserInformation()
-	{
+	public UserInformation getUserInformation() {
 		return createUserInformation();
 	}
 
 	@Override
-	public UserInformation createUserInformation()
-	{
+	public UserInformation createUserInformation() {
 		return UserInfoUtils.getUserInformation(getUserName());
 	}
 
 	@Override
-	public UserInformation saveUserInformation()
-	{
+	public UserInformation saveUserInformation() {
 		return null;
 	}
 
 	@Override
-	public UserInformation deleteUserInformation()
-	{
+	public UserInformation deleteUserInformation() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public String getUserClientIP()
-	{
+	public String getUserClientIP() {
 		try
 		{
 			return OnlineUsers.getOnUser(getUserName()).getIp();

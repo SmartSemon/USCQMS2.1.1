@@ -13,8 +13,7 @@ import com.usc.util.ObjectHelperUtils;
 import lombok.Data;
 
 @Data
-public class CodeGenerator
-{
+public class CodeGenerator {
 
 	private String resultCode;
 	private ApplicationContext context;
@@ -26,8 +25,7 @@ public class CodeGenerator
 		this.context = context;
 	}
 
-	public synchronized void generator(USCObject[] objects)
-	{
+	public synchronized void generator(USCObject[] objects) {
 		this.resultCode = getCode(objects);
 		if (this.exhaust)
 		{
@@ -37,15 +35,12 @@ public class CodeGenerator
 				i++;
 				this.resultCode = getCode(objects);
 				if (i == 2000)
-				{
-					return;
-				}
+				{ return; }
 			}
 		}
 	}
 
-	private synchronized String getCode(USCObject[] objects)
-	{
+	private synchronized String getCode(USCObject[] objects) {
 		String plCodeID = objects[objects.length - 1].getID();
 		while (!CodeLock.locked(plCodeID))
 		{
@@ -61,9 +56,7 @@ public class CodeGenerator
 					buffer.append(prefix);
 					Object connector = uscObject.getFieldValue("CONNECTOR");
 					if (!ObjectHelperUtils.isEmpty(connector))
-					{
-						buffer.append(connector);
-					}
+					{ buffer.append(connector); }
 				} else if (type == 2)
 				{
 					Generator generator = new Generator(uscObject);
@@ -91,8 +84,7 @@ public class CodeGenerator
 	}
 
 	@Data
-	private class Generator implements Runnable
-	{
+	private class Generator implements Runnable {
 		private boolean exhaust;
 
 		private String startCode;
@@ -111,18 +103,16 @@ public class CodeGenerator
 
 		}
 
-		private synchronized void init(USCObject uscObject)
-		{
+		private synchronized void init(USCObject uscObject) {
 
-			this.startCode = object.getFieldValueToString("startcode");
-			this.endtCode = object.getFieldValueToString("endcode");
-			this.length = (int) object.getFieldValue("code_segment");
+			this.startCode = object.getFieldValueToString("STARTCODE");
+			this.endtCode = object.getFieldValueToString("ENDCODE");
+			this.length = (int) object.getFieldValue("CODE_SEGMENT");
 
 		}
 
 		@Override
-		public void run()
-		{
+		public void run() {
 			synchronized (this)
 			{
 				String id = this.object.getID();
@@ -151,7 +141,7 @@ public class CodeGenerator
 				{
 					this.maxValue = StringHelperUtil.formatString(this.startCode, this.length);
 				}
-				this.object.setFieldValue("maxcode", this.maxValue);
+				this.object.setFieldValue("MAXCODE", this.maxValue);
 				this.object.save(context);
 			}
 
