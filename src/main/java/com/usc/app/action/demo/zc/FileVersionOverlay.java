@@ -20,6 +20,8 @@ import java.util.List;
  **/
 public class FileVersionOverlay implements ExecutionListener {
 
+    private static final long serialVersionUID = -1400269214834170502L;
+
     @Override
     public void notify(DelegateExecution execution) throws Exception {
 //        String itemNo = ActCommonUtil.getItemNo(execution.getProcessInstanceId());

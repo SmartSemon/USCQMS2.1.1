@@ -22,6 +22,8 @@ import java.util.Map;
  * @Description: 文件下发并通知接收人
  **/
 public class IssuanceOfDocuments implements ExecutionListener {
+    private static final long serialVersionUID = 7434334549336067081L;
+
     @Override
     public void notify(DelegateExecution execution) throws Exception {
 
