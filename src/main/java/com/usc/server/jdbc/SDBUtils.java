@@ -20,22 +20,17 @@ import com.usc.server.util.SystemTime;
 import com.usc.server.util.uuid.USCUUID;
 import com.usc.util.ObjectHelperUtils;
 
-public class SDBUtils
-{
+public class SDBUtils {
 
-	public static boolean dataExistence(String table, String condition, Object... objects)
-	{
+	public static boolean dataExistence(String table, String condition, Object... objects) {
 
 		List<Map<String, Object>> datas = DBUtil.queryForList(table, condition, objects);
 		if (!ObjectHelperUtils.isEmpty(datas))
-		{
-			return Boolean.TRUE;
-		}
+		{ return Boolean.TRUE; }
 		return Boolean.FALSE;
 	}
 
-	public static Map<String, Object> getUserInfomation(String userName)
-	{
+	public static Map<String, Object> getUserInfomation(String userName) {
 		Map<String, Object> res = null;
 		RedisUtil redisUtil = RedisUtil.getInstanceOfObject();
 		Object userObject = redisUtil.hget("USERINFODATA", userName);
@@ -47,8 +42,7 @@ public class SDBUtils
 		return res;
 	}
 
-	public static String getUserPS(String userName)
-	{
+	public static String getUserPS(String userName) {
 		Map<String, Object> data = getUserInfomation(userName);
 		if (ObjectHelperUtils.isNotEmpty(data))
 		{
@@ -56,28 +50,20 @@ public class SDBUtils
 			Map<String, Object> ps = DBConnecter.getJdbcTemplate()
 					.queryForMap("SELECT PASSWORD FROM SUSER WHERE ID='" + userID + "'");
 			if (ObjectHelperUtils.isNotEmpty(ps))
-			{
-				return (String) ps.get("PASSWORD");
-			}
+			{ return (String) ps.get("PASSWORD"); }
 		}
 		return "-1";
 	}
 
-	public static List<Map<String, Object>> getAuthData(USCObject object)
-	{
+	public static List<Map<String, Object>> getAuthData(USCObject object) {
 		String strID = object.getID();
 		return DBUtil.getSQLResultByCondition("AUTHORIZED", "DEL=0 AND (CHECKEDSTATE=? OR CHECKEDSTATE=?) AND SRUID=?",
-				new Object[]
-				{ 1, 2, strID }, new int[]
-				{ Types.INTEGER, Types.INTEGER, Types.VARCHAR });
+				new Object[] { 1, 2, strID }, new int[] { Types.INTEGER, Types.INTEGER, Types.VARCHAR });
 	}
 
-	public static boolean authorize(USCObject uscObject, List<Map> nAuthData, ApplicationContext context)
-	{
+	public static boolean authorize(USCObject uscObject, List<Map> nAuthData, ApplicationContext context) {
 		if (ObjectHelperUtils.isEmpty(nAuthData))
-		{
-			return false;
-		}
+		{ return false; }
 		List<Object[]> list = new ArrayList<Object[]>(nAuthData.size());
 		StringBuffer fields = new StringBuffer("INSERT INTO authorized (");
 		StringBuffer values = new StringBuffer(" VALUES (");
@@ -136,8 +122,7 @@ public class SDBUtils
 
 	}
 
-	public static void cancelAuthorize(USCObject object, List<String> hIDS, ApplicationContext context)
-	{
+	public static void cancelAuthorize(USCObject object, List<String> hIDS, ApplicationContext context) {
 
 		StringBuffer sql = new StringBuffer("UPDATE AUTHORIZED SET DEL=?,DTIME=?,DUSER=? WHERE SRUID=? AND CID IN(");
 
@@ -145,9 +130,7 @@ public class SDBUtils
 		for (int i = 0; i < hIDS.size(); i++)
 		{
 			if (i > 0)
-			{
-				sql.append(",");
-			}
+			{ sql.append(","); }
 			sql.append("'" + hIDS.get(i) + "'");
 			objects[i] = hIDS.get(i);
 		}
@@ -174,8 +157,7 @@ public class SDBUtils
 	}
 
 	public static void updateAuthorize(USCObject uscObject, List<String> hIDS, List<String> hHIDS, List<Map> nAuthData,
-			ApplicationContext context)
-	{
+			ApplicationContext context) {
 		Map<String, Integer> map = getAuthedData(hIDS, hHIDS);
 		if (ObjectHelperUtils.isEmpty(map))
 		{
@@ -207,18 +189,13 @@ public class SDBUtils
 				int check = (Integer) nAuthData.get(i).get("checkedState");
 				int checked = map.get(id);
 				if (check != checked)
-				{
-					updateAuthData.add(new Object[]
-					{ uTime, context.getUserName(), check, uscObject.getID(), id });
-				}
+				{ updateAuthData.add(new Object[] { uTime, context.getUserName(), check, uscObject.getID(), id }); }
 				map.remove(id);
 			}
 		}
 
 		if (!ObjectHelperUtils.isEmpty(newAuthData))
-		{
-			authorize(uscObject, newAuthData, context);
-		}
+		{ authorize(uscObject, newAuthData, context); }
 		if (!ObjectHelperUtils.isEmpty(updateAuthData))
 		{
 			String sql = "UPDATE AUTHORIZED SET MTIME=?,MUSER=?,CHECKEDSTATE=? WHERE SRUID=? AND CID=?";
@@ -233,24 +210,21 @@ public class SDBUtils
 		}
 	}
 
-	private static Map<String, Integer> getAuthedData(List<String> hIDS, List<String> hHIDS)
-	{
+	private static Map<String, Integer> getAuthedData(List<String> hIDS, List<String> hHIDS) {
 		Map<String, Integer> map = new ConcurrentHashMap<String, Integer>();
 		hIDS.forEach(k -> map.put(k, 1));
 		hHIDS.forEach(k -> map.put(k, 2));
 		return map;
 	}
 
-	public static List<String> getModuleAuthed(String userName)
-	{
+	public static List<String> getModuleAuthed(String userName) {
 		Map map = getUserInfomation(userName);
 
 		return moduleAuthedData((String) map.get("ID"));
 
 	}
 
-	public static List<String> moduleAuthedData(String uID)
-	{
+	public static List<String> moduleAuthedData(String uID) {
 		List<Map<String, Object>> list = getUserAuthAllData(uID);
 
 		if (!ObjectHelperUtils.isEmpty(list))
@@ -260,9 +234,7 @@ public class SDBUtils
 				String cid = (String) map.get("CID");
 				cid = cid.substring(cid.lastIndexOf("_") + 1, cid.length());
 				if (!list2.contains(cid))
-				{
-					list2.add(cid);
-				}
+				{ list2.add(cid); }
 			});
 			return list2;
 
@@ -271,25 +243,20 @@ public class SDBUtils
 		return null;
 	}
 
-	public static List<Map<String, Object>> getUserAuthAllData(String uID)
-	{
+	public static List<Map<String, Object>> getUserAuthAllData(String uID) {
 		String itemA = "SROLE";
 		String itemB = "SUSER";
 		String condition = "del = 0 AND sruid IN (SELECT id FROM srole WHERE del=0 "
 				+ "AND EXISTS(SELECT 1 FROM sr_srole_suser_obj WHERE DEL=0 "
 				+ "AND itema=? AND itemb=? AND itembid=? AND itemaid=srole.id) UNION "
 				+ "SELECT id FROM suser WHERE id=?)";
-
-		Object[] objects = new Object[]
-		{ itemA, itemB, uID, uID };
-		int[] types = new int[]
-		{ Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR };
+		Object[] objects = new Object[] { itemA, itemB, uID, uID };
+		int[] types = new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR };
 		List<Map<String, Object>> list = DBUtil.getSQLResultByCondition("AUTHORIZED", condition, objects, types);
 		return list;
 	}
 
-	public static Map<String, Object> getUserWKContextID(UserInformation userInformation)
-	{
+	public static Map<String, Object> getUserWKContextID(UserInformation userInformation) {
 		String userID = userInformation.getUserID();
 		List<Map<String, Object>> maps = DBUtil.getSQLResultByCondition("WKCLIENT", "del=0 AND suid='" + userID + "'");
 		return ObjectHelperUtils.isEmpty(maps) ? null : (Map<String, Object>) maps.get(0);
