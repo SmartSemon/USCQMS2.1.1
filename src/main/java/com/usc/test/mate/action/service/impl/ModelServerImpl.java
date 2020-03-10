@@ -16,15 +16,13 @@ import com.usc.test.mate.action.service.ModelServer;
 import com.usc.util.ObjectHelperUtils;
 
 @Service(value = "modelServer")
-public class ModelServerImpl implements ModelServer
-{
+public class ModelServerImpl implements ModelServer {
 	RedisUtil redis = null;
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
 	@Override
-	public Object openModel(String param)
-	{
+	public Object openModel(String param) {
 		redis = RedisUtil.getInstanceOfObject();
 		JSONObject jsonObject = JSONObject.parseObject(param);
 		String userName = jsonObject.getString("userName");
@@ -33,16 +31,13 @@ public class ModelServerImpl implements ModelServer
 		map.put("flag", true);
 		map.put("info", "开启成功");
 		if (!isModelingUser(userName))
-		{
-			redis.hset("OPENMODEL", userName, userName);
-		}
+		{ redis.hset("OPENMODEL", userName, userName); }
 
 		return map;
 	}
 
 	@Override
-	public Object closeModel(String param)
-	{
+	public Object closeModel(String param) {
 		redis = RedisUtil.getInstanceOfString();
 		JSONObject jsonObject = JSONObject.parseObject(param);
 		String user = jsonObject.getString("userName");
@@ -94,8 +89,7 @@ public class ModelServerImpl implements ModelServer
 		{
 			if (!(boolean) force)
 			{
-				String[] sqls = new String[]
-				{ "DELETE FROM usc_model_classview WHERE state IN('C','U')" + cusersql,
+				String[] sqls = new String[] { "DELETE FROM usc_model_classview WHERE state IN('C','U')" + cusersql,
 						"DELETE FROM usc_model_classview_node WHERE state IN('C','U')" + cusersql,
 						"DELETE FROM usc_model_queryview WHERE state IN('C','U')" + cusersql,
 						"DELETE FROM usc_model_field WHERE del=0 AND state IN('C','U')" + cusersql,
@@ -149,8 +143,7 @@ public class ModelServerImpl implements ModelServer
 	private String tableName;
 
 	@Override
-	public Object upgradeModel(String param)
-	{
+	public Object upgradeModel(String param) {
 		JSONObject jsonObject = JSONObject.parseObject(param);
 		this.cuser = jsonObject.getString("userName");
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -211,8 +204,7 @@ public class ModelServerImpl implements ModelServer
 
 	private String cuser;
 
-	private void cloneItem(JSONObject obj)
-	{
+	private void cloneItem(JSONObject obj) {
 		List<String> sqls = new Vector<String>();
 		Integer ver = obj.getInteger("VER") + 1;
 		String oldItemID = obj.getString("ID");
@@ -240,17 +232,43 @@ public class ModelServerImpl implements ModelServer
 			{
 				String oldProID = (String) map.get("ID");
 				String newProID = getUUID();
-				String proSql = "INSERT INTO usc_model_property (itemid,id,del,state,no,name,width,columns,defaultc,cuser,ctime) SELECT '"
+				String proSql = "INSERT INTO usc_model_property (itemid,id,del,state,no,name,width,columns,defaultc,peptide,cuser,ctime) SELECT '"
 						+ newItemID + "' AS itemid,'" + newProID
-						+ "' AS id,del,'U' AS state,no,name,width,columns,defaultc,'" + cuser
+						+ "' AS id,del,'U' AS state,no,name,width,columns,defaultc,peptide,'" + cuser
 						+ "' AS cuser,(select NOW()) AS ctime FROM usc_model_property WHERE id='" + oldProID + "'";
 				sqls.add(proSql);
-				String proFieldSql = "INSERT INTO usc_model_property_field (itemid,rootid,id,sort,del,state,no,name,editable,wline,cuser,ctime) SELECT '"
-						+ newItemID + "' AS itemid,'" + newProID
-						+ "' AS rootid,(select UUID()) AS id,sort,del,'U' AS state,no,name,editable,wline,'" + cuser
-						+ "' AS cuser,(select NOW()) AS ctime FROM usc_model_property_field WHERE del=0 AND itemid='"
-						+ oldItemID + "' AND rootid='" + oldProID + "'";
-				sqls.add(proFieldSql);
+				List<Map<String, Object>> proTopFieldList = jdbcTemplate
+						.queryForList("SELECT ID FROM usc_model_property_field WHERE del=0 AND pid='0' AND itemid='"
+								+ oldItemID + "' AND rootid='" + oldProID + "'");
+				if (!ObjectHelperUtils.isEmpty(proTopFieldList))
+				{
+					for (Map<String, Object> map2 : proTopFieldList)
+					{
+						String topFiledid = (String) map2.get("ID");
+						String newTopFiledid = getUUID();
+						String proTopFieldSql = "INSERT INTO usc_model_property_field (pid,itemid,rootid,id,sort,del,state,no,name,editable,wline,cuser,ctime) SELECT pid,'"
+								+ newItemID + "' AS itemid,'" + newProID + "' AS rootid,'" + newTopFiledid
+								+ "' AS id,sort,del,'U' AS state,no,name,editable,wline,'" + cuser
+								+ "' AS cuser,(select NOW()) AS ctime FROM usc_model_property_field WHERE id='"
+								+ topFiledid + "'";
+						sqls.add(proTopFieldSql);
+						String proFieldSql = "INSERT INTO usc_model_property_field (pid,itemid,rootid,id,sort,del,state,no,name,editable,wline,cuser,ctime) SELECT '"
+								+ newTopFiledid + "' AS pid,'" + newItemID + "' AS itemid,'" + newProID
+								+ "' AS rootid,(select UUID()) AS id,sort,del,'U' AS state,no,name,editable,wline,'"
+								+ cuser
+								+ "' AS cuser,(select NOW()) AS ctime FROM usc_model_property_field WHERE del=0 AND itemid='"
+								+ oldItemID + "' AND rootid='" + oldProID + "' AND  pid='" + topFiledid + "'";
+						sqls.add(proFieldSql);
+					}
+				} else
+				{
+					String proFieldSql = "INSERT INTO usc_model_property_field (pid,itemid,rootid,id,sort,del,state,no,name,editable,wline,cuser,ctime) SELECT pid,'"
+							+ newItemID + "' AS itemid,'" + newProID
+							+ "' AS rootid,(select UUID()) AS id,sort,del,'U' AS state,no,name,editable,wline,'" + cuser
+							+ "' AS cuser,(select NOW()) AS ctime FROM usc_model_property_field WHERE del=0 AND itemid='"
+							+ oldItemID + "' AND rootid='" + oldProID + "'";
+					sqls.add(proFieldSql);
+				}
 			}
 		}
 		List<Map<String, Object>> grids = jdbcTemplate
@@ -304,8 +322,7 @@ public class ModelServerImpl implements ModelServer
 
 	}
 
-	private String getItemMenusSql(List<String> sqls, String oldItemID, String newItemID)
-	{
+	private String getItemMenusSql(List<String> sqls, String oldItemID, String newItemID) {
 		List<Map<String, Object>> menu = jdbcTemplate.queryForList(
 				"SELECT id FROM usc_model_itemmenu WHERE del=0 AND pid='0' AND itemid='" + oldItemID + "'");
 		if (!ObjectHelperUtils.isEmpty(menu))
@@ -326,8 +343,8 @@ public class ModelServerImpl implements ModelServer
 		return null;
 	}
 
-	private void getChrildMenuNode(List<String> sqls, String oldItemID, String newItemID, String oldPid, String newPid)
-	{
+	private void getChrildMenuNode(List<String> sqls, String oldItemID, String newItemID, String oldPid,
+			String newPid) {
 		List<Map<String, Object>> menus = jdbcTemplate
 				.queryForList("SELECT id,mtype,abtype FROM usc_model_itemmenu WHERE del=0 AND pid='" + oldPid
 						+ "' AND itemid='" + oldItemID + "'");
@@ -346,9 +363,7 @@ public class ModelServerImpl implements ModelServer
 				Integer mtype = (Integer) map.get("MTYPE");
 				Object abtype = map.get("ABTYPE");
 				if (mtype == 0 && abtype != null)
-				{
-					continue;
-				}
+				{ continue; }
 				getChrildMenuNode(sqls, oldItemID, newItemID, oldMenuId, newMenuId);
 			}
 		} else
@@ -357,8 +372,7 @@ public class ModelServerImpl implements ModelServer
 		}
 	}
 
-	private void cloneRelationship(JSONObject obj)
-	{
+	private void cloneRelationship(JSONObject obj) {
 		List<String> sqls = new Vector<String>();
 		Integer v = obj.getInteger("VER");
 		Integer ver = v == null ? 1 : v + 1;
@@ -375,8 +389,7 @@ public class ModelServerImpl implements ModelServer
 		jdbcTemplate.batchUpdate(sqls.toArray(new String[sqls.size()]));
 	}
 
-	private void cloneClassview(JSONObject obj)
-	{
+	private void cloneClassview(JSONObject obj) {
 		List<String> sqls = new Vector<String>();
 		Integer v = obj.getInteger("VER");
 		Integer ver = v == null ? 1 : v + 1;
@@ -409,8 +422,8 @@ public class ModelServerImpl implements ModelServer
 		jdbcTemplate.batchUpdate(sqls.toArray(new String[sqls.size()]));
 	}
 
-	private void getChrildClassNode(List<String> sqls, String oldViewID, String newViewID, String oldPid, String newPid)
-	{
+	private void getChrildClassNode(List<String> sqls, String oldViewID, String newViewID, String oldPid,
+			String newPid) {
 		List<Map<String, Object>> menus = jdbcTemplate
 				.queryForList("SELECT id FROM usc_model_classview_node WHERE del=0 AND pid='" + oldPid
 						+ "' AND itemid='" + oldViewID + "'");
@@ -431,8 +444,7 @@ public class ModelServerImpl implements ModelServer
 		}
 	}
 
-	private void cloneQueryview(JSONObject obj)
-	{
+	private void cloneQueryview(JSONObject obj) {
 		List<String> sqls = new Vector<String>();
 		Integer v = obj.getInteger("VER");
 		Integer ver = v == null ? 1 : v + 1;
@@ -449,29 +461,24 @@ public class ModelServerImpl implements ModelServer
 	}
 
 	@Override
-	public Object cancelUpgradeModel(String param)
-	{
+	public Object cancelUpgradeModel(String param) {
 		return null;
 	}
 
 	@Override
-	public boolean isModelingUser(String userName)
-	{
+	public boolean isModelingUser(String userName) {
 		if (userName != null)
 		{
 			redis = RedisUtil.getInstanceOfObject();
 			String user = (String) redis.hget("OPENMODEL", userName);
 			if (user != null)
-			{
-				return true;
-			}
+			{ return true; }
 		}
 
 		return false;
 	}
 
-	private String getUUID()
-	{
+	private String getUUID() {
 		return UUID.randomUUID().toString().replace("-", "");
 	}
 }

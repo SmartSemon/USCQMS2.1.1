@@ -11,30 +11,24 @@ import com.usc.obj.api.impl.AppFileContext;
 import com.usc.obj.api.type.file.FileObject;
 import com.usc.obj.api.type.file.IFile;
 
-public class CreateObjAction extends AbstractAction
-{
+public class CreateObjAction extends AbstractAction {
 
 	@Override
-	public Object executeAction() throws Exception
-	{
+	public Object executeAction() throws Exception {
 		if (disable())
 		{
-			Map newData = ActionParamParser.getFieldVaues(context.getItemInfo(), context.getItemPage(),
+			Map<String, Object> newData = ActionParamParser.getFieldVaues(context.getItemInfo(), context.getItemPage(),
 					context.getFormData());
 			context.setFormData(newData);
 			USCObject object = context.createObj(context.getItemNo());
 			if (object == null)
 			{
 				if (context.getExtendInfo("CreateResult") != null)
-				{
-					return context.getExtendInfo("CreateResult");
-				}
+				{ return context.getExtendInfo("CreateResult"); }
 			} else
 			{
 				if (object instanceof IFile)
-				{
-					doFileAction(object);
-				}
+				{ doFileAction(object); }
 			}
 			return new ActionMessage(flagTrue, RetSignEnum.NEW, StandardResultTranslate.translate("Action_Create_1"),
 					object);
@@ -43,16 +37,14 @@ public class CreateObjAction extends AbstractAction
 
 	}
 
-	private void doFileAction(USCObject object)
-	{
+	private void doFileAction(USCObject object) {
 		AppFileContext fileContext = (AppFileContext) context;
 		FileObject fileObject = (FileObject) object;
 		fileObject.upLoadFile(fileContext);
 	}
 
 	@Override
-	public boolean disable() throws Exception
-	{
+	public boolean disable() throws Exception {
 		return true;
 	}
 

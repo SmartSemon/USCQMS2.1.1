@@ -9,16 +9,17 @@ import org.springframework.jdbc.support.JdbcUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.util.LinkedCaseInsensitiveMap;
 
-import com.usc.server.md.ItemInfo;
+import com.usc.server.md.ItemPeptidePage;
 
-public class ItemRowMapper implements RowMapper<ItemInfo> {
-	public ItemRowMapper()
+public class PeptidePageRowMapper implements RowMapper<ItemPeptidePage> {
+	public PeptidePageRowMapper()
 	{
 	}
 
 	@Override
-	public ItemInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
-		return ItemBeanFactoryConverter.getBean(ItemInfo.class, rs);
+	public ItemPeptidePage mapRow(ResultSet rs, int rowNum) throws SQLException {
+		ItemPeptidePage info = ItemRelBeanFactoryConverter.getBean(ItemPeptidePage.class, rs);
+		return info;
 	}
 
 	protected Map<String, Object> createColumnMap(int columnCount) {

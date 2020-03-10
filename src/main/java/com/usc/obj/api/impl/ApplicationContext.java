@@ -68,8 +68,10 @@ public class ApplicationContext extends DefaultInvokeContext {
 			String classItemNo = bean.getClassNodeItemNo();
 			itemNo = classItemNo != null ? classItemNo : null;
 		}
+
+		Assert.notNull(itemNo, "itemNo must not be null");
 		setItemNo(itemNo);
-		Assert.notNull(getItemNo(), "itemNo must not be null");
+
 		setItemInfo(MateFactory.getItemInfo(getItemNo()));
 		HashMap<String, Object> data = bean.getData();
 		Map<String, Object> initData = getFormData();
@@ -197,7 +199,7 @@ public class ApplicationContext extends DefaultInvokeContext {
 	}
 
 	public ItemPage getItemPage() {
-		String pageNo = bean.getItemPropertyPageNo();
+		String pageNo = bean.getMNo();
 		if (bean instanceof ActionRequestJSONBean)
 		{
 			ActionRequestJSONBean requestJSONBean = (ActionRequestJSONBean) bean;

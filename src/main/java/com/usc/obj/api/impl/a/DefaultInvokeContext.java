@@ -16,12 +16,11 @@ import com.usc.server.md.ItemField;
 import com.usc.server.md.ItemInfo;
 import com.usc.server.md.field.FieldUtils;
 
-public abstract class DefaultInvokeContext implements InvokeContext
-{
+public abstract class DefaultInvokeContext implements InvokeContext {
 
 	protected USCObject[] objs = null;
 	private Map<String, Object> formData = null;
-	private Map extendInfo = new HashMap<String, Object>();
+	private Map<Object, Object> extendInfo = new HashMap<Object, Object>();
 	protected String param = null;
 	private String itemNo;
 	private boolean isInitModel = true;
@@ -31,13 +30,13 @@ public abstract class DefaultInvokeContext implements InvokeContext
 	{
 	}
 
-	public USCObject getSelectedObj()
-	{
+	@Override
+	public USCObject getSelectedObj() {
 		return objs != null ? objs[0] : null;
 	}
 
-	public void setCurrObj(USCObject paramObj)
-	{
+	@Override
+	public void setCurrObj(USCObject paramObj) {
 		if (paramObj == null)
 		{
 			this.objs = null;
@@ -49,74 +48,66 @@ public abstract class DefaultInvokeContext implements InvokeContext
 			this.objs[0] = paramObj;
 		} else
 		{
-			this.objs = new USCObject[]
-			{ paramObj };
+			this.objs = new USCObject[] { paramObj };
 		}
 
 	}
 
-	public String getParam()
-	{
+	@Override
+	public String getParam() {
 		return this.param;
 	}
 
-	public void setParam(String paramString)
-	{
+	@Override
+	public void setParam(String paramString) {
 		this.param = paramString;
 	}
 
-	public String getClientID()
-	{
+	@Override
+	public String getClientID() {
 		UserInformation information = getUserInformation();
 		if (information != null)
-		{
-			return information.getClientID();
-		}
+		{ return information.getClientID(); }
 		return null;
 	}
 
-	public USCObject[] getSelectObjs()
-	{
+	@Override
+	public USCObject[] getSelectObjs() {
 		return objs;
 	}
 
-	public void setSelectObjs(USCObject[] objs)
-	{
+	@Override
+	public void setSelectObjs(USCObject[] objs) {
 
 		this.objs = objs;
 	}
 
-	public boolean isInitModel()
-	{
+	@Override
+	public boolean isInitModel() {
 		return false;
 	}
 
-	public void setInitModel(boolean paramBoolean)
-	{
+	@Override
+	public void setInitModel(boolean paramBoolean) {
 		this.isInitModel = paramBoolean;
 
 	}
 
-	public Map<String, Object> getFormData()
-	{
+	@Override
+	public Map<String, Object> getFormData() {
 		return this.formData;
 	}
 
-	public void setFormData(Map<String, Object> map)
-	{
+	@Override
+	public void setFormData(Map<String, Object> map) {
 		this.formData = map;
 	}
 
-	public void setContextFormData(Map<String, Object> map, ItemInfo info)
-	{
+	public void setContextFormData(Map<String, Object> map, ItemInfo info) {
 		if (map == null)
-		{
-			return;
-		}
+		{ return; }
 		if (info == null)
-		{
-			Assert.notNull(getItemNo(), "itemNo must not be null");
-		}
+		{ Assert.notNull(getItemNo(), "itemNo must not be null"); }
 		this.formData = new HashMap<String, Object>();
 		map.forEach((field, value) -> {
 			ItemField itemField = info.getItemField(field);
@@ -128,64 +119,57 @@ public abstract class DefaultInvokeContext implements InvokeContext
 		});
 	}
 
-	public String getItemNo()
-	{
+	@Override
+	public String getItemNo() {
 		return itemNo;
 	}
 
-	public void setItemNo(String paramString)
-	{
+	@Override
+	public void setItemNo(String paramString) {
 		this.itemNo = paramString;
 
 	}
 
-	public USCObjectAction getActionObjType()
-	{
+	@Override
+	public USCObjectAction getActionObjType() {
 		return objAction;
 	}
 
-	public void setActionObjType(USCObjectAction objectAction)
-	{
+	@Override
+	public void setActionObjType(USCObjectAction objectAction) {
 		this.objAction = objectAction;
 	}
 
-	public void putContext(InvokeContext context)
-	{
+	public void putContext(InvokeContext context) {
 
 	}
 
-	public String getCurrUserName()
-	{
+	@Override
+	public String getCurrUserName() {
 		UserInformation userInformation = getUserInformation();
 		if (userInformation != null)
-		{
-			return userInformation.getUserName();
-		}
+		{ return userInformation.getUserName(); }
 		return null;
 	}
 
-	public USCObject createObj(String objType) throws Exception
-	{
+	@Override
+	public USCObject createObj(String objType) throws Exception {
 		setItemNo(objType);
 		USCObjCreator creator = new AppMainCreator(objType);
 		if (((AppMainCreator) creator).VerifyItemUniqueness(this.getFormData()))
-		{
-			throw new ApplicationException("违反字段唯一性约束，字段：" + creator.getOnlyFields(this));
-		}
+		{ throw new ApplicationException("违反字段唯一性约束，字段：" + creator.getOnlyFields(this)); }
 		USCObject object = creator.create(this);
 		setCurrObj(object);
 		return object;
 	}
 
 	@Override
-	public Object getExtendInfo(Object paramObject)
-	{
+	public Object getExtendInfo(Object paramObject) {
 		return extendInfo.get(paramObject);
 	}
 
 	@Override
-	public void setExtendInfo(Object paramObject1, Object paramObject2)
-	{
+	public void setExtendInfo(Object paramObject1, Object paramObject2) {
 		extendInfo.putIfAbsent(paramObject1, paramObject2);
 	}
 

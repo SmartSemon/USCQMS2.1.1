@@ -2,22 +2,18 @@ package com.usc.app.util.file;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 /**
- * @BelongsProject: exchange
- * @BelongsPackage: com.elens.util
- * @Author: xuweichao
+ * @Author: Semon
  * @CreateTime: 2019-06-04 15:51
  * @Description: 文件压缩工具类
  */
 
-public class ZipUtil
-{
+public class ZipUtil {
 
 	private static final int BUFFER_SIZE = 2 * 1024;
 
@@ -30,34 +26,19 @@ public class ZipUtil
 	 *                         false:所有文件跑到压缩包根目录下(注意：不保留目录结构可能会出现同名文件,会压缩失败)
 	 * @throws RuntimeException 压缩失败会抛出运行时异常
 	 */
-	public static void toZip(String srcDir, OutputStream out, boolean keepDirStructure) throws RuntimeException
-	{
+	public static void toZip(String srcDir, OutputStream out, boolean keepDirStructure) throws RuntimeException {
 
-		long start = System.currentTimeMillis();
-		ZipOutputStream zos = null;
-		try
+//		long start = System.currentTimeMillis();
+		try (ZipOutputStream zos = new ZipOutputStream(out))
 		{
-			zos = new ZipOutputStream(out);
 			File sourceFile = new File(srcDir);
 			compress(sourceFile, zos, sourceFile.getName(), keepDirStructure);
 
-			long end = System.currentTimeMillis();
-			System.out.println("压缩完成，耗时：" + (end - start) + " ms");
+//			long end = System.currentTimeMillis();
+//			System.out.println("压缩完成，耗时：" + (end - start) + " ms");
 		} catch (Exception e)
 		{
 			throw new RuntimeException("zip error from ZipUtils", e);
-		} finally
-		{
-			if (zos != null)
-			{
-				try
-				{
-					zos.close();
-				} catch (IOException e)
-				{
-					e.printStackTrace();
-				}
-			}
 		}
 
 	}
@@ -69,14 +50,9 @@ public class ZipUtil
 	 * @param out      压缩文件输出流
 	 * @throws RuntimeException 压缩失败会抛出运行时异常
 	 */
-	public static void toZip(List<File> srcFiles, OutputStream out) throws RuntimeException
-	{
-		long start = System.currentTimeMillis();
-		ZipOutputStream zos = null;
-
-		try
+	public static void toZip(List<File> srcFiles, OutputStream out) throws RuntimeException {
+		try (ZipOutputStream zos = new ZipOutputStream(out))
 		{
-			zos = new ZipOutputStream(out);
 			for (File srcFile : srcFiles)
 			{
 				byte[] buf = new byte[BUFFER_SIZE];
@@ -84,29 +60,13 @@ public class ZipUtil
 				int len;
 				FileInputStream in = new FileInputStream(srcFile);
 				while ((len = in.read(buf)) != -1)
-				{
-					zos.write(buf, 0, len);
-				}
+				{ zos.write(buf, 0, len); }
 				zos.closeEntry();
 				in.close();
 			}
-			long end = System.currentTimeMillis();
-			System.out.println("压缩完成，耗时：" + (end - start) + " ms");
 		} catch (Exception e)
 		{
 			throw new RuntimeException("zip error from ZipUtils", e);
-		} finally
-		{
-			if (zos != null)
-			{
-				try
-				{
-					zos.close();
-				} catch (IOException e)
-				{
-					e.printStackTrace();
-				}
-			}
 		}
 	}
 
@@ -121,8 +81,7 @@ public class ZipUtil
 	 * @throws Exception
 	 */
 	private static void compress(File sourceFile, ZipOutputStream zos, String name, boolean keepDirStructure)
-			throws Exception
-	{
+			throws Exception {
 		byte[] buf = new byte[BUFFER_SIZE];
 		if (sourceFile.isFile())
 		{
@@ -132,9 +91,7 @@ public class ZipUtil
 			int len;
 			FileInputStream in = new FileInputStream(sourceFile);
 			while ((len = in.read(buf)) != -1)
-			{
-				zos.write(buf, 0, len);
-			}
+			{ zos.write(buf, 0, len); }
 			// Complete the entry
 			zos.closeEntry();
 			in.close();
@@ -159,7 +116,7 @@ public class ZipUtil
 					// 判断是否需要保留原来的文件结构
 					if (keepDirStructure)
 					{
-						// 注意：file.getName()前面需要带上父文件夹的名字加一斜杠,
+						// file.getName()前面需要带上父文件夹的名字加一斜杠,
 						// 不然最后压缩包中就不能保留原来的文件结构,即：所有文件都跑到压缩包根目录下了
 						compress(file, zos, name + "/" + file.getName(), keepDirStructure);
 					} else

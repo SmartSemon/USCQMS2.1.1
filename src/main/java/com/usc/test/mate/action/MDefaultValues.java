@@ -5,11 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MDefaultValues
-{
+public class MDefaultValues {
 
-	public static List<Map<String, Object>> getDefaultField(int itemType, String itemid)
-	{
+	public static List<Map<String, Object>> getDefaultField(int itemType, String itemid) {
 		List<Map<String, Object>> listFieldMap = new ArrayList<Map<String, Object>>();
 		HashMap<String, Object> MapID = new HashMap<String, Object>();
 		MapID.put("no", "ID");
@@ -521,8 +519,7 @@ public class MDefaultValues
 
 	}
 
-	public static List<Map<String, Object>> getDefaultMenu(List<Map<String, Object>> list, String itemid)
-	{
+	public static List<Map<String, Object>> getDefaultMenu(List<Map<String, Object>> list, String itemid) {
 
 		if (list != null && !list.isEmpty())
 		{
@@ -548,8 +545,7 @@ public class MDefaultValues
 
 	}
 
-	public static List<Map<String, Object>> getDefaultProperty(String itemid)
-	{
+	public static List<Map<String, Object>> getDefaultProperty(String itemid) {
 		List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
 		Map<String, Object> MapNo = new HashMap<String, Object>();
 		MapNo.put("defaultc", 1);
@@ -562,8 +558,7 @@ public class MDefaultValues
 
 	}
 
-	public static List<Map<String, Object>> getDefaultPropertyField(int itemType, String itemid, String rootid)
-	{
+	public static List<Map<String, Object>> getDefaultPropertyField(int itemType, String itemid, String rootid) {
 		List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
 		if (itemType == 0 || itemType == 1)
 		{
@@ -591,13 +586,13 @@ public class MDefaultValues
 				MapFName.put("itemid", itemid);
 				MapFName.put("rootid", rootid);
 				listMap.add(MapFName);
-				Map<String, Object> MapFLocation = new HashMap<String, Object>();
-				MapFLocation.put("no", "FLOCATION");
-				MapFLocation.put("name", "选择文件");
-				MapFLocation.put("editable", 1);
-				MapFLocation.put("itemid", itemid);
-				MapFLocation.put("rootid", rootid);
-				listMap.add(MapFLocation);
+//				Map<String, Object> MapFLocation = new HashMap<String, Object>();
+//				MapFLocation.put("no", "FLOCATION");
+//				MapFLocation.put("name", "选择文件");
+//				MapFLocation.put("editable", 1);
+//				MapFLocation.put("itemid", itemid);
+//				MapFLocation.put("rootid", rootid);
+//				listMap.add(MapFLocation);
 			}
 		}
 
@@ -613,8 +608,7 @@ public class MDefaultValues
 
 	}
 
-	public static List<Map<String, Object>> getDefaultGrid(String itemid)
-	{
+	public static List<Map<String, Object>> getDefaultGrid(String itemid) {
 		List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
 		Map<String, Object> MapNo = new HashMap<String, Object>();
 		MapNo.put("defaultc", 1);
@@ -627,8 +621,7 @@ public class MDefaultValues
 
 	}
 
-	public static List<Map<String, Object>> getDefaultGridField(int itemType, String itemid, String rootid)
-	{
+	public static List<Map<String, Object>> getDefaultGridField(int itemType, String itemid, String rootid) {
 		List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
 
 		if (itemType == 0 || itemType == 1)
@@ -744,14 +737,12 @@ public class MDefaultValues
 
 	}
 
-	public static List<Map<String, Object>> getDefaultRelationPage()
-	{
+	public static List<Map<String, Object>> getDefaultRelationPage() {
 		return null;
 
 	}
 
-	public static List<Map<String, Object>> getDefaultRelationPageSign()
-	{
+	public static List<Map<String, Object>> getDefaultRelationPageSign() {
 		return null;
 
 	}

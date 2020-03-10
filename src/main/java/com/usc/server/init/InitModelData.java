@@ -21,8 +21,7 @@ import com.usc.server.md.mapper.ModelQueryViewRowMapper;
 import com.usc.server.md.mapper.RelationShipRowMapper;
 import com.usc.util.ObjectHelperUtils;
 
-public class InitModelData
-{
+public class InitModelData {
 
 	private static final String MODELITEMSQL = "SELECT * FROM usc_model_item WHERE del=0 AND (effective IN(-1,1) AND state='F') OR (effective=1 AND state='HS') ORDER BY CTIME";
 	private static final String MODELSHIPSQL = "SELECT * FROM usc_model_relationship WHERE del=0 AND (effective IN(-1,1) AND state='F') OR (effective=1 AND state='HS') ORDER BY CTIME";
@@ -39,8 +38,7 @@ public class InitModelData
 	private static final String MODEL_CLASSVIEWDATA = "MODEL_CLASSVIEWDATA";
 	private static final String MODEL_MENULIBRARY = "MODEL_MENULIBRARY";
 
-	public static void initModel()
-	{
+	public static void initModel() {
 		RedisUtil redisUtil = RedisUtil.getInstanceOfObject();
 		JdbcTemplate jdbcTemplate = DBConnecter.getJdbcTemplate();
 		List<ItemInfo> itemInfos = jdbcTemplate.query(MODELITEMSQL, new ItemRowMapper());
@@ -48,9 +46,7 @@ public class InitModelData
 		{
 			redisUtil.del(MODEL_ITEMDATA);
 			MateFactory.clearItemInfo();
-			itemInfos.forEach((itemInfo) -> {
-				redisUtil.hset(MODEL_ITEMDATA, itemInfo.getItemNo(), itemInfo);
-			});
+			itemInfos.forEach((itemInfo) -> { redisUtil.hset(MODEL_ITEMDATA, itemInfo.getItemNo(), itemInfo); });
 
 			itemInfos.forEach((itemInfo) -> redisUtil.hset(MODEL_ITEMDATABYTABLE, itemInfo.getTableName(), itemInfo));
 		}

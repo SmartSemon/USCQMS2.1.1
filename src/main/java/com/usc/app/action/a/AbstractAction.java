@@ -5,22 +5,20 @@ import com.usc.app.query.rt.QueryReturnRequest;
 import com.usc.obj.api.USCObject;
 import com.usc.obj.api.impl.ApplicationContext;
 
-public abstract class AbstractAction implements AppAction, QueryReturnRequest
-{
+public abstract class AbstractAction implements AppAction, QueryReturnRequest {
 
 	protected ApplicationContext context = null;
+	private String actionParam = null;
 
-	public Object action() throws Exception
-	{
+	@Override
+	public Object action() throws Exception {
 		if (CheckUserConnections() && isCommandEnvironmentEnable(getApplicationContext()))
-		{
-			return executeAction();
-		}
+		{ return executeAction(); }
 		return null;
 	}
 
-	public boolean isEnabled() throws Exception
-	{
+	@Override
+	public boolean isEnabled() throws Exception {
 		return disable();
 	}
 
@@ -42,28 +40,36 @@ public abstract class AbstractAction implements AppAction, QueryReturnRequest
 	 */
 	public abstract boolean disable() throws Exception;
 
-	public ApplicationContext getApplicationContext()
-	{
+	@Override
+	public void setActionParam(String param) throws Exception {
+		this.actionParam = param;
+	}
+
+	@Override
+	public String getActionParam() throws Exception {
+		return actionParam;
+	}
+
+	@Override
+	public ApplicationContext getApplicationContext() {
 		return this.context;
 	}
 
-	public void setApplicationContext(ApplicationContext context)
-	{
+	@Override
+	public void setApplicationContext(ApplicationContext context) {
 		this.context = context;
 	}
 
-	public USCObject getSelectedObj()
-	{
+	public USCObject getSelectedObj() {
 		return context.getSelectedObj();
 	}
 
-	public boolean isCommandEnvironmentEnable(ApplicationContext context)
-	{
+	@Override
+	public boolean isCommandEnvironmentEnable(ApplicationContext context) {
 		return true;
 	}
 
-	public boolean CheckUserConnections()
-	{
+	public boolean CheckUserConnections() {
 		return true;
 	}
 
