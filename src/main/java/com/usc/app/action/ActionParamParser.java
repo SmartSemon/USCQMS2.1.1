@@ -103,7 +103,7 @@ public class ActionParamParser {
 		Map<String, Object> newData = new HashMap<String, Object>();
 		if (!ObjectHelperUtils.isEmpty(data))
 		{
-			int pit = itemPage.getPeptide();
+			Integer pit = itemPage.getPeptide() == null ? 0 : itemPage.getPeptide();
 			if (pit == 1)
 			{
 				List<ItemPeptidePage> itemPeptidePages = itemPage.getPeptidePageList();
