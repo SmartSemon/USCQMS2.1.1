@@ -10,8 +10,7 @@ import com.usc.util.ObjectHelperUtils;
 import lombok.Data;
 
 @Data
-public class ItemInfo implements Serializable
-{
+public class ItemInfo implements Serializable {
 	/**
 	 *
 	 */
@@ -48,8 +47,7 @@ public class ItemInfo implements Serializable
 	{
 	}
 
-	public boolean isFileObj()
-	{
+	public boolean isFileObj() {
 		return this.type == 1 ? true : false;
 
 	}
@@ -57,24 +55,21 @@ public class ItemInfo implements Serializable
 	/**
 	 * @return the fieldType
 	 */
-	public ItemField getItemField(String no)
-	{
+	public ItemField getItemField(String no) {
 		return this.itemFieldMap == null ? null : itemFieldMap.get(no);
 	}
 
 	/**
 	 * @return the menuType
 	 */
-	public ItemMenu getItemMenu(String implclass)
-	{
+	public ItemMenu getItemMenu(String implclass) {
 		return this == null ? null : (this.itemMenuMap == null) ? null : this.itemMenuMap.get(implclass);
 	}
 
 	/**
 	 * @return the itemPage
 	 */
-	public ItemPage getItemPage(String no)
-	{
+	public ItemPage getItemPage(String no) {
 		return (no == null || String.valueOf(no).equals("null") || "".equals(no)) ? this.getDefaultItemPage()
 				: (this.itemPageMap == null ? null : itemPageMap.get(no));
 	}
@@ -82,8 +77,7 @@ public class ItemInfo implements Serializable
 	/**
 	 * @return the itemGrid
 	 */
-	public ItemGrid getItemGrid(String no)
-	{
+	public ItemGrid getItemGrid(String no) {
 		return (no == null || String.valueOf(no).equals("null") || "".equals(no)) ? this.getDefaultItemGrid()
 				: (this.itemGridMap == null ? null : itemGridMap.get(no));
 	}
@@ -91,8 +85,7 @@ public class ItemInfo implements Serializable
 	/**
 	 * @return the relationPageMap
 	 */
-	public ItemRelationPage getItemRelationPage(String no)
-	{
+	public ItemRelationPage getItemRelationPage(String no) {
 		return (no == null || String.valueOf(no).equals("null") || "".equals(no)) ? this.getDefaultItemRelationPage()
 				: (this.relationPageMap == null ? null : relationPageMap.get(no));
 	}
@@ -100,22 +93,15 @@ public class ItemInfo implements Serializable
 	/**
 	 * @return the defaultItemPage
 	 */
-	public ItemPage getDefaultItemPage()
-	{
+	public ItemPage getDefaultItemPage() {
 		if (defaultItemPage != null)
-		{
-			return defaultItemPage;
-		}
+		{ return defaultItemPage; }
 		if (itemPageList == null)
-		{
-			return null;
-		}
+		{ return null; }
 		for (ItemPage p : itemPageList)
 		{
 			if (p.getDefaultc() == 1)
-			{
-				return p;
-			}
+			{ return p; }
 		}
 		return itemPageList.get(0);
 	}
@@ -123,36 +109,27 @@ public class ItemInfo implements Serializable
 	/**
 	 * @param defaultItemPage the defaultItemPage to set
 	 */
-	public void setDefaultItemPage(ItemPage defaultItemPage)
-	{
+	public void setDefaultItemPage(ItemPage defaultItemPage) {
 		this.defaultItemPage = defaultItemPage;
 	}
 
 	/**
 	 * @return the defaultItemGrid
 	 */
-	public ItemGrid getDefaultItemGrid()
-	{
+	public ItemGrid getDefaultItemGrid() {
 		if (defaultItemGrid != null)
-		{
-			return defaultItemGrid;
-		}
+		{ return defaultItemGrid; }
 		if (itemGridList == null)
-		{
-			return null;
-		}
+		{ return null; }
 		for (ItemGrid g : itemGridList)
 		{
 			if (g.getDefaultc() == 1)
-			{
-				return g;
-			}
+			{ return g; }
 		}
 		return itemGridList.get(0);
 	}
 
-	public boolean containsField(String field)
-	{
+	public boolean containsField(String field) {
 
 		return this.getItemField(field) != null;
 
@@ -161,30 +138,22 @@ public class ItemInfo implements Serializable
 	/**
 	 * @param defaultItemGrid the defaultItemGrid to set
 	 */
-	public void setDefaultItemGrid(ItemGrid defaultItemGrid)
-	{
+	public void setDefaultItemGrid(ItemGrid defaultItemGrid) {
 		this.defaultItemGrid = defaultItemGrid;
 	}
 
 	/**
 	 * @return the defaultItemRelationPage
 	 */
-	public ItemRelationPage getDefaultItemRelationPage()
-	{
+	public ItemRelationPage getDefaultItemRelationPage() {
 		if (defaultItemRelationPage != null)
-		{
-			return defaultItemRelationPage;
-		}
+		{ return defaultItemRelationPage; }
 		if (relationPageList == null)
-		{
-			return null;
-		}
+		{ return null; }
 		for (ItemRelationPage g : relationPageList)
 		{
 			if (g.getDefaultc() == 1)
-			{
-				return g;
-			}
+			{ return g; }
 		}
 		return relationPageList.get(0);
 	}
@@ -192,42 +161,31 @@ public class ItemInfo implements Serializable
 	/**
 	 * @param defaultItemRelationPage the defaultItemRelationPage to set
 	 */
-	public void setDefaultItemRelationPage(ItemRelationPage defaultItemRelationPage)
-	{
+	public void setDefaultItemRelationPage(ItemRelationPage defaultItemRelationPage) {
 		this.defaultItemRelationPage = defaultItemRelationPage;
 	}
 
-	public List<ItemField> getQueryFieldList()
-	{
+	public List<ItemField> getQueryFieldList() {
 		if (this.queryFields == null)
-		{
-			return null;
-		}
+		{ return null; }
 		if (ObjectHelperUtils.isEmpty(this.itemFieldMap))
-		{
-			return null;
-		}
+		{ return null; }
 		List<ItemField> fields = new ArrayList<ItemField>();
 		String[] fieldStrings = this.queryFields.split(",");
 		for (String fieldString : fieldStrings)
 		{
 			ItemField field = this.itemFieldMap.get(fieldString);
 			if (field == null)
-			{
-				continue;
-			}
+			{ continue; }
 			if (!"DATETIME".equals((field.getFType())))
-			{
-				fields.add(field);
-			}
+			{ fields.add(field); }
 
 		}
 		return fields;
 	}
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return this.itemNo + "-" + this.name;
 	}
 

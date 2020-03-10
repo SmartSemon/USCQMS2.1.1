@@ -15,7 +15,6 @@ public class Navigation {
 		Object[] objects = null;
 		if (!UserAuthority.getSuperUsers().contains(userName))
 		{
-
 			List<String> authIDS = SDBUtils.getModuleAuthed(userName);
 			if (!ObjectHelperUtils.isEmpty(authIDS))
 			{
