@@ -9,11 +9,13 @@ import com.usc.app.action.utils.ActionMessage;
 import com.usc.app.entry.ret.RetSignEnum;
 import com.usc.app.ims.config.action.EndpointEnum;
 import com.usc.app.util.SendMessageUtils;
+import com.usc.app.wxdd.WxDdMessageService;
 import com.usc.obj.api.USCObject;
 import com.usc.obj.api.bean.UserInformation;
 import com.usc.obj.api.impl.ApplicationContext;
 import com.usc.obj.api.impl.USCServerBeanProvider;
 import com.usc.util.ObjectHelperUtils;
+import com.usc.util.SpringContextUtil;
 
 /**
  * @author SEMON
@@ -21,22 +23,16 @@ import com.usc.util.ObjectHelperUtils;
  *         批量通知同一责任人
  *         </p>
  */
-public class NotifySameResponsiblePersonAction extends AbstractAction
-{
+public class NotifySameResponsiblePersonAction extends AbstractAction {
 
 	@Override
-	public Object executeAction() throws Exception
-	{
+	public Object executeAction() throws Exception {
 		Map<String, Object> map = context.getFormData();
 		if (ObjectHelperUtils.isEmpty(map))
-		{
-			return new ActionMessage(flagFalse, RetSignEnum.MODIFY, "请判定责任单位和责任人");
-		}
+		{ return new ActionMessage(flagFalse, RetSignEnum.MODIFY, "请判定责任单位和责任人"); }
 
 		if (ObjectHelperUtils.isEmpty(map.get("NAME")))
-		{
-			return new ActionMessage(flagFalse, RetSignEnum.MODIFY, "请判定责任人");
-		}
+		{ return new ActionMessage(flagFalse, RetSignEnum.MODIFY, "请判定责任人"); }
 		String toUser = (String) map.get("NAME");
 		ApplicationContext applicationContext = (ApplicationContext) USCServerBeanProvider.getContext("DRUNIT",
 				context.getUserName());
@@ -51,6 +47,9 @@ public class NotifySameResponsiblePersonAction extends AbstractAction
 			uscObject.save(context);
 			SendMessageUtils.sendToUser(EndpointEnum.RefreshRead, context, objects, "todo", "请确认质量问题责任",
 					"请确认质量问题责任。问题编号:" + uscObject.getFieldValueToString("NO"), context.getUserName(), toUser);
+			WxDdMessageService wxDdMessageService = SpringContextUtil.getBean(WxDdMessageService.class);
+			wxDdMessageService.sendTextMessage("请确认质量问题责任。问题编号:" + uscObject.getFieldValueToString("NO"), toUser, null,
+					null);
 		}
 
 		return new ActionMessage(flagTrue, RetSignEnum.MODIFY, "已通知责任人", objects);
@@ -65,8 +64,7 @@ public class NotifySameResponsiblePersonAction extends AbstractAction
 	 * @param uscObject          问题对象
 	 * @throws Exception
 	 */
-	private void createDRUNIT(ApplicationContext applicationContext, USCObject uscObject) throws Exception
-	{
+	private void createDRUNIT(ApplicationContext applicationContext, USCObject uscObject) throws Exception {
 		UserInformation userInformation = applicationContext.getUserInformation();
 		Map<String, Object> data = applicationContext.getFormData();
 //		data.put("NO", uscObject.getFieldValueToString("PJUNIT"));
@@ -85,8 +83,7 @@ public class NotifySameResponsiblePersonAction extends AbstractAction
 	}
 
 	@Override
-	public boolean disable() throws Exception
-	{
+	public boolean disable() throws Exception {
 		// 如果不合格汇报数据处理状态为：已通知责任单位 B、责任单位处理中D、责任单位已关闭额E、已关闭F时
 		// 不能再执行此操作
 		USCObject object = context.getSelectedObj();
@@ -104,13 +101,9 @@ public class NotifySameResponsiblePersonAction extends AbstractAction
 				String pjunit1 = uscObject.getFieldValueToString("PJUNIT");
 				String pjuser1 = uscObject.getFieldValueToString("PJUSER");
 				if (pjuser == null && pjuser1 != null)
-				{
-					pjuser = pjuser1;
-				}
+				{ pjuser = pjuser1; }
 				if ((pjuser != null && pjuser1 != null) && !pjuser.equals(pjuser1))
-				{
-					return true;
-				}
+				{ return true; }
 			}
 		}
 		return false;
