@@ -9,8 +9,7 @@ import com.usc.server.util.BeanConverter;
 import lombok.Data;
 
 @Data
-public class ItemField implements Serializable
-{
+public class ItemField implements Serializable {
 	/**
 	 *
 	 */
@@ -29,6 +28,8 @@ public class ItemField implements Serializable
 	private int type;
 	private String editor;
 	private String editParams;
+	private int supQuery;
+	private int editAble;
 
 	private FieldEditor fieldEditor;
 
@@ -36,33 +37,27 @@ public class ItemField implements Serializable
 	{
 	}
 
-	public FieldEditor getFieldEditor()
-	{
+	public FieldEditor getFieldEditor() {
 		if (this.fieldEditor == null)
 		{
 			setFieldEditor(new FieldEditor(this));
 		} else
 		{
 			if (this.fieldEditor.getEditor() == null)
-			{
-				this.fieldEditor.setEditor(editor);
-			}
+			{ this.fieldEditor.setEditor(editor); }
 			if (this.fieldEditor.getEditParams() == null)
-			{
-				this.fieldEditor.setEditParams(editParams);
-			}
+			{ this.fieldEditor.setEditParams(editParams); }
 		}
 		return fieldEditor;
 	}
 
-	public Map<String, Object> toMap()
-	{
+	public Map<String, Object> toMap() {
 		ItemField fieldType = this;
 		return BeanConverter.toMap(fieldType);
 	}
 
-	public String toString()
-	{
+	@Override
+	public String toString() {
 		return (this != null) ? (no + ":" + name) : null;
 
 	}

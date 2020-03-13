@@ -137,7 +137,7 @@ public class ModelUtils {
 		UserAuthority.authorityMenus(userInformation, itemMenus);
 		resultMap.put("itemMenus", itemMenus);
 		resultMap.put("itemGrid", info.getItemGrid(itemGridNo));
-		resultMap.put("itemPropertyPage", info.getItemPage(itemPropertyNo));
+		resultMap.put("itemSuppertQueryFields", info.getSupQueryFieldList());
 		resultMap.put("itemColor", info.getColors());
 		if (faceType == -1 || faceType == 0 || faceType == 1)
 		{ return; }
