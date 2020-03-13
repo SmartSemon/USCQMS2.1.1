@@ -26,8 +26,7 @@ import com.usc.util.ObjectHelperUtils;
 
 @RestController
 @RequestMapping(value = "/sysModelItem", produces = "application/json;charset=UTF-8")
-public class SysModelItemResource
-{
+public class SysModelItemResource {
 
 	@Autowired
 	private ModelServer modelServer;
@@ -35,22 +34,19 @@ public class SysModelItemResource
 	private ModelItemServer modelItemServer;
 
 	@PostMapping("/create")
-	public Object create(@RequestBody String queryParam)
-	{
+	public Object create(@RequestBody String queryParam) {
 		return MCreateAction.createModelObj(queryParam);
 	}
 
 	@PostMapping("/delete")
-	public Dto delete(@RequestBody String queryParam)
-	{
+	public Dto delete(@RequestBody String queryParam) {
 		modelItemServer.deleteItem(queryParam);
 		return new MapDto("flag", "sucess");
 	}
 
 	@GetMapping("/packet")
 	public Object findPagingList(@RequestParam(value = "queryParam", required = false) String queryParam)
-			throws JsonParseException, JsonMappingException, IOException
-	{
+			throws JsonParseException, JsonMappingException, IOException {
 		JSONObject jsonObject = JSONObject.parseObject(queryParam);
 		String userName = jsonObject.getString("userName");
 		String table = jsonObject.getString("tableName");
@@ -68,8 +64,7 @@ public class SysModelItemResource
 
 	@GetMapping("/getAbolishedItem")
 	public Object getAbolishedItem(@RequestParam(value = "queryParam", required = false) String queryParam)
-			throws JsonParseException, JsonMappingException, IOException
-	{
+			throws JsonParseException, JsonMappingException, IOException {
 		JSONObject jsonObject = JSONObject.parseObject(queryParam);
 		String table = jsonObject.getString("tableName");
 
@@ -78,16 +73,14 @@ public class SysModelItemResource
 	}
 
 	@PostMapping("/recovery")
-	public Object recoveryItem(@RequestBody String queryParam)
-	{
+	public Object recoveryItem(@RequestBody String queryParam) {
 		return modelItemServer.recoveryItem(queryParam);
 
 	}
 
 	@GetMapping("/query")
 	public Object queryItemList(@RequestParam(value = "queryParam", required = false) String queryParam)
-			throws JsonParseException, JsonMappingException, IOException
-	{
+			throws JsonParseException, JsonMappingException, IOException {
 		JSONObject jsonObject = JSONObject.parseObject(queryParam);
 		String userName = jsonObject.getString("userName");
 		String table = jsonObject.getString("tableName");
@@ -99,7 +92,8 @@ public class SysModelItemResource
 		{
 			if (modelServer.isModelingUser(userName))
 			{
-				condition.append(" AND effective IN(1,0) AND (state='F' OR (cuser='F' AND state IN('C','U')))");
+				condition.append(
+						" AND effective IN(1,0) AND (state='F' OR (cuser='" + userName + "' AND state IN('C','U')))");
 			} else
 			{
 				condition.append(" AND effective IN(1,-1) AND state='F'");
@@ -121,9 +115,7 @@ public class SysModelItemResource
 			queryWord = queryWord.toUpperCase();
 			String field = "UPPER(itemno)";
 			if (!table.equals("usc_model_item"))
-			{
-				field = "UPPER(no)";
-			}
+			{ field = "UPPER(no)"; }
 			queryCondition = " AND (" + field + " LIKE '%" + queryWord + "%' OR UPPER(name) LIKE '%" + queryWord
 					+ "%' )";
 		}
@@ -133,8 +125,7 @@ public class SysModelItemResource
 
 	@GetMapping("/queryItemPGR")
 	public Object getItemList(@RequestParam(value = "queryParam", required = false) String queryParam)
-			throws JsonParseException, JsonMappingException, IOException
-	{
+			throws JsonParseException, JsonMappingException, IOException {
 		JSONObject jsonObject = JSONObject.parseObject(queryParam);
 		String userName = jsonObject.getString("userName");
 		String table = jsonObject.getString("tableName");
@@ -168,8 +159,7 @@ public class SysModelItemResource
 	}
 
 	@GetMapping("/queryItemFields")
-	public Object getItemFields(@RequestParam(value = "queryParam", required = false) String queryParam)
-	{
+	public Object getItemFields(@RequestParam(value = "queryParam", required = false) String queryParam) {
 		JSONObject jsonObject = JSONObject.parseObject(queryParam);
 		String table = "USC_MODEL_FIELD";
 		String propertyNo = jsonObject.getString("propertyPageNo");

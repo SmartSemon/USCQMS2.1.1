@@ -20,67 +20,55 @@ import com.usc.server.util.StringHelperUtil;
  * @version
  * @since JDK 1.8
  */
-public class FieldAdapter
-{
-	protected final static String FIELD_TYPE_INT = "INT";
-	protected final static String FIELD_TYPE_VARCHAR = "VARCHAR";
-	protected final static String FIELD_TYPE_FLOAT = "FLOAT";
-	protected final static String FIELD_TYPE_DOUBLE = "DOUBLE";
-	protected final static String FIELD_TYPE_BOOLEAN = "BOOLEAN";
-	protected final static String FIELD_TYPE_DATETIME = "DATETIME";
-	protected final static String FIELD_TYPE_LONGTEXT = "LONGTEXT";
-	protected final static String FIELD_TYPE_BIGDECIMAL = "BigDecimal";
-	protected final static String FIELD_TYPE_NUMERIC = FIELD_TYPE_BIGDECIMAL;
+public class FieldAdapter {
+	public final static String FIELD_TYPE_INT = "INT";
+	public final static String FIELD_TYPE_VARCHAR = "VARCHAR";
+	public final static String FIELD_TYPE_FLOAT = "FLOAT";
+	public final static String FIELD_TYPE_DOUBLE = "DOUBLE";
+	public final static String FIELD_TYPE_BOOLEAN = "BOOLEAN";
+	public final static String FIELD_TYPE_DATETIME = "DATETIME";
+	public final static String FIELD_TYPE_LONGTEXT = "LONGTEXT";
+	public final static String FIELD_TYPE_BIGDECIMAL = "BigDecimal";
+	public final static String FIELD_TYPE_NUMERIC = FIELD_TYPE_BIGDECIMAL;
 
 	protected static ItemField itemField;
 
-	public static boolean isInt(String fieldType)
-	{
+	public static boolean isInt(String fieldType) {
 		return FIELD_TYPE_INT.equalsIgnoreCase(fieldType);
 	}
 
-	public static boolean isVarchar(String fieldType)
-	{
+	public static boolean isVarchar(String fieldType) {
 		return FIELD_TYPE_VARCHAR.equalsIgnoreCase(fieldType);
 	}
 
-	public static boolean isFloat(String fieldType)
-	{
+	public static boolean isFloat(String fieldType) {
 		return FIELD_TYPE_FLOAT.equalsIgnoreCase(fieldType);
 	}
 
-	public static boolean isDouble(String fieldType)
-	{
+	public static boolean isDouble(String fieldType) {
 		return FIELD_TYPE_DOUBLE.equalsIgnoreCase(fieldType);
 	}
 
-	public static boolean isBoolean(String fieldType)
-	{
+	public static boolean isBoolean(String fieldType) {
 		return FIELD_TYPE_BOOLEAN.equalsIgnoreCase(fieldType);
 	}
 
-	public static boolean isDateTime(String fieldType)
-	{
+	public static boolean isDateTime(String fieldType) {
 		return FIELD_TYPE_DATETIME.equalsIgnoreCase(fieldType);
 	}
 
-	public static boolean isNumeric(String fieldType)
-	{
+	public static boolean isNumeric(String fieldType) {
 		return FIELD_TYPE_NUMERIC.equalsIgnoreCase(fieldType);
 	}
 
-	public static boolean isRichText(String fieldType)
-	{
+	public static boolean isRichText(String fieldType) {
 		return FIELD_TYPE_LONGTEXT.equalsIgnoreCase(fieldType);
 	}
 
-	public static Map<String, Object> filterResult(ItemField itemField, Object value)
-	{
+	public static Map<String, Object> filterResult(ItemField itemField, Object value) {
 		Map<String, Object> objects = new HashMap<String, Object>();
 		if (value == null || "".equals(value.toString().trim()))
-		{
-			return null;
-		}
+		{ return null; }
 		setItemField(itemField);
 		if (itemField != null)
 		{
@@ -123,12 +111,9 @@ public class FieldAdapter
 
 	}
 
-	private static Map<String, Object> getFieldRichTextValue(Object value)
-	{
+	private static Map<String, Object> getFieldRichTextValue(Object value) {
 		if (value == null)
-		{
-			return null;
-		}
+		{ return null; }
 		if (comparativeLength(value))
 		{
 			Map<String, Object> map = new HashMap<String, Object>();
@@ -142,27 +127,21 @@ public class FieldAdapter
 		return null;
 	}
 
-	private static boolean comparativeLength(Object value)
-	{
+	private static boolean comparativeLength(Object value) {
 		if (itemField.getFType().equals(FIELD_TYPE_LONGTEXT))
-		{
-			return true;
-		}
+		{ return true; }
 		return itemField.getFLength() >= String.valueOf(value).length();
 	}
 
-	private static Map<String, Object> getFieldNumericValue(Object value)
-	{
+	private static Map<String, Object> getFieldNumericValue(Object value) {
 		if (value == null)
-		{
-			return null;
-		}
+		{ return null; }
 		if (comparativeLength(value))
 		{
 			Map<String, Object> map = new HashMap<String, Object>();
 			if (value instanceof BigDecimal)
 			{
-				map.put(getItemField().getNo(), (BigDecimal) value);
+				map.put(getItemField().getNo(), value);
 			} else
 			{
 				map.put(getItemField().getNo(),
@@ -177,26 +156,20 @@ public class FieldAdapter
 		return null;
 	}
 
-	private static Map<String, Object> getFieldDateTimeValue(Object value)
-	{
+	private static Map<String, Object> getFieldDateTimeValue(Object value) {
 
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (value instanceof Date)
 		{
-			map.put(getItemField().getNo(), ((Date) value));
+			map.put(getItemField().getNo(), (value));
 		} else if (value instanceof String)
-		{
-			map.put(getItemField().getNo(), TypeUtils.castToDate(value, itemField.getFieldEditor().gainFormatter()));
-		}
+		{ map.put(getItemField().getNo(), TypeUtils.castToDate(value, itemField.getFieldEditor().gainFormatter())); }
 		return (map == null || map.isEmpty()) ? null : map;
 	}
 
-	private static Map<String, Object> getFieldDoubleValue(Object value)
-	{
+	private static Map<String, Object> getFieldDoubleValue(Object value) {
 		if (value == null)
-		{
-			return null;
-		}
+		{ return null; }
 		if (comparativeLength(value))
 		{
 			Map<String, Object> map = new HashMap<String, Object>();
@@ -216,12 +189,9 @@ public class FieldAdapter
 		return null;
 	}
 
-	private static Map<String, Object> getFieldFloatValue(Object value)
-	{
+	private static Map<String, Object> getFieldFloatValue(Object value) {
 		if (value == null)
-		{
-			return null;
-		}
+		{ return null; }
 		if (comparativeLength(value))
 		{
 			Map<String, Object> map = new HashMap<String, Object>();
@@ -240,12 +210,9 @@ public class FieldAdapter
 		return null;
 	}
 
-	private static Map<String, Object> getFieldVarcharValue(Object value)
-	{
+	private static Map<String, Object> getFieldVarcharValue(Object value) {
 		if (value == null)
-		{
-			return null;
-		}
+		{ return null; }
 		if (comparativeLength(value))
 		{
 			Map<String, Object> map = new HashMap<String, Object>();
@@ -258,8 +225,7 @@ public class FieldAdapter
 		return null;
 	}
 
-	private static Map<String, Object> getFieldBooleanValue(Object value)
-	{
+	private static Map<String, Object> getFieldBooleanValue(Object value) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (value instanceof Boolean)
 		{
@@ -289,12 +255,9 @@ public class FieldAdapter
 		return (map == null || map.isEmpty()) ? null : map;
 	}
 
-	private static Map<String, Object> getFieldIntValue(Object value)
-	{
+	private static Map<String, Object> getFieldIntValue(Object value) {
 		if (value == null)
-		{
-			return null;
-		}
+		{ return null; }
 		if (comparativeLength(value))
 		{
 			Map<String, Object> map = new HashMap<String, Object>();
@@ -310,9 +273,7 @@ public class FieldAdapter
 					map.put(getItemField().getNo(), Integer.valueOf(v));
 					return map;
 				} else if (!StringHelperUtil.isDigit(String.valueOf(value)) && ("false".equals(v) || "true".equals(v)))
-				{
-					map = getFieldBooleanValue(v);
-				}
+				{ map = getFieldBooleanValue(v); }
 			}
 		} else
 		{
@@ -324,16 +285,14 @@ public class FieldAdapter
 	/**
 	 * @return the itemField
 	 */
-	public static ItemField getItemField()
-	{
+	public static ItemField getItemField() {
 		return itemField;
 	}
 
 	/**
 	 * @param itemField the itemField to set
 	 */
-	public static void setItemField(ItemField itemField)
-	{
+	public static void setItemField(ItemField itemField) {
 		FieldAdapter.itemField = itemField;
 	}
 }

@@ -43,6 +43,8 @@ public class ItemInfo implements Serializable {
 	private ItemGrid defaultItemGrid = null;
 	private ItemRelationPage defaultItemRelationPage = null;
 
+	private List<ItemField> supQueryFieldList = null;
+
 	public ItemInfo()
 	{
 	}
