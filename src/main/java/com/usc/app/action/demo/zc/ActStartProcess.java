@@ -21,7 +21,7 @@ public class ActStartProcess extends AbstractAction {
         for (USCObject uscObject : objects)
         {
             String state = (String) uscObject.getFieldValue("STATE");
-            String muser = uscObject.getFieldValueToString("MUSER");
+            String muser = uscObject.getFieldValueToString("CUSER");
             if (!"C".equals(state) || !user.equals(muser))
             {
                 return true;
