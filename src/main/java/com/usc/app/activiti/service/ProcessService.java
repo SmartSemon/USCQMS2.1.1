@@ -10,6 +10,8 @@ public interface ProcessService {
 
 	Dto getProcdefProcess();
 
+	Dto getProcdefProcessByProcdefId(String queryParam);
+
 	Dto deleteByDeploymentId(String deploymentId);
 
 	Dto suspension(String id);

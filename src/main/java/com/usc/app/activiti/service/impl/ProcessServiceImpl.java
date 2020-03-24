@@ -8,9 +8,13 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.alibaba.fastjson.JSONObject;
+import com.usc.obj.api.USCObject;
+import com.usc.obj.util.USCObjectQueryHelper;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.IdentityService;
@@ -69,6 +73,54 @@ public class ProcessServiceImpl extends BaseService implements ProcessService {
         // 处理数据获取最新版本的流程定义
         Map<String, ProcessDefinition> map = new LinkedHashMap<>();
         for (ProcessDefinition pd : list) {
+            map.put(pd.getKey(), pd);
+        }
+        // 获取list集合
+        ArrayList<Object> processDefinitions = new ArrayList<>();
+        for (ProcessDefinition pd : map.values()) {
+            // 根据DeploymentId查询deployment
+            List<Deployment> deployment = repositoryService.createDeploymentQuery().deploymentId(pd.getDeploymentId())
+                    .list();
+            Dto dto = new MapDto();
+            for (Deployment dm : deployment) {
+                dto.put("DEPLOYMENTTIME", dm.getDeploymentTime());
+            }
+            Dto processDefinition = new MapDto();
+            processDefinition.put("DEPLOYMENTID", pd.getDeploymentId());
+            processDefinition.put("ID", pd.getId());
+            processDefinition.put("NAME", pd.getName());
+            processDefinition.put("VERSION", pd.getVersion());
+            processDefinition.put("PNG", pd.getDiagramResourceName());
+            processDefinition.put("DEPLOYTIME", dto.get("DEPLOYMENTTIME"));
+            // 获取次流程定义是否激活挂起(1:false-激活;2:true-挂起)
+            processDefinition.put("SUSPENSIONSTATE", repositoryService.isProcessDefinitionSuspended(pd.getId()));
+            processDefinitions.add(processDefinition);
+        }
+        return new MapDto("list", processDefinitions);
+    }
+
+    @Override
+    public Dto getProcdefProcessByProcdefId(String queryParam) {
+        //获取当前对象itemNo
+        JSONObject json = JSONObject.parseObject(queryParam);
+        String itemNo = json.getString("itemNo");
+        //根据itemNo查询绑定的流程
+        String conditions = "ITEMNO = " + "'" + itemNo + "'";
+        USCObject[] objects = USCObjectQueryHelper.getObjectsByCondition("ACT_PROCESSMANAGE_ITEM", conditions);
+        // 获取所有流程定义
+        List<ProcessDefinition> list = repositoryService.createProcessDefinitionQuery()
+                .orderByProcessDefinitionVersion().asc().list();
+        List<ProcessDefinition> resultList = new ArrayList<>();
+        if (objects != null && objects.length > 0) {
+            for (USCObject object : objects) {
+                resultList.addAll(list.stream().filter(i -> i.getId().equals(object.getFieldValueToString("PROCDEF_ID"))).collect(Collectors.toList()));
+            }
+        } else {
+            resultList.addAll(list);
+        }
+        // 处理数据获取最新版本的流程定义
+        Map<String, ProcessDefinition> map = new LinkedHashMap<>();
+        for (ProcessDefinition pd : resultList) {
             map.put(pd.getKey(), pd);
         }
         // 获取list集合
