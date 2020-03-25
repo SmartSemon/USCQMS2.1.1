@@ -11,13 +11,11 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-@Order(2)
-public class UserInfo2RedisRunner extends AppRunner
-{
+@Order(20)
+public class UserInfo2RedisRunner extends AppRunner {
 
 	@Override
-	public void run(ApplicationArguments args) throws Exception
-	{
+	public void run(ApplicationArguments args) throws Exception {
 		try
 		{
 			Long st = System.currentTimeMillis();

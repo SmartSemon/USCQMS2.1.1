@@ -8,30 +8,37 @@ import com.usc.app.action.a.AbstractAction;
 import com.usc.app.action.i.AppAction;
 import com.usc.server.md.ItemMenu;
 
-public class MenuEnableAuthAction extends AbstractAction
-{
+public class MenuEnableAuthAction extends AbstractAction {
 
 	@Override
-	public Object executeAction() throws Exception
-	{
+	public Object executeAction() throws Exception {
 		Object str = context.getExtendInfo("otherParam");
 		if (str != null)
 		{
 			List<ItemMenu> ms = JSONArray.parseArray(String.valueOf(str), ItemMenu.class);
 			for (ItemMenu m : ms)
 			{
-				if (!m.isDisabled())
+				boolean implType = m.getImpltype() == 0;
+				if (implType)
 				{
-					AppAction clazz = AppActionFactory.getAction(m.getImplclass());
-					if (clazz != null)
+					if (!m.isDisabled())
 					{
-						clazz.setApplicationContext(context);
-						m.setDisabled(clazz.isEnabled());
-					} else
-					{
-						m.setDisabled(flagFalse);
+						AppAction clazz = AppActionFactory.getAction(m.getImplclass());
+						if (clazz != null)
+						{
+							clazz.setApplicationContext(context);
+							m.setDisabled(clazz.isEnabled());
+						} else
+						{
+							m.setDisabled(false);
+						}
 					}
+				} else
+				{
+					m.setDisabled(false);
+					m.setWtype(null);
 				}
+
 			}
 			return queryTrue(ms);
 		}
@@ -40,8 +47,7 @@ public class MenuEnableAuthAction extends AbstractAction
 	}
 
 	@Override
-	public boolean disable() throws Exception
-	{
+	public boolean disable() throws Exception {
 		return true;
 	}
 

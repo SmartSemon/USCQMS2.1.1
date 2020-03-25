@@ -1,4 +1,4 @@
-package com.usc.server.md.mapper;
+package com.usc.server.mq.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,23 +9,17 @@ import org.springframework.jdbc.support.JdbcUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.util.LinkedCaseInsensitiveMap;
 
-import com.usc.server.md.ItemPage;
+import com.usc.server.md.mapper.ItemRelBeanFactoryConverter;
+import com.usc.server.mq.ItemMQMenu;
 
-public class PageRowMapper implements RowMapper<ItemPage> {
-	public PageRowMapper()
+public class ItemMQMenuRowMapper implements RowMapper<ItemMQMenu> {
+	public ItemMQMenuRowMapper()
 	{
 	}
 
 	@Override
-	public ItemPage mapRow(ResultSet rs, int rowNum) throws SQLException {
-		ItemPage info = null;
-		try
-		{
-			info = ItemRelBeanFactoryConverter.getBean(ItemPage.class, rs);
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+	public ItemMQMenu mapRow(ResultSet rs, int rowNum) throws SQLException {
+		ItemMQMenu info = ItemRelBeanFactoryConverter.getBean(ItemMQMenu.class, rs);
 		return info;
 	}
 

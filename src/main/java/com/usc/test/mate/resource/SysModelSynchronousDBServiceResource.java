@@ -20,6 +20,8 @@ import com.usc.app.action.mate.MateFactory;
 import com.usc.cache.redis.RedisUtil;
 import com.usc.server.DBConnecter;
 import com.usc.server.init.InitJurisdictionData;
+import com.usc.server.init.InitMqLines;
+import com.usc.server.init.InitMqTransactionData;
 import com.usc.server.md.GlobalGrid;
 import com.usc.server.md.ItemInfo;
 import com.usc.server.md.ModelClassView;
@@ -204,10 +206,16 @@ public class SysModelSynchronousDBServiceResource {
 			result.put("info", "表对象参数不正确");
 			return result;
 		}
-		table = table.toUpperCase();
+		table = table.toUpperCase().trim();
 		if ("USC_MODEL_NAVIGATION".equals(table))
 		{
-			b = SynchClassView();
+			b = SynchNavigation();
+		} else if ("USC_MODEL_MQ_AFFAIR".equals(table))
+		{
+			b = SynchuscMqAffair();
+		} else if ("USC_MODEL_MQ_LINES".equals(table))
+		{
+			b = SynchuscMqLines();
 		} else
 		{
 			if ("U".equals(state))
@@ -239,7 +247,23 @@ public class SysModelSynchronousDBServiceResource {
 
 	}
 
-	private boolean SynchClassView() {
+	private boolean SynchuscMqLines() {
+		String sql = "(STATE='F' AND MYSM='M') OR STATE='C'";
+		jdbcTemplate.batchUpdate("UPDATE usc_model_mq_lines SET MYSM='I',STATE='F' WHERE DEL=0 AND " + sql,
+				"UPDATE usc_model_mq_listener SET MYSM='I',STATE='F' WHERE DEL=0 AND " + sql);
+		InitMqLines.init();
+		return false;
+	}
+
+	private boolean SynchuscMqAffair() {
+		String sql = "(STATE='F' AND MYSM='M') OR STATE='F'";
+		jdbcTemplate.batchUpdate("UPDATE usc_model_mq_affair SET STATE='F' WHERE DEL=0 AND STATE='C'");
+		InitMqTransactionData.init(sql);
+		jdbcTemplate.batchUpdate("UPDATE usc_model_mq_affair SET MYSM='I' WHERE DEL=0 AND STATE='F'");
+		return true;
+	}
+
+	private boolean SynchNavigation() {
 		jdbcTemplate.batchUpdate("UPDATE USC_MODEL_NAVIGATION SET state='F' WHERE del=0 AND state<>'F'",
 				"UPDATE USC_MODEL_ITEMMENU SET state='F' WHERE del=0 AND EXISTS(SELECT 1 FROM USC_MODEL_NAVIGATION WHERE "
 						+ "del=0 AND id = USC_MODEL_ITEMMENU.itemid) AND state<>'F'");

@@ -20,13 +20,11 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Component
-@Order(4)
-public class FunctionalPermissionsRunner extends AppRunner
-{
+@Order(40)
+public class FunctionalPermissionsRunner extends AppRunner {
 
 	@Override
-	public void run(ApplicationArguments args) throws Exception
-	{
+	public void run(ApplicationArguments args) throws Exception {
 		Long st = System.currentTimeMillis();
 		InitJurisdictionData.init();
 		log.info("Authorization initialized successfully, in " + (System.currentTimeMillis() - st) + " ms");

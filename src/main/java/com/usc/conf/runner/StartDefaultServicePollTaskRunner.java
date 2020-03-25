@@ -19,15 +19,13 @@ import com.usc.obj.util.USCObjectQueryHelper;
 import com.usc.server.AppRunner;
 
 @Component
-@Order(10)
-public class StartDefaultServicePollTaskRunner extends AppRunner
-{
+@Order(50)
+public class StartDefaultServicePollTaskRunner extends AppRunner {
 	@Autowired
 	private PollTaskService pollTaskService;
 
 	@Override
-	public void run(ApplicationArguments args) throws Exception
-	{
+	public void run(ApplicationArguments args) throws Exception {
 		List<PollTaskBean> tasks = pollTaskService.taskList();
 		if (!CollectionUtils.isEmpty(tasks))
 		{
@@ -60,8 +58,7 @@ public class StartDefaultServicePollTaskRunner extends AppRunner
 		}
 	}
 
-	private ApplicationContext getConext(USCObject taskObject)
-	{
+	private ApplicationContext getConext(USCObject taskObject) {
 		ApplicationContext context = new ApplicationContext("admin", taskObject);
 		USCObjectAction objectAction = (USCObjectAction) ObjectCachingDataHelper
 				.newInstance(MateFactory.getItemInfo("SPOLLTASK").getImplClass() + "Action");
