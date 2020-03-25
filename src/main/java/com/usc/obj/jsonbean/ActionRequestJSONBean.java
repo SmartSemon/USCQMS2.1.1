@@ -13,10 +13,10 @@ import com.usc.server.md.ModelRelationShip;
 import lombok.Data;
 
 @Data
-public class ActionRequestJSONBean extends JSONBean
-{
+public class ActionRequestJSONBean extends JSONBean {
 	private ItemInfo itemInfo;
 	protected String implclass;
+	protected Boolean implType;
 	protected String menuId;
 
 	public ActionRequestJSONBean()
@@ -24,53 +24,43 @@ public class ActionRequestJSONBean extends JSONBean
 
 	}
 
-	public void init()
-	{
+	public void init() {
 		if (this.itemInfo == null)
-		{
-			this.itemInfo = MateFactory.getItemInfo(itemNo);
-		}
+		{ this.itemInfo = MateFactory.getItemInfo(itemNo); }
 	}
 
 	@Override
-	public ItemInfo getItemInfo(String itemNo)
-	{
+	public ItemInfo getItemInfo(String itemNo) {
 		return this.itemInfo;
 	}
 
 	@Override
-	public ItemMenu getItemMenu(String menuNo)
-	{
+	public ItemMenu getItemMenu(String menuNo) {
 		return this.itemInfo.getItemMenu(menuNo);
 	}
 
 	@Override
-	public List<ItemMenu> getItemMenus()
-	{
+	public List<ItemMenu> getItemMenus() {
 		return this.itemInfo.getItemMenuList();
 	}
 
 	@Override
-	public ItemPage getItemPage(String itemPropertyNo)
-	{
+	public ItemPage getItemPage(String itemPropertyNo) {
 		return this.itemInfo.getItemPage(itemPropertyNo);
 	}
 
 	@Override
-	public ItemGrid getItemGrid(String itemGridNo)
-	{
+	public ItemGrid getItemGrid(String itemGridNo) {
 		return this.itemInfo.getItemGrid(itemGridNo);
 	}
 
 	@Override
-	public ItemRelationPage getItemRelationPage(String itemRelationPageNo)
-	{
+	public ItemRelationPage getItemRelationPage(String itemRelationPageNo) {
 		return this.itemInfo.getItemRelationPage(itemRelationPageNo);
 	}
 
 	@Override
-	public ModelRelationShip getModelRelationShip(String relationShipNo)
-	{
+	public ModelRelationShip getModelRelationShip(String relationShipNo) {
 		return MateFactory.getRelationShip(relationShipNo);
 	}
 

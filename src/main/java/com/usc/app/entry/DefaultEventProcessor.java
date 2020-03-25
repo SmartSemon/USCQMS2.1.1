@@ -13,9 +13,14 @@ import com.usc.app.action.AppActionFactory;
 import com.usc.app.action.i.AppAction;
 import com.usc.app.action.utils.ActionMessage;
 import com.usc.app.action.utils.ResultMessage;
+import com.usc.app.entry.ret.RetSignEnum;
 import com.usc.app.exception.ApplicationException;
 import com.usc.app.exception.GetExceptionDetails;
+import com.usc.app.util.RabbitMqUtils;
+import com.usc.app.util.RabbitMqUtilsBuilder;
 import com.usc.app.util.tran.StandardResultTranslate;
+import com.usc.cache.redis.RedisUtil;
+import com.usc.cache.redis.RedisUtilBuilder;
 import com.usc.obj.api.BeanFactoryConverter;
 import com.usc.obj.api.impl.AppFileContext;
 import com.usc.obj.api.impl.ApplicationContext;
@@ -23,6 +28,7 @@ import com.usc.obj.jsonbean.ActionRequestJSONBean;
 import com.usc.server.md.ItemInfo;
 import com.usc.server.md.ItemMenu;
 import com.usc.server.md.MenuLibrary;
+import com.usc.server.mq.ItemMQMenu;
 import com.usc.server.util.LoggerFactory;
 
 public class DefaultEventProcessor {
@@ -61,11 +67,11 @@ public class DefaultEventProcessor {
 	}
 
 	public void setResultJson(Object obj) {
-		if (obj == null)
-		{
-			this.resultJson = StandardResultTranslate.successfulOperation();
-			return;
-		}
+//		if (obj == null)
+//		{
+//			this.resultJson = StandardResultTranslate.successfulOperation();
+//			return;
+//		}
 		if (obj instanceof ResultMessage)
 		{
 			this.resultJson = obj;
@@ -88,7 +94,8 @@ public class DefaultEventProcessor {
 			return;
 		}
 
-		this.resultJson = ActionMessage.creator(true, null, StandardResultTranslate.translate("Action_Default"), obj);
+		this.resultJson = ActionMessage.creator(true, RetSignEnum.NOT_DEAL_WITH,
+				StandardResultTranslate.translate("Action_Default_1"), obj);
 	}
 
 	public DefaultEventProcessor(MultipartFile file, HttpServletRequest request, HttpServletResponse response)
@@ -98,8 +105,16 @@ public class DefaultEventProcessor {
 		try
 		{
 			jsonBean = BeanFactoryConverter.getJsonBean(ActionRequestJSONBean.class, queryParam);
+
 			if (jsonBean != null)
 			{
+				String impl = jsonBean.getImplclass();
+				boolean implType = jsonBean.getImplType() != null && jsonBean.getImplType() == true;
+				if (implType)
+				{
+					doMq(impl);
+					return;
+				}
 				jsonBean.init();
 				setFile(file);
 				setRequest(request);
@@ -133,6 +148,17 @@ public class DefaultEventProcessor {
 		} else
 		{
 			LoggerFactory.logError("未找到实现类：" + impl, new Throwable("No menu found : " + impl));
+		}
+	}
+
+	private void doMq(String impl) throws Exception {
+		RedisUtil redisUtil = RedisUtilBuilder.builder();
+		ItemMQMenu menu = redisUtil.hget("MODEL_MQAFFAIRS", impl, ItemMQMenu.class);
+		if (menu != null)
+		{
+			RabbitMqUtils mqUtils = RabbitMqUtilsBuilder.build();
+			mqUtils.sendToFanoutExchange(menu.getChannelname(), menu.getMcontent());
+			setResultJson(null);
 		}
 	}
 

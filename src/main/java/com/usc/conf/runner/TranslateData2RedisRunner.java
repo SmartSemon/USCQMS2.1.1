@@ -17,13 +17,11 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-@Order(3)
-public class TranslateData2RedisRunner extends AppRunner
-{
+@Order(30)
+public class TranslateData2RedisRunner extends AppRunner {
 
 	@Override
-	public void run(ApplicationArguments args) throws Exception
-	{
+	public void run(ApplicationArguments args) throws Exception {
 		try
 		{
 			Long st = System.currentTimeMillis();
@@ -36,8 +34,7 @@ public class TranslateData2RedisRunner extends AppRunner
 
 	}
 
-	private void propertice(File file)
-	{
+	private void propertice(File file) {
 		RedisUtil redisUtil = RedisUtil.getInstanceOfObject();
 		Properties properties = new Properties();
 		try
@@ -53,8 +50,7 @@ public class TranslateData2RedisRunner extends AppRunner
 		}
 	}
 
-	private void initTranslateData()
-	{
+	private void initTranslateData() {
 		File f2 = new File(this.getClass().getResource("").getPath());
 		File t = new File(f2.getPath() + "\\res\\actiontranslatemsg.properties");
 		propertice(t);

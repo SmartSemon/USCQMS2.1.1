@@ -218,6 +218,17 @@ public class RedisUtil {
 	}
 
 	/**
+	 * HashGet
+	 *
+	 * @param key  键 不能为null
+	 * @param item 项 不能为null
+	 * @return 值
+	 */
+	public <T> T hget(String key, String item, Class<T> clazz) {
+		return (T) redisTemplate.opsForHash().get(key, item);
+	}
+
+	/**
 	 * 获取hashKey对应的所有键值
 	 *
 	 * @param key 键

@@ -17,8 +17,7 @@ import com.usc.server.md.ItemPage;
 import com.usc.server.md.ItemRelationPage;
 import com.usc.util.ObjectHelperUtils;
 
-public class ItemBeanFactoryConverter
-{
+public class ItemBeanFactoryConverter {
 
 	private static JdbcTemplate jdbcTemplate;
 	private static List<ItemField> itemFieldList = null;
@@ -31,8 +30,7 @@ public class ItemBeanFactoryConverter
 	 * @return
 	 * @see 返回单个实体对象
 	 */
-	public static <T> T getBean(Class<T> calss, ResultSet resultSet)
-	{
+	public static <T> T getBean(Class<T> calss, ResultSet resultSet) {
 		try
 		{
 			jdbcTemplate = new JdbcTemplate(DBConnecter.getDataSource());
@@ -56,16 +54,13 @@ public class ItemBeanFactoryConverter
 	/**
 	 * @see 返回实体对象集
 	 */
-	public static <T> List<T> getBeans(Class<T> calss, ResultSet resultSet)
-	{
+	public static <T> List<T> getBeans(Class<T> calss, ResultSet resultSet) {
 		List<T> ts = null;
 		try
 		{
 			ts = new ArrayList<>();
 			while (resultSet.next())
-			{
-				ts.add(createBean(calss, resultSet));
-			}
+			{ ts.add(createBean(calss, resultSet)); }
 		} catch (Exception e)
 		{
 			e.printStackTrace();
@@ -80,8 +75,7 @@ public class ItemBeanFactoryConverter
 	 * @return 实体对象
 	 * @throws Exception
 	 */
-	private static <T> T createBean(Class<T> calss, ResultSet resultSet) throws Exception
-	{
+	private static <T> T createBean(Class<T> calss, ResultSet resultSet) throws Exception {
 		T object = calss.newInstance();
 		// 获取字段
 		Field[] fields = calss.getDeclaredFields();
@@ -103,9 +97,7 @@ public class ItemBeanFactoryConverter
 			{
 
 				if (fieldName.equalsIgnoreCase("serialVersionUID"))
-				{
-					continue;
-				}
+				{ continue; }
 				if ("itemFieldMap".equals(fieldName) || "itemFieldList".equals(fieldName))
 				{
 					itemFieldList = getFieldTypes(itemId);
@@ -226,44 +218,34 @@ public class ItemBeanFactoryConverter
 		return object;
 	}
 
-	private static List<ItemRelationPage> getRelationPage(String itemId)
-	{
+	private static List<ItemRelationPage> getRelationPage(String itemId) {
 
 		return jdbcTemplate.query(getSql(itemId, "usc_model_relationpage"), new RelationPageRowMapper());
 	}
 
-	private static String getSql(String itemId, String tableName)
-	{
+	private static String getSql(String itemId, String tableName) {
 		if (itemId == null || tableName == null)
-		{
-			return null;
-		}
+		{ return null; }
 		String sql = "SELECT * FROM " + tableName + " WHERE del=0 AND state='F' AND itemid='" + itemId + "'";
 		if ("usc_model_itemmenu".equals(tableName.toLowerCase()))
-		{
-			sql += " AND abtype is null";
-		}
+		{ sql += " AND abtype is null"; }
 		return sql;
 
 	}
 
-	public static List<ItemField> getFieldTypes(String itemId)
-	{
+	public static List<ItemField> getFieldTypes(String itemId) {
 		return jdbcTemplate.query(getSql(itemId, "usc_model_field"), new FieldRowMapper());
 	}
 
-	public static List<ItemMenu> getMenuTypes(String itemId)
-	{
+	public static List<ItemMenu> getMenuTypes(String itemId) {
 		return jdbcTemplate.query(getSql(itemId, "usc_model_itemmenu"), new MenuRowMapper());
 	}
 
-	public static List<ItemPage> getPageTypes(String itemId)
-	{
+	public static List<ItemPage> getPageTypes(String itemId) {
 		return jdbcTemplate.query(getSql(itemId, "usc_model_property"), new PageRowMapper());
 	}
 
-	public static List<ItemGrid> getGridTypes(String itemId)
-	{
+	public static List<ItemGrid> getGridTypes(String itemId) {
 		return jdbcTemplate.query(getSql(itemId, "usc_model_grid"), new GridRowMapper());
 	}
 

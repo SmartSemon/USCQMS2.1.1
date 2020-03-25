@@ -3,10 +3,12 @@ package com.usc.app.activiti.resource;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+import javax.websocket.server.PathParam;
 
 import com.usc.app.activiti.service.ProcessService;
 import com.usc.dto.Dto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -26,6 +28,14 @@ public class ProcessResource {
 	@GetMapping("/getProcdefProcess")
 	public Dto getProcdefProcess() {
 		return processService.getProcdefProcess();
+	}
+	/**
+	 * *获取流程定义(版本号，流程名称，流程图)
+	 * @return 根据流程下绑定的对象筛选展示的流程
+	 */
+	@PostMapping("/getProcdefProcessByProcdefId")
+	public Dto getProcdefProcessByProcdefId(@RequestBody String queryParam) {
+		return processService.getProcdefProcessByProcdefId(queryParam);
 	}
 	/**
 	 **流程的挂起
