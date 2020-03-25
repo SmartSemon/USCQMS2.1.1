@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class ItemGridField implements Serializable
-{
+public class ItemGridField implements Serializable {
 	/**
 	 *
 	 */
@@ -31,11 +30,14 @@ public class ItemGridField implements Serializable
 	private Double width;
 	private String align;
 	private int screen;
+
+	private int supLink;
+	private String linkParams;
+
 	private int sort;
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return this == null ? this.getClass().getSimpleName() : this.no + "-" + this.name;
 	}
 }

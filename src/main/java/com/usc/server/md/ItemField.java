@@ -30,6 +30,8 @@ public class ItemField implements Serializable {
 	private String editParams;
 	private int supQuery;
 	private int editAble;
+	private int supLink;
+	private String linkParams;
 
 	private FieldEditor fieldEditor;
 

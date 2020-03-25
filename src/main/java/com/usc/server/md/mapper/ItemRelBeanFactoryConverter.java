@@ -275,7 +275,7 @@ public class ItemRelBeanFactoryConverter {
 		String sql = "SELECT P.id AS id,P.no AS no,P.name AS name,P.editable AS editable,P.sort AS sort,P.ctime AS ctime,";
 		String sql2 = "F.fieldname AS fieldname,F.ftype AS ftype,F.flength AS flength,P.defaultv AS defaultv,"
 				+ "F.allownull AS allownull,F.accuracy AS accuracy,F.only AS only,"
-				+ "F.ispk AS ispk,F.editor AS editor,F.editparams AS editparams,F.type AS type,F.itemid AS itemid "
+				+ "F.ispk AS ispk,F.editor AS editor,F.editparams AS editparams,F.type AS type,F.itemid AS itemid ,F.suplink AS suplink,F.linkparams AS linkparams "
 				+ "FROM usc_model_field F,";
 		String condition = "WHERE P.del=0 AND P.state='F' AND F.del=0 AND F.state='F' AND P.itemid='" + itemId
 				+ "' AND P.rootid='" + rootId + "' AND (F.no=P.no OR P.no is null OR P.no='') AND F.itemid='" + itemId
