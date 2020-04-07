@@ -1,11 +1,9 @@
 package com.usc.app.activiti.resource;
 
 import com.usc.app.activiti.service.ProcessTaskService;
-import com.usc.dto.Dto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * @author lwp
@@ -24,7 +22,7 @@ public class ProcessTaskResource {
      * @return 任务集合
      */
     @PostMapping("getTaskToDo")
-    public List<Dto> getTaskToDo(@RequestBody String queryParam) throws IOException {
+    public Object getTaskToDo(@RequestBody String queryParam) throws IOException {
         return processTaskService.getTaskToDo(queryParam);
     }
 
@@ -36,7 +34,7 @@ public class ProcessTaskResource {
      */
     @PostMapping("handle/{taskId}")
     @CrossOrigin
-    public Dto handle(@PathVariable("taskId") String taskId, @RequestBody String queryParam) throws IOException {
+    public Object handle(@PathVariable("taskId") String taskId, @RequestBody String queryParam) throws IOException {
         return processTaskService.handle(taskId, queryParam);
     }
 
@@ -48,7 +46,7 @@ public class ProcessTaskResource {
      */
     @PostMapping("reject/{taskId}")
     @CrossOrigin
-    public Dto reject(@PathVariable("taskId") String taskId, @RequestBody String queryParam) throws IOException {
+    public Object reject(@PathVariable("taskId") String taskId, @RequestBody String queryParam) throws IOException {
         return processTaskService.reject(taskId, queryParam);
     }
 
@@ -60,7 +58,7 @@ public class ProcessTaskResource {
      */
     @PostMapping("taskTransfer/{taskId}")
     @CrossOrigin
-    public Dto taskTransfer(@PathVariable("taskId") String taskId, @RequestBody String queryParam) throws IOException {
+    public Object taskTransfer(@PathVariable("taskId") String taskId, @RequestBody String queryParam) throws IOException {
         return processTaskService.taskTransfer(taskId, queryParam);
     }
 
@@ -70,7 +68,7 @@ public class ProcessTaskResource {
      * @return
      */
     @PostMapping("getTaskDone")
-    public List<Dto> getTaskDone(@RequestBody String queryParam) throws IOException {
+    public Object getTaskDone(@RequestBody String queryParam) throws IOException {
         return processTaskService.getTaskDone(queryParam);
     }
 
@@ -79,7 +77,7 @@ public class ProcessTaskResource {
      * @return 获取我的申请流程集合
      */
     @PostMapping("getMyProcess")
-    public List<Dto> getRunProcess(@RequestBody String queryParam) throws IOException{
+    public Object getRunProcess(@RequestBody String queryParam) throws IOException{
         return processTaskService.getMyProcess(queryParam);
     }
 
@@ -88,7 +86,7 @@ public class ProcessTaskResource {
      * @param queryParam （processInstanceId） 流程实例id
      */
     @PostMapping("processRevoke")
-    public Dto processRevoke (@RequestBody String queryParam) throws IOException {
+    public Object processRevoke (@RequestBody String queryParam) throws IOException {
        return processTaskService.processRevoke(queryParam);
     }
 }

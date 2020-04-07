@@ -1,39 +1,37 @@
 package com.usc.app.activiti.service;
 
-import com.usc.dto.Dto;
-
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
 public interface ProcessService {
 
-	Dto getProcdefProcess();
+	Object getProcdefProcess();
 
-	Dto getProcdefProcessByProcdefId(String queryParam);
+	Object getProcdefProcessByProcdefId(String queryParam);
 
-	Dto deleteByDeploymentId(String deploymentId);
+	Object deleteByDeploymentId(String deploymentId);
 
-	Dto suspension(String id);
+	Object suspension(String id);
 
-	Dto activation(String id);
+	Object activation(String id);
 
 	void getProcessPicture(String id, HttpServletResponse response) throws IOException;
 
-	Dto startProcess(String queryParam) throws IOException;
+	Object startProcess(String queryParam) throws IOException;
 
-	List<Dto> getRunProcess();
+	Object getRunProcess();
 
 	void getActivityPng(String processInstanceId, HttpServletResponse response) throws IOException;
 
-	List<Dto> getProcessReverseList(String queryParam) throws IOException;
+	Object getProcessReverseList(String queryParam) throws IOException;
 
-	Dto getProcessSubList(String queryParam) throws Exception;
+	Object getProcessSubList(String queryParam) throws Exception;
 
-	Dto endProcess(String queryParam) throws IOException;
+	Object endProcess(String queryParam) throws IOException;
 
-	List<Dto> getEndProcess();
+	Object getEndProcess();
 
-	Dto deleteProcess(String queryParam) throws IOException;
+	Object deleteProcess(String queryParam) throws IOException;
 
 }

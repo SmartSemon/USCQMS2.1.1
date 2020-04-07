@@ -3,12 +3,8 @@ package com.usc.app.activiti.resource;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
-import javax.websocket.server.PathParam;
-
 import com.usc.app.activiti.service.ProcessService;
-import com.usc.dto.Dto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -26,7 +22,7 @@ public class ProcessResource {
 	 * @return 流程定义
 	 */
 	@GetMapping("/getProcdefProcess")
-	public Dto getProcdefProcess() {
+	public Object getProcdefProcess() {
 		return processService.getProcdefProcess();
 	}
 	/**
@@ -34,21 +30,21 @@ public class ProcessResource {
 	 * @return 根据流程下绑定的对象筛选展示的流程
 	 */
 	@PostMapping("/getProcdefProcessByProcdefId")
-	public Dto getProcdefProcessByProcdefId(@RequestBody String queryParam) {
+	public Object getProcdefProcessByProcdefId(@RequestBody String queryParam) {
 		return processService.getProcdefProcessByProcdefId(queryParam);
 	}
 	/**
 	 **流程的挂起
 	 */
 	@PostMapping("/suspension/{id}")
-	public Dto suspension(@PathVariable("id") String id) {
+	public Object suspension(@PathVariable("id") String id) {
 		return processService.suspension(id);
 	}
 	/**
 	 **流程的激活
 	 */
 	@PostMapping("/activation/{id}")
-	public Dto activation(@PathVariable("id") String id) {
+	public Object activation(@PathVariable("id") String id) {
 		return processService.activation(id);
 	}
 
@@ -67,7 +63,7 @@ public class ProcessResource {
 	 * @return 状态
 	 */
 	@PostMapping("/deleteByDeploymentId/{deploymentId}")
-	public Dto deleteByDeploymentId(@PathVariable("deploymentId") String deploymentId) {
+	public Object deleteByDeploymentId(@PathVariable("deploymentId") String deploymentId) {
 		return processService.deleteByDeploymentId(deploymentId);
 	}
 
@@ -76,7 +72,7 @@ public class ProcessResource {
 	 * @param queryParam(id,userName,selectedRows) 流程id,用户名，选中的数据
 	 */
 	@PostMapping("/startProcess")
-	public Dto startProcess (@RequestBody String queryParam) throws IOException {
+	public Object startProcess (@RequestBody String queryParam) throws IOException {
 		return processService.startProcess(queryParam);
 	}
 
@@ -85,7 +81,7 @@ public class ProcessResource {
 	 * @return 运行中流程集合
 	 */
 	@PostMapping("getRunProcess")
-	public List<Dto> getRunProcess() {
+	public Object getRunProcess() {
 		return processService.getRunProcess();
 	}
 
@@ -105,7 +101,7 @@ public class ProcessResource {
 	 * @return 流转信息集合
 	 */
 	@PostMapping("/getProcessReverseList")
-	public List<Dto> getProcessReverseList(@RequestBody String queryParam) throws IOException {
+	public Object getProcessReverseList(@RequestBody String queryParam) throws IOException {
 		return processService.getProcessReverseList(queryParam);
 	}
 
@@ -116,7 +112,7 @@ public class ProcessResource {
 	 * @return 流转信息集合
 	 */
 	@PostMapping("/getProcessSubList")
-	public Dto getProcessSubList(@RequestBody String queryParam) throws Exception {
+	public Object getProcessSubList(@RequestBody String queryParam) throws Exception {
 		return processService.getProcessSubList(queryParam);
 	}
 
@@ -125,7 +121,7 @@ public class ProcessResource {
      * @param queryParam （processInstanceId） 流程实例id
      */
     @PostMapping("endProcess")
-	public Dto endProcess (@RequestBody String queryParam) throws IOException {
+	public Object endProcess (@RequestBody String queryParam) throws IOException {
 	    return processService.endProcess(queryParam);
     }
 
@@ -134,7 +130,7 @@ public class ProcessResource {
 	 * @return 结束流程集合
 	 */
 	@PostMapping("getEndProcess")
-	public List<Dto> getEndProcess()  {
+	public Object getEndProcess()  {
 		return processService.getEndProcess();
 	}
 
@@ -143,7 +139,7 @@ public class ProcessResource {
 	 * @param queryParam（processInstanceId）流程实例id
 	 */
 	@PostMapping("deleteProcess")
-	public Dto deleteProcess(@RequestBody String queryParam) throws IOException {
+	public Object deleteProcess(@RequestBody String queryParam) throws IOException {
 		return processService.deleteProcess(queryParam);
 	}
 
