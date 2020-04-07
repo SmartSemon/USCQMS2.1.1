@@ -3,6 +3,7 @@ package com.usc.app.activiti.service.impl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -12,7 +13,10 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.JsonObject;
+import com.usc.app.action.utils.ActionMessage;
 import com.usc.obj.api.USCObject;
 import com.usc.obj.util.USCObjectQueryHelper;
 import org.activiti.bpmn.model.BpmnModel;
@@ -40,8 +44,6 @@ import com.usc.app.activiti.ActCommonUtil;
 import com.usc.app.activiti.service.ProcessService;
 import com.usc.app.bs.service.impl.BaseService;
 import com.usc.app.util.Utils;
-import com.usc.dto.Dto;
-import com.usc.dto.impl.MapDto;
 import com.usc.test.mate.resource.ServiceToWbeClientResource;
 
 @Service("processService")
@@ -66,7 +68,7 @@ public class ProcessServiceImpl extends BaseService implements ProcessService {
     TaskService taskService;
 
     @Override
-    public Dto getProcdefProcess() {
+    public Object getProcdefProcess() {
         // 获取所有流程定义
         List<ProcessDefinition> list = repositoryService.createProcessDefinitionQuery()
                 .orderByProcessDefinitionVersion().asc().list();
@@ -81,11 +83,11 @@ public class ProcessServiceImpl extends BaseService implements ProcessService {
             // 根据DeploymentId查询deployment
             List<Deployment> deployment = repositoryService.createDeploymentQuery().deploymentId(pd.getDeploymentId())
                     .list();
-            Dto dto = new MapDto();
+            Map<String, Object> dto = new HashMap<>();
             for (Deployment dm : deployment) {
                 dto.put("DEPLOYMENTTIME", dm.getDeploymentTime());
             }
-            Dto processDefinition = new MapDto();
+            Map<String, Object> processDefinition = new HashMap<>();
             processDefinition.put("DEPLOYMENTID", pd.getDeploymentId());
             processDefinition.put("ID", pd.getId());
             processDefinition.put("NAME", pd.getName());
@@ -96,11 +98,11 @@ public class ProcessServiceImpl extends BaseService implements ProcessService {
             processDefinition.put("SUSPENSIONSTATE", repositoryService.isProcessDefinitionSuspended(pd.getId()));
             processDefinitions.add(processDefinition);
         }
-        return new MapDto("list", processDefinitions);
+        return new ActionMessage(true, null, "查询成功", processDefinitions);
     }
 
     @Override
-    public Dto getProcdefProcessByProcdefId(String queryParam) {
+    public Object getProcdefProcessByProcdefId(String queryParam) {
         //获取当前对象itemNo
         JSONObject json = JSONObject.parseObject(queryParam);
         String itemNo = json.getString("itemNo");
@@ -129,11 +131,11 @@ public class ProcessServiceImpl extends BaseService implements ProcessService {
             // 根据DeploymentId查询deployment
             List<Deployment> deployment = repositoryService.createDeploymentQuery().deploymentId(pd.getDeploymentId())
                     .list();
-            Dto dto = new MapDto();
+            Map<String, Object> dto = new HashMap<>();
             for (Deployment dm : deployment) {
                 dto.put("DEPLOYMENTTIME", dm.getDeploymentTime());
             }
-            Dto processDefinition = new MapDto();
+            Map<String, Object> processDefinition = new HashMap<>();
             processDefinition.put("DEPLOYMENTID", pd.getDeploymentId());
             processDefinition.put("ID", pd.getId());
             processDefinition.put("NAME", pd.getName());
@@ -144,25 +146,40 @@ public class ProcessServiceImpl extends BaseService implements ProcessService {
             processDefinition.put("SUSPENSIONSTATE", repositoryService.isProcessDefinitionSuspended(pd.getId()));
             processDefinitions.add(processDefinition);
         }
-        return new MapDto("list", processDefinitions);
+        return new ActionMessage(true, null, "查询成功", processDefinitions);
     }
 
     @Override
-    public Dto deleteByDeploymentId(String deploymentId) {
-        repositoryService.deleteDeployment(deploymentId, true);
-        return new MapDto("result", "success");
+    public Object deleteByDeploymentId(String deploymentId) {
+        try {
+            repositoryService.deleteDeployment(deploymentId, true);
+            return new ActionMessage(true, null, "删除成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ActionMessage(false, null, "删除失败");
+        }
     }
 
     @Override
-    public Dto suspension(String id) {
-        repositoryService.suspendProcessDefinitionById(id);
-        return new MapDto("result", "success");
+    public Object suspension(String id) {
+        try {
+            repositoryService.suspendProcessDefinitionById(id);
+            return new ActionMessage(true, null, "挂起成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ActionMessage(false, null, "挂起失败");
+        }
     }
 
     @Override
-    public Dto activation(String id) {
-        repositoryService.activateProcessDefinitionById(id);
-        return new MapDto("result", "success");
+    public Object activation(String id) {
+        try {
+            repositoryService.activateProcessDefinitionById(id);
+            return new ActionMessage(true, null, "激活成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ActionMessage(true, null, "激活失败");
+        }
     }
 
     @Override
@@ -187,48 +204,49 @@ public class ProcessServiceImpl extends BaseService implements ProcessService {
     }
 
     @Override
-    public Dto startProcess(String queryParam) throws IOException {
-        Dto param = new MapDto();
-        if (!Utils.isEmpty(queryParam)) {
-            param.putAll(new ObjectMapper().readValue(queryParam, MapDto.class));
-        }
-        Dto result = new MapDto();
-        // 流程发起前设置发起人，记录在流程历史中
-        identityService.setAuthenticatedUserId(param.getString("userName"));
-        // 根据流程定义ID启动流程并且设置流程变量
-        Map<String, Object> map = new HashMap<>();
-        map.put("itemNo", param.getString("itemNo"));
-        ProcessInstance processInstance = runtimeService.startProcessInstanceById(param.getString("id"), map);
-        // 根据流程定义ID启动流程
+    public Object startProcess(String queryParam) {
+        try {
+            Map<String, Object> param = JSON.parseObject(queryParam);
+            // 流程发起前设置发起人，记录在流程历史中
+            identityService.setAuthenticatedUserId((String) param.get("userName"));
+            // 根据流程定义ID启动流程并且设置流程变量
+            Map<String, Object> map = new HashMap<>();
+            map.put("itemNo", param.get("itemNo"));
+            ProcessInstance processInstance = runtimeService.startProcessInstanceById((String) param.get("id"), map);
+            // 根据流程定义ID启动流程
 //        ProcessInstance processInstance = runtimeService.startProcessInstanceById(param.getString("id"));
-        // 修改业务数据状态（维护中:C,签审中:E,已归档:F,检出:U)
-        boolean isRestore = ActCommonUtil.restore(processInstance.getProcessInstanceId(), param.getString("userName"),
-                "E", processInstance.getProcessInstanceId(), (List<HashMap<String, Object>>) param.get("selectedRows"));
-        if (isRestore) {
-            result.put("result", true);
-            return result;
-        } else {
-            // 业务数据没修改成功流程启动后先把流程结束再删除
-            runtimeService.deleteProcessInstance(processInstance.getProcessInstanceId(), "启动失败");
-            historyService.deleteHistoricProcessInstance(processInstance.getProcessInstanceId());
-            result.put("result", false);
-            return result;
+            // 修改业务数据状态（维护中:C,签审中:E,已归档:F,检出:U)
+            List<HashMap> selectedRows = JSON.parseArray(param.get("selectedRows").toString(), HashMap.class);
+
+            boolean isRestore = ActCommonUtil.restore(processInstance.getProcessInstanceId(), (String) param.get("userName"),
+                    "E", processInstance.getProcessInstanceId(), selectedRows);
+            if (isRestore) {
+                return new ActionMessage(true, null, "启动成功");
+            } else {
+                // 业务数据没修改成功流程启动后先把流程结束再删除
+                runtimeService.deleteProcessInstance(processInstance.getProcessInstanceId(), "启动失败");
+                historyService.deleteHistoricProcessInstance(processInstance.getProcessInstanceId());
+                return new ActionMessage(false, null, "启动失败");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ActionMessage(false, null, "启动失败");
         }
     }
 
     @Override
-    public List<Dto> getRunProcess() {
+    public Object getRunProcess() {
         // 创建查询所有未完成流程实例，(act_hi_procinst表)，根据开始时间降序排序
         List<HistoricProcessInstance> hpiList = historyService.createHistoricProcessInstanceQuery().unfinished()
                 .orderByProcessInstanceStartTime().desc().list();
-        List<Dto> list = new ArrayList<>();
+        List<Map<String, Object>> list = new ArrayList<>();
         if (hpiList != null && hpiList.size() > 0) {
             // 遍历流程实例根据流程实例获取最新流程任务(未完成的任务)
             for (HistoricProcessInstance hp : hpiList) {
                 // 根据流程实例ID获取未完成的最新流程节点任务
                 HistoricActivityInstance hai = historyService.createHistoricActivityInstanceQuery()
                         .processInstanceId(hp.getId()).unfinished().singleResult();
-                Dto dto = new MapDto();
+                Map<String, Object> dto = new HashMap<>();
                 // id(act_hi_actinst表)
                 dto.put("id", hai.getId());
                 // 流程实例ID(方便对活动节点进行操作)
@@ -245,7 +263,7 @@ public class ProcessServiceImpl extends BaseService implements ProcessService {
                 list.add(dto);
             }
         }
-        return list;
+        return new ActionMessage(true, null, "查询成功", list);
     }
 
     @Override
@@ -290,180 +308,161 @@ public class ProcessServiceImpl extends BaseService implements ProcessService {
     }
 
     @Override
-    public List<Dto> getProcessReverseList(String queryParam) throws IOException {
-        Dto param = new MapDto();
-        if (!Utils.isEmpty(queryParam)) {
-            param.putAll(new ObjectMapper().readValue(queryParam, MapDto.class));
-        }
+    public Object getProcessReverseList(String queryParam) throws IOException {
+        Map<String, Object> param = JSON.parseObject(queryParam);
         // 获取流程历史中startEvent节点
         List<HistoricActivityInstance> startList = historyService.createHistoricActivityInstanceQuery()
-                .processInstanceId(param.getString("processInstanceId")).activityType("startEvent").list();
+                .processInstanceId((String) param.get("processInstanceId")).activityType("startEvent").list();
         // 获取流程历史中所有userTask节点，并按照节点在流程中结束时升序排序
         List<HistoricActivityInstance> userTaskList = historyService.createHistoricActivityInstanceQuery()
-                .processInstanceId(param.getString("processInstanceId")).activityType("userTask")
+                .processInstanceId((String) param.get("processInstanceId")).activityType("userTask")
                 .orderByHistoricActivityInstanceStartTime().asc().orderByHistoricActivityInstanceEndTime().asc().list();
         // 获取流程历史中startEvent节点
         List<HistoricActivityInstance> endtList = historyService.createHistoricActivityInstanceQuery()
-                .processInstanceId(param.getString("processInstanceId")).activityType("endEvent").list();
+                .processInstanceId((String) param.get("processInstanceId")).activityType("endEvent").list();
         startList.addAll(userTaskList);
         startList.addAll(endtList);
-        List<Dto> list = new ArrayList<>();
+        List<Map<String, Object>> list = new ArrayList<>();
         for (HistoricActivityInstance hai : startList) {
-            Dto dto = new MapDto();
+            Map<String, Object> hisMap = new HashMap<>();
             // 执行节点id
-            dto.put("id", hai.getId());
+            hisMap.put("id", hai.getId());
             // 执行环节
-            dto.put("actName", hai.getActivityName());
+            hisMap.put("actName", hai.getActivityName());
             // 执行人(因为节点开始没有执行人信息，所以根据processInstanceId获取流程历史实例获取发起人)
             if ("startEvent".equals(hai.getActivityType())) {
                 // 获取历史流程实例
                 HistoricProcessInstance hpi = historyService.createHistoricProcessInstanceQuery()
-                        .processInstanceId(param.getString("processInstanceId")).singleResult();
-                dto.put("assignee", hpi.getStartUserId());
+                        .processInstanceId((String) param.get("processInstanceId")).singleResult();
+                hisMap.put("assignee", hpi.getStartUserId());
             } else {
-                dto.put("assignee", hai.getAssignee());
+                hisMap.put("assignee", hai.getAssignee());
             }
             // 开始时间
-            dto.put("startTime", Utils.dateToString(hai.getStartTime()));
+            hisMap.put("startTime", Utils.dateToString(hai.getStartTime()));
             // 结束时间
-            dto.put("endTime", Utils.dateToString(hai.getEndTime()));
+            hisMap.put("endTime", Utils.dateToString(hai.getEndTime()));
             // 提交建议（根据活动节点获取taskid，根据taskid获取act_hi_comment表的任务提交建议）
             List<Comment> comment = taskService.getTaskComments(hai.getTaskId());
             if (comment.size() > 0) {
-                dto.put("subOpinions", comment.get(0).getFullMessage());
+                hisMap.put("subOpinions", comment.get(0).getFullMessage());
             } else {
-                dto.put("subOpinions", null);
+                hisMap.put("subOpinions", null);
             }
             // 任务历时(毫秒)
-            dto.put("duration", Utils.msToHms(hai.getDurationInMillis()));
-            list.add(dto);
+            hisMap.put("duration", Utils.msToHms(hai.getDurationInMillis()));
+            list.add(hisMap);
         }
-        return list;
+        return new ActionMessage(true, null, "查询成功", list);
     }
 
     @Override
-    public Dto getProcessSubList(String queryParam) throws Exception {
-        Dto param = new MapDto();
-        if (!Utils.isEmpty(queryParam)) {
-            param.putAll(new ObjectMapper().readValue(queryParam, MapDto.class));
-        }
+    public Object getProcessSubList(String queryParam) throws Exception {
+        Map<String, Object> param = JSON.parseObject(queryParam);
         /// 先判断流程是否结束
         ProcessInstance singleResult = runtimeService.createProcessInstanceQuery()
-                .processInstanceId(param.getString("processInstanceId")).singleResult();
+                .processInstanceId((String) param.get("processInstanceId")).singleResult();
         String itemNo;
         if (singleResult != null) {
             // 获取对象标识
-            itemNo = (String) runtimeService.getVariable(param.getString("processInstanceId"), "itemNo");
+            itemNo = (String) runtimeService.getVariable((String) param.get("processInstanceId"), "itemNo");
         } else {
             // 获取对象标识
             HistoricVariableInstance hvi = historyService.createHistoricVariableInstanceQuery()
-                    .processInstanceId(param.getString("processInstanceId")).variableName("itemNo").singleResult();
+                    .processInstanceId((String) param.get("processInstanceId")).variableName("itemNo").singleResult();
             itemNo = (String) hvi.getValue();
         }
-        Dto dto = new MapDto();
+        Map<String, Object> dto = new HashMap<>();
         dto.put("itemNo", itemNo);
         dto.put("facetype", 2);
         dto.put("itemGridNo", "default");
         dto.put("itemPropertyNo", "default");
         dto.put("itemRelationPageNo", "default");
-        dto.put("userName", param.getString("userName"));
-        dto.put("condition", "DSNO=" + param.getString("processInstanceId") + " ORDER BY id DESC");
+        dto.put("userName", param.get("userName"));
+        dto.put("condition", "DSNO=" + param.get("processInstanceId") + " ORDER BY id DESC");
         dto.put("page", 1);
         String params = ActCommonUtil.toJsonString(dto);
         ServiceToWbeClientResource serviceToWbeClientResource = new ServiceToWbeClientResource();
-        Map<String, Object> resultModel = serviceToWbeClientResource.getModelData(params);
-        Object resultItemList = serviceToWbeClientResource.getDataListLimit(params);
-        Dto subList = new MapDto();
+        Map<String, Object> resultModel = null;
+        Object resultItemList = null;
+        try {
+            resultModel = serviceToWbeClientResource.getModelData(params);
+            resultItemList = serviceToWbeClientResource.getDataListLimit(params);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//        Map<String, Object> resultModel = serviceToWbeClientResource.getModelData(params);
+//        Object resultItemList = serviceToWbeClientResource.getDataListLimit(params);
+        Map<String, Object> subList = new HashMap<>();
         subList.put("resultModel", resultModel);
         subList.put("resultItemList", resultItemList);
-        return subList;
+        return new ActionMessage(true, null, "查询成功", subList);
     }
 
     @Override
-    public Dto endProcess(String queryParam) throws IOException {
-        Dto param = new MapDto();
-        if (!Utils.isEmpty(queryParam)) {
-            param.putAll(new ObjectMapper().readValue(queryParam, MapDto.class));
-        }
+    public Object endProcess(String queryParam) throws IOException {
+        Map<String, Object> param = JSON.parseObject(queryParam);
         // 还原流程绑定的数据是否成功
-        boolean isRestore = ActCommonUtil.restore(param.getString("processInstanceId"), param.getString("userName"),
+        boolean isRestore = ActCommonUtil.restore((String) param.get("processInstanceId"), (String) param.get("userName"),
                 "C", "", null);
         if (isRestore) {
             try {
-                runtimeService.deleteProcessInstance(param.getString("processInstanceId"),
-                        "[流程作废]原因:" + param.getString("options"));
-                Dto resultDto = new MapDto();
-                resultDto.put("flag", true);
-                resultDto.put("msg", "作废成功！");
-                return resultDto;
+                runtimeService.deleteProcessInstance((String) param.get("processInstanceId"),
+                        "[流程作废]原因:" + param.get("options"));
+                return new ActionMessage(true, null, "作废成功");
             } catch (Exception e) {
-                Dto resultDto = new MapDto();
-                resultDto.put("flag", false);
-                resultDto.put("msg", "作废失败！");
-                return resultDto;
+                return new ActionMessage(true, null, "作废失败");
             }
         } else {
-            Dto resultDto = new MapDto();
-            resultDto.put("flag", false);
-            resultDto.put("msg", "作废失败(还原业务数据失败)！");
-            return resultDto;
+            return new ActionMessage(true, null, "作废失败");
         }
     }
 
     @Override
-    public List<Dto> getEndProcess() {
+    public Object getEndProcess() {
         // 创建查询所有已经完成流程实例，(act_hi_procinst表)，根据结束时间降序排序
         List<HistoricProcessInstance> hpiList = historyService.createHistoricProcessInstanceQuery().finished()
                 .orderByProcessInstanceEndTime().desc().list();
-        List<Dto> list = new ArrayList<>();
+        List<Map<String, Object>> list = new ArrayList<>();
         if (hpiList != null && hpiList.size() > 0) {
             // 遍历流程实例根据流程实例获取最新流程任务(未完成的任务)
             for (HistoricProcessInstance hp : hpiList) {
                 // 根据流程实例processInstanceId获取已经完成的任务
                 List<HistoricTaskInstance> htiList = historyService.createHistoricTaskInstanceQuery()
                         .processInstanceId(hp.getId()).finished().orderByHistoricTaskInstanceEndTime().desc().list();
-                Dto dto = new MapDto();
+                Map<String, Object> endProcessMap = new HashMap<>();
                 // id(act_hi_taskinst表)
-                dto.put("id", htiList.get(0).getId());
+                endProcessMap.put("id", htiList.get(0).getId());
                 // 流程实例ID(方便对活动节点进行操作)
-                dto.put("processInstanceId", htiList.get(0).getProcessInstanceId());
+                endProcessMap.put("processInstanceId", htiList.get(0).getProcessInstanceId());
                 // 流程标题（发起人+发起时间+流程实例名称）
-                dto.put("title", hp.getStartUserId() + "在" + Utils.dateToString(hp.getStartTime()) + "发起"
+                endProcessMap.put("title", hp.getStartUserId() + "在" + Utils.dateToString(hp.getStartTime()) + "发起"
                         + hp.getProcessDefinitionName());
                 // 流程名称
-                dto.put("name", hp.getProcessDefinitionName());
+                endProcessMap.put("name", hp.getProcessDefinitionName());
                 // 发起人
-                dto.put("startName", hp.getStartUserId());
+                endProcessMap.put("startName", hp.getStartUserId());
                 // 发起时间
-                dto.put("startTime", Utils.dateToString(htiList.get(0).getStartTime()));
+                endProcessMap.put("startTime", Utils.dateToString(htiList.get(0).getStartTime()));
                 // 结束时间
-                dto.put("endTime", Utils.dateToString(htiList.get(0).getEndTime()));
+                endProcessMap.put("endTime", Utils.dateToString(htiList.get(0).getEndTime()));
                 // 流程状态
-                dto.put("processState", htiList.get(0).getDeleteReason());
-                list.add(dto);
+                endProcessMap.put("processState", htiList.get(0).getDeleteReason());
+                list.add(endProcessMap);
             }
         }
-        return list;
+        return new ActionMessage(true, null, "查询成功", list);
     }
 
     @Override
-    public Dto deleteProcess(String queryParam) throws IOException {
-        Dto param = new MapDto();
-        if (!Utils.isEmpty(queryParam)) {
-            param.putAll(new ObjectMapper().readValue(queryParam, MapDto.class));
-        }
+    public Object deleteProcess(String queryParam) throws IOException {
+        Map<String, Object> param = JSON.parseObject(queryParam);
         try {
             // 删除流程实例删除已完成任务
-            historyService.deleteHistoricProcessInstance(param.getString("processInstanceId"));
-            Dto resultDto = new MapDto();
-            resultDto.put("flag", true);
-            resultDto.put("msg", "删除成功！");
-            return resultDto;
+            historyService.deleteHistoricProcessInstance((String) param.get("processInstanceId"));
+            return new ActionMessage(true, null, "删除成功");
         } catch (Exception e) {
-            Dto resultDto = new MapDto();
-            resultDto.put("flag", false);
-            resultDto.put("msg", "删除失败！");
-            return resultDto;
+            return new ActionMessage(false, null, "删除失败");
         }
 
     }

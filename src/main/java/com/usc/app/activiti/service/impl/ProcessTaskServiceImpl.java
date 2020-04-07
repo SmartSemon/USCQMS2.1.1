@@ -1,19 +1,18 @@
 package com.usc.app.activiti.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.usc.app.action.utils.ActionMessage;
 import com.usc.app.activiti.ActCommonUtil;
 import com.usc.app.activiti.service.ProcessTaskService;
 import com.usc.app.bs.service.impl.BaseService;
 import com.usc.app.util.Utils;
-import com.usc.dto.Dto;
-import com.usc.dto.impl.MapDto;
 import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.RepositoryServiceImpl;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
-import org.activiti.engine.impl.pvm.PvmActivity;
 import org.activiti.engine.impl.pvm.PvmTransition;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.impl.pvm.process.ProcessDefinitionImpl;
@@ -46,18 +45,15 @@ public class ProcessTaskServiceImpl extends BaseService implements ProcessTaskSe
     RepositoryService repositoryService;
 
     @Override
-    public List<Dto> getTaskToDo(String queryParam) throws IOException {
-        Dto param = new MapDto();
-        if (!Utils.isEmpty(queryParam)) {
-            param.putAll(new ObjectMapper().readValue(queryParam, MapDto.class));
-        }
+    public Object getTaskToDo(String queryParam) throws IOException {
+        Map<String, Object> param = JSON.parseObject(queryParam);
         //获取登陆人任务列表根据创建时间降序排序
-        List<Task> taskList = taskService.createTaskQuery().taskAssignee(param.getString("userName"))
+        List<Task> taskList = taskService.createTaskQuery().taskAssignee((String) param.get("userName"))
                 .orderByTaskCreateTime().desc().list();
-        List<Dto> list = new ArrayList<>();
+        List<Map<String, Object>> list = new ArrayList<>();
         if (taskList != null && taskList.size() > 0) {
             for (Task task : taskList) {
-                Dto dto = new MapDto();
+                Map<String, Object> dto = new HashMap<>();
                 //id(act_run_task表)
                 dto.put("id", task.getId());
                 //根据proc_inst_id获取act_hi_procinst中的发起人和发起时间与流程实例名称
@@ -78,35 +74,26 @@ public class ProcessTaskServiceImpl extends BaseService implements ProcessTaskSe
                 list.add(dto);
             }
         }
-        return list;
+        return new ActionMessage(true, null, "查询成功", list);
     }
 
     @Override
-    public Dto handle(String taskId, String queryParam) throws IOException {
-        Dto param = new MapDto();
-        if (!Utils.isEmpty(queryParam)) {
-            param.putAll(new ObjectMapper().readValue(queryParam, MapDto.class));
-        }
+    public Object handle(String taskId, String queryParam) throws IOException {
+        Map<String, Object> param = JSON.parseObject(queryParam);
         //添加意见  （param.getString("processInstanceId"):流程实例ID，如果为空，则不保存任务提交意见）
-        if (StringUtils.isNotBlank(param.getString("processInstanceId")) && StringUtils.isNotBlank(param.getString("options"))) {
-            taskService.addComment(taskId, param.getString("processInstanceId"), param.getString("options"));
+        if (StringUtils.isNotBlank((String) param.get("processInstanceId")) && StringUtils.isNotBlank((String) param.get("options"))) {
+            taskService.addComment(taskId, (String) param.get("processInstanceId"), (String) param.get("options"));
         }
         Boolean isEnd = ActCommonUtil.nextTaskIsEnd(taskId);
         Boolean isExclusiveGateway = ActCommonUtil.nextTaskIsExclusiveGateway(taskId);
         if (isEnd) {
-            boolean isRestore = ActCommonUtil.restore(param.getString("processInstanceId"), param.getString("userName"),
-                    "F", param.getString("processInstanceId"), null);
+            boolean isRestore = ActCommonUtil.restore((String) param.get("processInstanceId"), (String) param.get("userName"),
+                    "F", (String) param.get("processInstanceId"), null);
             if (isRestore) {
                 taskService.complete(taskId);
-                Dto resultDto = new MapDto();
-                resultDto.put("flag", true);
-                resultDto.put("msg", "流程正常结束！");
-                return resultDto;
+                return new ActionMessage(true, null, "办理成功");
             } else {
-                Dto resultDto = new MapDto();
-                resultDto.put("flag", false);
-                resultDto.put("msg", "流程结束失败！");
-                return resultDto;
+                return new ActionMessage(false, null, "办理失败");
             }
         } else if (isExclusiveGateway) {
             //对应排他网关判断输入建议值判断选择分支
@@ -116,53 +103,32 @@ public class ProcessTaskServiceImpl extends BaseService implements ProcessTaskSe
                 taskService.complete(taskId, variables);
             } catch (Exception e) {
                 System.err.println("排他网关判断之输入不正确！");
-                Dto resultDto = new MapDto();
-                resultDto.put("flag", false);
-                resultDto.put("msg", "排他网关输入值不正确！");
-                return resultDto;
+                return new ActionMessage(false, null, "办理失败");
             }
             //执行排他网关监听选择分支
 //            taskService.complete(taskId);
-            Dto resultDto = new MapDto();
-            resultDto.put("flag", true);
-            resultDto.put("msg", "办理成功！");
-            return resultDto;
+            return new ActionMessage(true, null, "办理成功");
         } else {
             //完成任务
             taskService.complete(taskId);
-            Dto resultDto = new MapDto();
-            resultDto.put("flag", true);
-            resultDto.put("msg", "办理成功！");
-            return resultDto;
+            return new ActionMessage(true, null, "办理成功");
         }
     }
 
     @Override
-    public Dto taskTransfer(String taskId, String queryParam) throws IOException {
-        Dto param = new MapDto();
-        if (!Utils.isEmpty(queryParam)) {
-            param.putAll(new ObjectMapper().readValue(queryParam, MapDto.class));
-        }
+    public Object taskTransfer(String taskId, String queryParam) throws IOException {
+        Map<String, Object> param = JSON.parseObject(queryParam);
         try {
-            taskService.setAssignee(taskId, param.getString("name"));
-            Dto resultDto = new MapDto();
-            resultDto.put("flag", true);
-            resultDto.put("msg", "转办成功！");
-            return resultDto;
+            taskService.setAssignee(taskId, (String) param.get("name"));
+            return new ActionMessage(true, null, "转办成功");
         } catch (Exception e) {
-            Dto resultDto = new MapDto();
-            resultDto.put("flag", false);
-            resultDto.put("msg", "转办失败！");
-            return resultDto;
+            return new ActionMessage(false, null, "转办失败");
         }
     }
 
     @Override
-    public Dto reject(String taskId, String queryParam) throws IOException {
-        Dto param = new MapDto();
-        if (!Utils.isEmpty(queryParam)) {
-            param.putAll(new ObjectMapper().readValue(queryParam, MapDto.class));
-        }
+    public Object reject(String taskId, String queryParam) throws IOException {
+        Map<String, Object> param = JSON.parseObject(queryParam);
         //获取当前任务
         HistoricTaskInstance currTask = historyService.createHistoricTaskInstanceQuery()
                 .taskId(taskId)
@@ -175,10 +141,7 @@ public class ProcessTaskServiceImpl extends BaseService implements ProcessTaskSe
         ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) ((RepositoryServiceImpl) repositoryService)
                 .getDeployedProcessDefinition(currTask.getProcessDefinitionId());
         if (processDefinitionEntity == null) {
-            Dto resultDto = new MapDto();
-            resultDto.put("flag", false);
-            resultDto.put("msg", "不存在的流程定义！");
-            return resultDto;
+            return new ActionMessage(false, null, "驳回失败");
         }
         //获取当前activity
         ActivityImpl currActivity = ((ProcessDefinitionImpl) processDefinitionEntity)
@@ -204,10 +167,7 @@ public class ProcessTaskServiceImpl extends BaseService implements ProcessTaskSe
             transitionImpl = currActivity.createOutgoingTransition(lastActivity.getId());
             transitionImpl.setDestination(lastActivity);
         } else {
-            Dto resultDto = new MapDto();
-            resultDto.put("flag", false);
-            resultDto.put("msg", "上级为开始节点，无法驳回！");
-            return resultDto;
+            return new ActionMessage(false, null, "驳回失败");
         }
         // 完成任务
         List<Task> tasks = taskService.createTaskQuery()
@@ -215,32 +175,26 @@ public class ProcessTaskServiceImpl extends BaseService implements ProcessTaskSe
                 .taskDefinitionKey(currTask.getTaskDefinitionKey()).list();
         for (Task task : tasks) {
             //添加意见  （param.getString("processInstanceId"):流程实例ID，如果为空，则不保存任务提交意见）
-            if (StringUtils.isNotBlank(param.getString("processInstanceId")) && StringUtils.isNotBlank(param.getString("options"))) {
-                taskService.addComment(taskId, param.getString("processInstanceId"), param.getString("options"));
+            if (StringUtils.isNotBlank((String) param.get("processInstanceId")) && StringUtils.isNotBlank((String) param.get("options"))) {
+                taskService.addComment(taskId, (String) param.get("processInstanceId"), (String) param.get("options"));
             }
             taskService.complete(task.getId());
         }
         // 恢复方向
         currActivity.getOutgoingTransitions().remove(transitionImpl);
         pvmTransitionList.addAll(originPvmTransitionList);
-        Dto resultDto = new MapDto();
-        resultDto.put("flag", true);
-        resultDto.put("msg", "驳回成功！");
-        return resultDto;
+        return new ActionMessage(true, null, "驳回成功");
     }
 
     @Override
-    public List<Dto> getTaskDone(String queryParam) throws IOException {
-        Dto param = new MapDto();
-        if (!Utils.isEmpty(queryParam)) {
-            param.putAll(new ObjectMapper().readValue(queryParam, MapDto.class));
-        }
-        List<HistoricTaskInstance> histTaskList = historyService.createHistoricTaskInstanceQuery().taskAssignee(param.getString("userName")).finished()
+    public Object getTaskDone(String queryParam) throws IOException {
+        Map<String, Object> param = JSON.parseObject(queryParam);
+        List<HistoricTaskInstance> histTaskList = historyService.createHistoricTaskInstanceQuery().taskAssignee((String) param.get("userName")).finished()
                 .orderByHistoricTaskInstanceEndTime().desc().list();
-        List<Dto> list = new ArrayList<>();
+        List<Map<String, Object>> list = new ArrayList<>();
         if (histTaskList != null && histTaskList.size() > 0) {
             for (HistoricTaskInstance historicTask : histTaskList) {
-                Dto dto = new MapDto();
+                Map<String, Object> dto = new HashMap<>();
                 //id(act_run_task表)
                 dto.put("id", historicTask.getId());
                 //根据proc_inst_id获取act_hi_procinst中的发起人和发起时间与流程实例名称
@@ -261,19 +215,16 @@ public class ProcessTaskServiceImpl extends BaseService implements ProcessTaskSe
                 list.add(dto);
             }
         }
-        return list;
+        return new ActionMessage(true, null, "查询成功", list);
     }
 
     @Override
-    public List<Dto> getMyProcess(String queryParam) throws IOException {
-        Dto param = new MapDto();
-        if (!Utils.isEmpty(queryParam)) {
-            param.putAll(new ObjectMapper().readValue(queryParam, MapDto.class));
-        }
+    public Object getMyProcess(String queryParam) throws IOException {
+        Map<String, Object> param = JSON.parseObject(queryParam);
         // 根据用户查询所有流程实例，(act_hi_procinst表)，根据开始时间降序排序
-        List<HistoricProcessInstance> hpiList = historyService.createHistoricProcessInstanceQuery().startedBy(param.getString("userName"))
+        List<HistoricProcessInstance> hpiList = historyService.createHistoricProcessInstanceQuery().startedBy((String) param.get("userName"))
                 .orderByProcessInstanceStartTime().desc().list();
-        List<Dto> list = new ArrayList<>();
+        List<Map<String, Object>> list = new ArrayList<>();
         if (hpiList != null && hpiList.size() > 0) {
             //遍历流程实例根据流程实例获取最新流程任务(未完成的任务)
             for (HistoricProcessInstance hp : hpiList) {
@@ -283,7 +234,7 @@ public class ProcessTaskServiceImpl extends BaseService implements ProcessTaskSe
                     // 没结束根据流程实例ID获取任务
                     List<HistoricTaskInstance> htiList = historyService.createHistoricTaskInstanceQuery()
                             .processInstanceId(hp.getId()).orderByHistoricTaskInstanceEndTime().desc().list();
-                    Dto endDto = new MapDto();
+                    Map<String, Object> endDto = new HashMap<>();
                     //id(act_hi_actinst表)
                     endDto.put("id", htiList.get(0).getId());
                     //流程实例ID(方便对活动节点进行操作)
@@ -298,7 +249,7 @@ public class ProcessTaskServiceImpl extends BaseService implements ProcessTaskSe
                 } else {
                     // 已结束根据流程实例ID获取任务
                     HistoricTaskInstance hti = historyService.createHistoricTaskInstanceQuery().processInstanceId(singleResult.getId()).unfinished().singleResult();
-                    Dto runDto = new MapDto();
+                    Map<String, Object> runDto = new HashMap<>();
                     //id(act_hi_actinst表)
                     runDto.put("id", hti.getId());
                     //流程实例ID(方便对活动节点进行操作)
@@ -316,35 +267,23 @@ public class ProcessTaskServiceImpl extends BaseService implements ProcessTaskSe
                 }
             }
         }
-        return list;
+        return new ActionMessage(true, null, "查询成功", list);
     }
 
     @Override
-    public Dto processRevoke(String queryParam) throws IOException {
-        Dto param = new MapDto();
-        if (!Utils.isEmpty(queryParam)) {
-            param.putAll(new ObjectMapper().readValue(queryParam, MapDto.class));
-        }
+    public Object processRevoke(String queryParam) throws IOException {
+        Map<String, Object> param = JSON.parseObject(queryParam);
         //还原流程绑定的数据是否成功
-        boolean isRestore = ActCommonUtil.restore(param.getString("processInstanceId"), param.getString("userName"), "C", "", null);
+        boolean isRestore = ActCommonUtil.restore((String) param.get("processInstanceId"), (String) param.get("userName"), "C", "", null);
         if (isRestore) {
             try {
-                runtimeService.deleteProcessInstance(param.getString("processInstanceId"), "[用户撤销]");
-                Dto resultDto = new MapDto();
-                resultDto.put("flag", true);
-                resultDto.put("msg", "撤销成功！");
-                return resultDto;
+                runtimeService.deleteProcessInstance((String) param.get("processInstanceId"), "[用户撤销]");
+                return new ActionMessage(true, null, "撤销成功");
             } catch (Exception e) {
-                Dto resultDto = new MapDto();
-                resultDto.put("flag", false);
-                resultDto.put("msg", "撤销失败！");
-                return resultDto;
+                return new ActionMessage(false, null, "撤销失败");
             }
         } else {
-            Dto resultDto = new MapDto();
-            resultDto.put("flag", false);
-            resultDto.put("msg", "撤销失败(还原业务数据失败)！");
-            return resultDto;
+            return new ActionMessage(false, null, "撤销失败");
         }
 
     }

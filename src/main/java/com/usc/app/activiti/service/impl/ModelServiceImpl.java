@@ -1,9 +1,8 @@
 package com.usc.app.activiti.service.impl;
 
+import com.usc.app.action.utils.ActionMessage;
 import com.usc.app.activiti.service.ModelService;
 import com.usc.app.bs.service.impl.BaseService;
-import com.usc.dto.Dto;
-import com.usc.dto.impl.MapDto;
 import com.usc.server.DBConnecter;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
@@ -14,7 +13,6 @@ import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -32,6 +30,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -84,12 +83,19 @@ public class ModelServiceImpl extends BaseService implements ModelDataJsonConsta
     }
 
     @Override
-    public List<Model> getModelList() {
-        return repositoryService.createModelQuery().orderByCreateTime().desc().list();
+    public Object getModelList() {
+        List list = new ArrayList<>();
+        try {
+            list = repositoryService.createModelQuery().orderByCreateTime().desc().list();
+            return new ActionMessage(true, null, "查询成功", list);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ActionMessage(false, null, "查询失败", list);
+        }
     }
 
     @Override
-    public Dto create(String name, String key, String description) {
+    public Object create(String name, String key, String description) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             ObjectNode editorNode = objectMapper.createObjectNode();
@@ -110,15 +116,15 @@ public class ModelServiceImpl extends BaseService implements ModelDataJsonConsta
             modelData.setKey(StringUtils.defaultString(key));
             repositoryService.saveModel(modelData);
             repositoryService.addModelEditorSource(modelData.getId(), editorNode.toString().getBytes(StandardCharsets.UTF_8));
+            return new ActionMessage(true, null, "新建成功");
         } catch (DataAccessException e) {
             e.printStackTrace();
             SQLException sqle = (SQLException) e.getCause();
-            return new MapDto("ErrorCode", sqle.getMessage());
+            return new ActionMessage(false, null, "新建失败");
         } catch (Exception e) {
             e.printStackTrace();
-            return new MapDto("Message", e.getMessage());
+            return new ActionMessage(false, null, "新建失败");
         }
-        return new MapDto("result", "success");
     }
 
     @Override
@@ -150,7 +156,7 @@ public class ModelServiceImpl extends BaseService implements ModelDataJsonConsta
     }
 
     @Override
-    public Dto deploy(String modelId) {
+    public Object deploy(String modelId) {
         try {
             Model modelData = repositoryService.getModel(modelId);
             ObjectNode modelNode = (ObjectNode) new ObjectMapper()
@@ -160,36 +166,37 @@ public class ModelServiceImpl extends BaseService implements ModelDataJsonConsta
             bpmnBytes = new BpmnXMLConverter().convertToXML(model);
             String processName = modelData.getName() + ".bpmn20.xml";
             repositoryService.createDeployment().name(modelData.getName()).addString(processName, new String(bpmnBytes, StandardCharsets.UTF_8)).deploy();
-            return new MapDto("result", "success");
+            return new ActionMessage(true, null, "部署成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return new MapDto("Message", e.getMessage());
+            return new ActionMessage(true, null, "部署失败");
         }
     }
 
     @Override
-    public Dto delete(String modelId) {
+    public Object delete(String modelId) {
         try {
             repositoryService.deleteModel(modelId);
+            return new ActionMessage(true, null, "删除成功");
         } catch (DataAccessException e) {
             e.printStackTrace();
             SQLException sqle = (SQLException) e.getCause();
-            return new MapDto("ErrorCode", sqle.getMessage());
+            return new ActionMessage(true, null, "删除成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return new MapDto("Message", e.getMessage());
+            return new ActionMessage(true, null, "删除成功");
         }
-        return new MapDto("result", "success");
+
     }
 
     @Override
-    public List<Dto> getAllRole() {
-        List<Dto> roleList = new ArrayList<>();
+    public List getAllRole() {
+        List<Map<String, Object>> roleList = new ArrayList<>();
         String sql = "SELECT id,name FROM srole WHERE del = 0 AND type = 1";
         try {
             List<Map<String, Object>> list = new JdbcTemplate(DBConnecter.getDataSource()).queryForList(sql);
             for (Map<String, Object> role : list) {
-                Dto dto = new MapDto();
+                Map<String, Object> dto = new HashMap();
                 role.forEach((key, value) -> {
                     dto.put(key, value);
                 });
@@ -209,8 +216,8 @@ public class ModelServiceImpl extends BaseService implements ModelDataJsonConsta
     }
 
     @Override
-    public List<Dto> getRoleUserList(String roleId) {
-        List<Dto> userList = new ArrayList<>();
+    public List getRoleUserList(String roleId) {
+        List<Map<String, Object>> userList = new ArrayList<>();
         String sql = "SELECT " +
                 "suser.id,suser.name " +
                 "FROM " +
@@ -222,7 +229,7 @@ public class ModelServiceImpl extends BaseService implements ModelDataJsonConsta
         try {
             List<Map<String, Object>> list = new JdbcTemplate(DBConnecter.getDataSource()).queryForList(sql, new Object[]{roleId});
             for (Map<String, Object> user : list) {
-                Dto dto = new MapDto();
+                Map dto = new HashMap();
                 user.forEach((key, value) -> {
                     dto.put(key, value);
                 });

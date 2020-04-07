@@ -2,9 +2,8 @@ package com.usc.app.activiti.resource;
 
 import java.util.List;
 
+import com.usc.app.action.utils.ActionMessage;
 import com.usc.app.activiti.service.ModelService;
-import com.usc.dto.Dto;
-import org.activiti.engine.repository.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,7 +49,7 @@ public class ModelResource {
      * @return 模型集合
      */
     @GetMapping("/modelist")
-    public List<Model> modelList() {
+    public Object modelList() {
         return modelService.getModelList();
     }
 
@@ -63,8 +62,8 @@ public class ModelResource {
      */
     @PostMapping("/create/{name}/{key}/{description}")
     @CrossOrigin
-    public Dto create(@PathVariable("name") String name, @PathVariable("key") String key,
-                      @PathVariable("description") String description) {
+    public Object create(@PathVariable("name") String name, @PathVariable("key") String key,
+                                  @PathVariable("description") String description) {
         return modelService.create(name, key, description);
     }
 
@@ -90,7 +89,7 @@ public class ModelResource {
      * @return 状态
      */
     @PostMapping("/deploy/{modelId}")
-    public Dto deploy(@PathVariable("modelId") String modelId) {
+    public Object deploy(@PathVariable("modelId") String modelId) {
         return modelService.deploy(modelId);
     }
 
@@ -100,7 +99,7 @@ public class ModelResource {
      * @return 状态
      */
     @PostMapping("deleteById/{modelId}")
-    public Dto delete(@PathVariable("modelId") String modelId) {
+    public Object delete(@PathVariable("modelId") String modelId) {
         return modelService.delete(modelId);
     }
 
@@ -109,7 +108,7 @@ public class ModelResource {
      * @return 代理人集合
      */
     @GetMapping("getAllRole")
-    public List<Dto> getAllRole() {
+    public Object getAllRole() {
         return modelService.getAllRole();
     }
 
@@ -119,7 +118,7 @@ public class ModelResource {
      * @return 角色用户
      */
     @GetMapping("getRoleUserList/{roleId}")
-    public List<Dto> getRoleUserList(@PathVariable("roleId") String roleId) {
+    public Object getRoleUserList(@PathVariable("roleId") String roleId) {
         return modelService.getRoleUserList(roleId);
     }
 

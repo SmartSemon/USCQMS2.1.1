@@ -95,6 +95,8 @@ public class ActionMessage implements ResultMessage {
 					{ dataList.add(((USCObject) object).getFieldValuesJSON(true)); }
 					return;
 				}
+				this.dataList = objects;
+				return;
 			}
 			if (objs instanceof USCObject)
 			{
