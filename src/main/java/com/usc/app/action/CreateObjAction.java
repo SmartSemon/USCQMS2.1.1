@@ -15,7 +15,7 @@ public class CreateObjAction extends AbstractAction {
 
 	@Override
 	public Object executeAction() throws Exception {
-		if (disable())
+		if (!disable())
 		{
 			Map<String, Object> newData = ActionParamParser.getFieldVaues(context.getItemInfo(), context.getItemPage(),
 					context.getFormData());
@@ -30,7 +30,7 @@ public class CreateObjAction extends AbstractAction {
 				if (object instanceof IFile)
 				{ doFileAction(object); }
 			}
-			return new ActionMessage(flagTrue, RetSignEnum.NEW, StandardResultTranslate.translate("Action_Create_1"),
+			return new ActionMessage(true, RetSignEnum.NEW, StandardResultTranslate.translate("Action_Create_1"),
 					object);
 		}
 		return failedOperation();
@@ -45,7 +45,7 @@ public class CreateObjAction extends AbstractAction {
 
 	@Override
 	public boolean disable() throws Exception {
-		return true;
+		return false;
 	}
 
 }

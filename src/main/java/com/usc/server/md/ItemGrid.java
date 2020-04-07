@@ -11,8 +11,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class ItemGrid implements Serializable
-{
+public class ItemGrid implements Serializable {
 	/**
 	 *
 	 */
@@ -27,18 +26,16 @@ public class ItemGrid implements Serializable
 	protected List<ItemGridField> gridFieldList;
 	protected Map<String, ItemGridField> gridFieldMap;
 
-	public ItemGridField getItemGridField(String no)
-	{
+	public ItemGridField getItemGridField(String no) {
 		return this == null ? null : (this.gridFieldMap == null) ? null : this.gridFieldMap.get(no);
 	}
 
-	public String toString()
-	{
+	@Override
+	public String toString() {
 		return this == null ? null : this.no + "-" + this.name;
 	}
 
-	public Map<String, Object> toMap()
-	{
+	public Map<String, Object> toMap() {
 		ItemGrid gridType = this;
 		return BeanConverter.toMap(gridType);
 
