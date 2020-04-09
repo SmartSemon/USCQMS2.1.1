@@ -384,10 +384,17 @@ public class ProcessServiceImpl extends BaseService implements ProcessService {
         String params = ActCommonUtil.toJsonString(dto);
         ServiceToWbeClientResource serviceToWbeClientResource = new ServiceToWbeClientResource();
         Map<String, Object> resultModel = null;
-        Object resultItemList = null;
+        List<HashMap> resultItemList = new ArrayList<>();
         try {
             resultModel = serviceToWbeClientResource.getModelData(params);
-            resultItemList = serviceToWbeClientResource.getDataListLimit(params);
+            String conditions = "DSNO=" + param.get("processInstanceId") + " ORDER BY id DESC";
+            //申请单的中的数据集
+            USCObject[] objects = USCObjectQueryHelper.getObjectsByCondition(itemNo, conditions);
+            if (objects != null && objects.length > 0) {
+                for (USCObject object : objects) {
+                    resultItemList.add((HashMap<String, Object>) object.getFieldValues());
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
