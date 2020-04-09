@@ -1,10 +1,13 @@
 server:
-  port: 8898
+  port: 8890
   output:
     ansi:
       enabled: DETECT
-#启动不检查activiti文件
+
 spring:
+  messages:
+    basename: i18n/messages
+    encoding: UTF-8
   activiti:
     check-process-definitions: false
   aop:
@@ -12,14 +15,50 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+  redis:
+    database: 10
+    host: 127.0.0.1
+    timeout: 100000ms
+    lettuce:
+      pool:
+        max-active: 300
+        max-wait: -1ms
+        max-idle: 300
+        min-idle: 300
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+    publisher-confirms: true
+    listener:
+      concurrency: 50
+      max-concurrency: 100
+      prefetch: 20
+      
+fastjson:
+  parser:
+    autoTypeAccept: com.usc.server.md,com.usc.obj.api.impl,com.usc.server.md,com.usc.obj.api.type,com.usc.obj.api.bean.UserInformation
+
+qywx:
+  corpId: ww8ec99c1eb9982ab1
+  agentSecret: IJpoCO0cLJsPfQBjNGjivc_zgVBl0UCnIQzOMmX7Gzw
+  agentId: 1000003
+
 logging:
-  file:
-    max-size: 60KB
+  file: serverlog/workspace/server.log
+  level:
+    root: INFO
+
 fileConfig:
   Multipart:
     MaxFileSize: 1024MB
     MaxRequestSize: 1024MB
+
 mybatis:
 ###  mapper-locations: classpath:mybatis/mapper/module/**/*.xml
   mapper-locations: [com/usc/sys/**/*.xml]
   config-location: classpath:mybatis-config.xml
+
+mconfig:
+  swagger-ui-open: true

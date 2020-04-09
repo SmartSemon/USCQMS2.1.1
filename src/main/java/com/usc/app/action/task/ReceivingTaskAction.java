@@ -1,19 +1,18 @@
 package com.usc.app.action.task;
 
 import com.usc.app.action.a.AbstractAction;
-import com.usc.app.action.utils.ActionMessage;
+import com.usc.app.action.retmsg.ActionMessage;
 import com.usc.app.entry.ret.RetSignEnum;
+import com.usc.app.util.tran.InternationalFormat;
 import com.usc.obj.api.USCObject;
 import com.usc.obj.api.type.task.TaskObject;
 import com.usc.obj.api.type.task.TaskUtil;
 import com.usc.server.util.SystemTime;
 
-public class ReceivingTaskAction extends AbstractAction
-{
+public class ReceivingTaskAction extends AbstractAction {
 
 	@Override
-	public Object executeAction() throws Exception
-	{
+	public Object executeAction() throws Exception {
 		USCObject[] objects = context.getSelectObjs();
 		for (USCObject uscObject : objects)
 		{
@@ -39,7 +38,8 @@ public class ReceivingTaskAction extends AbstractAction
 		}
 
 //		return TaskActionResult.getResult(null, "Received_Task_Successfully", "M");
-		return new ActionMessage(flagTrue, RetSignEnum.MODIFY, "成功接受任务", objects);
+		return new ActionMessage(true, RetSignEnum.MODIFY,
+				InternationalFormat.getFormatMessage("Received_Task_Successfully", context.getLocale()), objects);
 	}
 
 	/**
@@ -49,36 +49,26 @@ public class ReceivingTaskAction extends AbstractAction
 	 * @param taskId 任务id
 	 * @return boolean
 	 */
-	private boolean hasOutputBusinessItems(USCObject outObj, String taskId)
-	{
+	private boolean hasOutputBusinessItems(USCObject outObj, String taskId) {
 		// 判断每个输出对象是否有输出数据
 		USCObject[] outs = TaskUtil.getOutputBusinessItems(outObj.getID(), taskId);
 		if (outs == null)
-		{
-			return false;
-		}
+		{ return false; }
 		return true;
 	}
 
 	@Override
-	public boolean disable() throws Exception
-	{
+	public boolean disable() throws Exception {
 		USCObject[] objects = context.getSelectObjs();
 		if (objects == null)
-		{
-			return false;
-		}
+		{ return false; }
 		for (USCObject uscObject : objects)
 		{
 			TaskObject taskObject = (TaskObject) uscObject;
 			if (!taskObject.getTaskState().equals("B"))
-			{
-				return true;
-			}
+			{ return true; }
 			if (!taskObject.getExecutor().equals(context.getUserInformation().getUserName()))
-			{
-				return true;
-			}
+			{ return true; }
 		}
 		return false;
 	}

@@ -2,10 +2,8 @@ package com.usc.app.sys.online;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class ClientInfoUtil
-{
-	public static String getIPAddress(HttpServletRequest request)
-	{
+public class ClientInfoUtil {
+	public static String getIPAddress(HttpServletRequest request) {
 		String ip = null;
 
 		// X-Forwarded-For：Squid
@@ -37,20 +35,15 @@ public class ClientInfoUtil
 
 		// 有些网络通过多层代理，那么获取到的ip就会有多个，一般都是通过逗号（,）分割开来，并且第一个ip为客户端的真实IP
 		if (ipAddresses != null && ipAddresses.length() != 0)
-		{
-			ip = ipAddresses.split(",")[0];
-		}
+		{ ip = ipAddresses.split(",")[0]; }
 
 		// 还是不能获取到，最后再通过request.getRemoteAddr();获取
 		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ipAddresses))
-		{
-			ip = request.getRemoteAddr();
-		}
+		{ ip = request.getRemoteAddr(); }
 		return ip;
 	}
 
-	public static String getOsAndBrowserInfo(HttpServletRequest request)
-	{
+	public static String getOsAndBrowserInfo(HttpServletRequest request) {
 		String browserDetails = request.getHeader("User-Agent");
 		String userAgent = browserDetails;
 		String user = userAgent.toLowerCase();
@@ -126,5 +119,10 @@ public class ClientInfoUtil
 
 		return "<" + os + "> " + browser;
 
+	}
+
+	public static String getBrowserAcceptLanguage(HttpServletRequest request) {
+		String reqLanguage = request.getHeader("Accept-Language");
+		return reqLanguage.substring(0, reqLanguage.indexOf(","));
 	}
 }

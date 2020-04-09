@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -16,37 +17,28 @@ import com.usc.util.ObjectHelperUtils;
 
 import lombok.Data;
 
-public class OnlineUsers
-{
+public class OnlineUsers {
 
 	private static ConcurrentHashMap<String, OnlineUserInfo> onUsers = new ConcurrentHashMap<String, OnlineUserInfo>();
 	private static ConcurrentHashMap<String, OnlineUserInfo> onClientUsers = new ConcurrentHashMap<String, OnlineUserInfo>();
 
-	private static ConcurrentHashMap<String, OnlineUserInfo> getOnUsers()
-	{
+	private static ConcurrentHashMap<String, OnlineUserInfo> getOnUsers() {
 		return onUsers;
 	}
 
-	public static OnlineUserInfo getOnUser(String userName)
-	{
+	public static OnlineUserInfo getOnUser(String userName) {
 		if (getOnUsers().containsKey(userName))
-		{
-			return getOnUsers().get(userName);
-		}
+		{ return getOnUsers().get(userName); }
 		return null;
 	}
 
-	public static OnlineUserInfo getOnClientUser(String clientID)
-	{
+	public static OnlineUserInfo getOnClientUser(String clientID) {
 		if (onClientUsers.containsKey(clientID))
-		{
-			return onClientUsers.get(clientID);
-		}
+		{ return onClientUsers.get(clientID); }
 		return null;
 	}
 
-	public static void addOnlineUser(HttpServletRequest request, UserInformation userInfo)
-	{
+	public static void addOnlineUser(HttpServletRequest request, UserInformation userInfo) {
 		if (request != null)
 		{
 //			HttpSession session = request.getSession();
@@ -54,9 +46,11 @@ public class OnlineUsers
 
 			String ip = ClientInfoUtil.getIPAddress(request);
 			String osBowser = ClientInfoUtil.getOsAndBrowserInfo(request);
+//			String language = ClientInfoUtil.getBrowserAcceptLanguage(request);
 
 			OnlineUserInfo onlineUserInfo = new OnlineUserInfo();
 			onlineUserInfo.setIp(ip);
+			onlineUserInfo.setLocale(request.getLocale());
 			onlineUserInfo.setOsBowser(osBowser);
 			onlineUserInfo.setSsid(request.getSession().getId());
 			onlineUserInfo.setLoginTime(new Timestamp(new Date().getTime()));
@@ -79,25 +73,27 @@ public class OnlineUsers
 		}
 	}
 
-	public static boolean isOnline(String userName)
-	{
+	public static boolean isOnline(String userName) {
 		if (userName == null)
-		{
-			return true;
-		}
+		{ return true; }
 		return getOnUsers().containsKey(userName);
 	}
 
-	public static void setOnlieUserLastTime(String userName)
-	{
+	public static void setOnlieUserLastTime(String userName) {
 		OnlineUserInfo onlineUserInfo = onUsers.get(userName);
 		onlineUserInfo.setLastTime(new Timestamp(new Date().getTime()));
 		onUsers.put(userName, onlineUserInfo);
 		onClientUsers.put(userName, onlineUserInfo);
 	}
 
-	public static List<OnlineUserInfo> getOnlineUsrs()
-	{
+	public static void setOnlieUserLocale(String userName, Locale locale) {
+		OnlineUserInfo onlineUserInfo = onUsers.get(userName);
+		onlineUserInfo.setLocale(locale);
+		onUsers.put(userName, onlineUserInfo);
+		onClientUsers.put(userName, onlineUserInfo);
+	}
+
+	public static List<OnlineUserInfo> getOnlineUsrs() {
 		if (!ObjectHelperUtils.isEmpty(getOnUsers()))
 		{
 			List<OnlineUserInfo> infos = new ArrayList<OnlineUserInfo>();
@@ -120,10 +116,14 @@ public class OnlineUsers
 
 	}
 
+	public static String getUserNameAcceptLanguage(String userName) {
+		return userName + "_" + (getOnUser(userName).getLocale().toLanguageTag());
+	}
+
 	@Data
-	public static class OnlineUserInfo
-	{
+	public static class OnlineUserInfo {
 		private String userName;
+		private Locale locale;
 		private String ip;
 		private Timestamp loginTime;
 		private String osBowser;
@@ -143,8 +143,7 @@ public class OnlineUsers
 		}
 
 		@Override
-		public String toString()
-		{
+		public String toString() {
 			return "OnlineUserInfo [userName=" + userName + ", ip=" + ip + ", loginTime=" + loginTime + ", osBowser="
 					+ osBowser + ", employeeNo=" + employeeNo + ", employeeName=" + employeeName + ", tel=" + tel
 					+ ", mail=" + mail + ", departMentNo=" + departMentNo + ", departMentName=" + departMentName + "]";
@@ -152,14 +151,11 @@ public class OnlineUsers
 
 	}
 
-	public static void removeUser(String userName)
-	{
+	public static void removeUser(String userName) {
 		onUsers.remove(userName);
 		onClientUsers.forEach((k, v) -> {
 			if (v.getUserName().equals(userName))
-			{
-				onClientUsers.remove(k);
-			}
+			{ onClientUsers.remove(k); }
 		});
 	}
 }

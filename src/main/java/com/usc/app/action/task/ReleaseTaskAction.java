@@ -12,12 +12,10 @@ import com.usc.obj.api.USCObject;
 import com.usc.obj.api.type.task.TaskObject;
 import com.usc.server.util.SystemTime;
 
-public class ReleaseTaskAction extends AbstractAction
-{
+public class ReleaseTaskAction extends AbstractAction {
 
 	@Override
-	public Object executeAction() throws Exception
-	{
+	public Object executeAction() throws Exception {
 		USCObject[] objects = context.getSelectObjs();
 		List<Map> maps = new ArrayList<Map>();
 		for (USCObject taskObject : objects)
@@ -29,23 +27,20 @@ public class ReleaseTaskAction extends AbstractAction
 			SendMessageUtils.sendToUser(EndpointEnum.RefreshUnread, context, objects, "notice", "你有新的待办任务",
 					"你有新的待办任务，任务为：" + taskObject.getFieldValueToString("NAME"), context.getUserName(),
 					taskObject.getFieldValueToString("EXECUTOR"));
-			maps.add(taskObject.getFieldValuesJSON(flagTrue));
+			maps.add(taskObject.getFieldValuesJSON(true));
 		}
 
 		return TaskActionResult.getResult(maps, "Delivered_Task_Successfully", "D");
 	}
 
 	@Override
-	public boolean disable() throws Exception
-	{
+	public boolean disable() throws Exception {
 		USCObject[] objects = context.getSelectObjs();
 		for (USCObject object : objects)
 		{
 			TaskObject task = (TaskObject) object;
 			if (!task.getTaskState().equals("C"))
-			{
-				return true;
-			}
+			{ return true; }
 		}
 		return false;
 	}

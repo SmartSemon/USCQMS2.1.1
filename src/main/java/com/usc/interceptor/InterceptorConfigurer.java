@@ -7,8 +7,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class InterceptorConfigurer implements WebMvcConfigurer
-{
+public class InterceptorConfigurer implements WebMvcConfigurer {
 	@Autowired
 	private OnlineInterceptor onlineInterceptor;
 	@Autowired
@@ -17,18 +16,16 @@ public class InterceptorConfigurer implements WebMvcConfigurer
 	private LogoutInterceptor logoutInterceptor;
 
 	@Override
-	public void addInterceptors(InterceptorRegistry registry)
-	{
+	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(loginInterceptor).addPathPatterns("/login");
 		registry.addInterceptor(logoutInterceptor).addPathPatterns("/logout");
 
 		registry.addInterceptor(onlineInterceptor).addPathPatterns("/**").excludePathPatterns("/login", "/logout",
-				"/src/**","/act/**");
+				"/src/**", "/act/**", "/swagger-ui.html");
 	}
 
 	@Override
-	public void addCorsMappings(CorsRegistry registry)
-	{
+	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**").allowedOrigins("*")
 				.allowedMethods("GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "TRACE")
 				.allowCredentials(true);

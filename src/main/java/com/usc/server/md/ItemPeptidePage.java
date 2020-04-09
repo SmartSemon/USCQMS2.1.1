@@ -20,10 +20,12 @@ public class ItemPeptidePage implements Serializable {
 
 	private String id;
 	private String no;
-	private String name;
 	private String rootid;
-
 	private Integer sort;
+
+	private String caption;
+	private String name;
+	private String enName;
 
 	private List<ItemPageField> pageFieldList;
 	private Map<String, ItemPageField> pageFieldMap;

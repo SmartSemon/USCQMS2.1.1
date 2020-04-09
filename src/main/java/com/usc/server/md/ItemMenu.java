@@ -21,14 +21,13 @@ public class ItemMenu implements Serializable {
 	private String id;
 	private String itemNo;
 	private String no;
-	private String name;
 	private String mtype;
 	private String implclass;
 	private String webpath;
 	private String icon;
 	private String pid;
 	private String param;
-	private String reqParam;
+	private String reqparam;
 	private String wtype;
 	private String abtype;
 	private String mno;
@@ -40,6 +39,10 @@ public class ItemMenu implements Serializable {
 	private List<MenuLibrary> afterActionList;
 
 	private boolean disabled;
+
+	private String caption;
+	private String name;
+	private String enName;
 
 	@Override
 	public String toString() {

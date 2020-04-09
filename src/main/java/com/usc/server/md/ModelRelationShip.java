@@ -11,8 +11,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class ModelRelationShip implements Serializable
-{
+public class ModelRelationShip implements Serializable {
 
 	/**
 	 *
@@ -21,7 +20,7 @@ public class ModelRelationShip implements Serializable
 
 	private String id;
 	private String no;
-	private String name;
+
 	private String relationItem;
 	private String itemA;
 	private String itemB;
@@ -29,6 +28,10 @@ public class ModelRelationShip implements Serializable
 	private String param;
 	private String ship;
 	private Integer supQuery;
+
+	private String caption;
+	private String name;
+	private String enName;
 
 	private List<ItemMenu> relationMenuList = null;
 	private Map<String, ItemMenu> relationMenuMap = null;
@@ -40,18 +43,14 @@ public class ModelRelationShip implements Serializable
 	private ItemPage itemPropertyPage;
 	private List<ItemRelationPageSign> itemRelationPage;
 
-	public String getrelationTableName()
-	{
+	public String getrelationTableName() {
 		if (relationItem != null)
-		{
-			return MateFactory.getItemInfo(this.relationItem).getTableName();
-		}
+		{ return MateFactory.getItemInfo(this.relationItem).getTableName(); }
 		return null;
 	}
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return this == null ? null : this.no + "-" + this.name;
 
 	}

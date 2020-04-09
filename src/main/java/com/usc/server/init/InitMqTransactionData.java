@@ -15,7 +15,7 @@ public class InitMqTransactionData {
 
 	public static void init(String condition) {
 		RedisUtil redisUtil = RedisUtil.getInstanceOfObject();
-		List<ItemMQMenu> mqMenus = DBConnecter.getJdbcTemplate().query(MQAFFAIRSQL + " AND " + condition,
+		List<ItemMQMenu> mqMenus = DBConnecter.getModelJdbcTemplate().query(MQAFFAIRSQL + " AND " + condition,
 				new ItemMQMenuRowMapper());
 		if (ObjectHelperUtils.isNotEmpty(mqMenus))
 		{

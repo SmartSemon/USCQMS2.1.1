@@ -17,7 +17,11 @@ public class ItemField implements Serializable {
 	private String id;
 	private String no;
 	private String fieldName;
+
+	private String caption;
 	private String name;
+	private String enName;
+
 	private String FType;
 	private int FLength;
 	private int allowNull;

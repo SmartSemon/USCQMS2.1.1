@@ -1,9 +1,9 @@
 package com.usc.obj.api;
 
+import java.util.Locale;
 import java.util.Map;
 
-public abstract interface InvokeContext extends USCObjectProvider, UserInfoProvider
-{
+public abstract interface InvokeContext extends USCObjectProvider, UserInfoProvider {
 	public abstract String getParam();
 
 	public abstract void setParam(String string);
@@ -39,6 +39,8 @@ public abstract interface InvokeContext extends USCObjectProvider, UserInfoProvi
 	public abstract InvokeContext cloneContext();
 
 	public abstract String getCurrUserName();
+
+	public abstract Locale getLocale();
 
 //	public abstract USCModelMate getMetadataParser();
 }

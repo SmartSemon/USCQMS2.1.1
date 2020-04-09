@@ -1,7 +1,7 @@
 package com.usc.app.query;
 
 import com.usc.app.action.a.AbstractRelationAction;
-import com.usc.app.action.utils.ActionMessage;
+import com.usc.app.action.retmsg.ActionMessage;
 import com.usc.app.entry.ret.RetSignEnum;
 import com.usc.app.query.search.i.AbstractSearchAction;
 import com.usc.obj.api.USCObject;

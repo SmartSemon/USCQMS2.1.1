@@ -3,9 +3,9 @@ package com.usc.app.action;
 import java.util.Map;
 
 import com.usc.app.action.a.AbstractAction;
-import com.usc.app.action.utils.ActionMessage;
+import com.usc.app.action.retmsg.ActionMessage;
 import com.usc.app.entry.ret.RetSignEnum;
-import com.usc.app.util.tran.StandardResultTranslate;
+import com.usc.app.util.tran.InternationalFormat;
 import com.usc.obj.api.USCObject;
 import com.usc.obj.api.impl.AppFileContext;
 import com.usc.obj.api.type.file.IFile;
@@ -36,13 +36,7 @@ public class BatchModifyAction extends AbstractAction {
 				{
 					b = uscObject.save(context);
 				}
-				if (b)
-				{
-					return new ActionMessage(b, RetSignEnum.MODIFY,
-							StandardResultTranslate.translate("Action_Update_1"), uscObject);
-				}
-			}
-			if (objects.length > 1)
+			} else if (objects.length > 1)
 			{
 				USCObject object = context.getSelectedObj();
 				if (object instanceof IFile)
@@ -57,8 +51,8 @@ public class BatchModifyAction extends AbstractAction {
 			}
 			if (b)
 			{
-				return new ActionMessage(b, RetSignEnum.MODIFY, StandardResultTranslate.translate("Action_Update_1"),
-						objects);
+				return new ActionMessage(b, RetSignEnum.MODIFY,
+						InternationalFormat.getFormatMessage("Action_Update_1", context.getLocale()), objects);
 			}
 
 		}

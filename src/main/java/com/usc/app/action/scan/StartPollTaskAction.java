@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
 import com.usc.app.action.a.AbstractAction;
-import com.usc.app.action.utils.ActionMessage;
+import com.usc.app.action.retmsg.ActionMessage;
 import com.usc.app.entry.ret.RetSignEnum;
 import com.usc.app.util.http.HttpURLConnectionUtils;
 import com.usc.obj.api.USCObject;

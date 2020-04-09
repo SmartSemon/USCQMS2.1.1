@@ -7,15 +7,14 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class ItemRelationPageSign implements Serializable
-{
+public class ItemRelationPageSign implements Serializable {
 	/**
 	 *
 	 */
 	private static final long serialVersionUID = 3518102973564367286L;
 	private String id;
 	private String no;
-	private String name;
+
 	private String itemNo;
 	private String rType;
 
@@ -25,6 +24,11 @@ public class ItemRelationPageSign implements Serializable
 	private String param;
 	private String icon;
 	private Integer supQuery;
+	private Object relationPageSign;
+
+	private String caption;
+	private String name;
+	private String enName;
 
 	private ItemPage itemRelationPropertyPage;
 	private ModelRelationShip modelRelationShip;
@@ -32,8 +36,7 @@ public class ItemRelationPageSign implements Serializable
 	private ModelClassView modelClassView;
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return this.no + "-" + this.name;
 	}
 }

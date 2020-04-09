@@ -5,7 +5,7 @@ import java.util.List;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.usc.app.action.a.AbstractAction;
-import com.usc.app.action.utils.ActionMessage;
+import com.usc.app.action.retmsg.ActionMessage;
 import com.usc.app.entry.ret.RetSignEnum;
 import com.usc.app.query.search.i.AbstractSearchAction;
 import com.usc.app.util.tran.StandardResultTranslate;

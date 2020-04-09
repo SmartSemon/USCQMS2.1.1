@@ -23,15 +23,13 @@ import com.usc.util.ObjectHelperUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class InitJurisdictionData
-{
+public class InitJurisdictionData {
 	private static List<Map<String, Object>> dataList = null;
 
 	private static JdbcTemplate jdbcTemplate;
 
-	public static void init()
-	{
-		jdbcTemplate = DBConnecter.getJdbcTemplate();
+	public static void init() {
+		jdbcTemplate = DBConnecter.getModelJdbcTemplate();
 		RedisUtil redisUtil = RedisUtil.getInstanceOfObject();
 		List<Map<String, Object>> list;
 		try
@@ -52,20 +50,16 @@ public class InitJurisdictionData
 
 	}
 
-	public static List<Map<String, Object>> getInit() throws Exception
-	{
+	public static List<Map<String, Object>> getInit() throws Exception {
 		dataList = new Vector<Map<String, Object>>();
 		if (navigation0())
-		{
-			return dataList;
-		}
+		{ return dataList; }
 
 		return null;
 
 	}
 
-	private static boolean navigation0() throws Exception
-	{
+	private static boolean navigation0() throws Exception {
 
 		List<Map<String, Object>> map1s = jdbcTemplate
 				.queryForList("SELECT * FROM usc_model_navigation WHERE del=0 AND pid='0'");
@@ -83,8 +77,7 @@ public class InitJurisdictionData
 
 	private static int n = 0;
 
-	private static void getNavigation1(Map<String, Object> map)
-	{
+	private static void getNavigation1(Map<String, Object> map) {
 		n = 1;
 		String id = (String) map.get("id");
 		String pid = (String) map.get("pid");
@@ -106,16 +99,13 @@ public class InitJurisdictionData
 			int facetype = map.get("facetype") != null ? (Integer) map.get("facetype") : -1;
 			String pageParams = String.valueOf(map.get("params")).replace("null", "");
 			if (!pageParams.equals(""))
-			{
-				getModelData(facetype, pageParams, L1ID);
-			}
+			{ getModelData(facetype, pageParams, L1ID); }
 		}
 	}
 
 //	private static boolean b = false;
 
-	private static void getCNavigation2(Map<String, Object> map)
-	{
+	private static void getCNavigation2(Map<String, Object> map) {
 		n = 2;
 		String id = (String) map.get("id");
 		String pid = (String) map.get("pid");
@@ -136,14 +126,11 @@ public class InitJurisdictionData
 			int facetype = map.get("facetype") != null ? (Integer) map.get("facetype") : -1;
 			String pageParams = String.valueOf(map.get("params")).replace("null", "");
 			if (!pageParams.equals(""))
-			{
-				getModelData(facetype, pageParams, L2ID);
-			}
+			{ getModelData(facetype, pageParams, L2ID); }
 		}
 	}
 
-	private static void getCNavigation3(Map<String, Object> map)
-	{
+	private static void getCNavigation3(Map<String, Object> map) {
 		n = 3;
 		String id = (String) map.get("id");
 		String pid = (String) map.get("pid");
@@ -164,14 +151,11 @@ public class InitJurisdictionData
 			int facetype = map.get("facetype") != null ? (Integer) map.get("facetype") : -1;
 			String pageParams = String.valueOf(map.get("params")).replace("null", "");
 			if (!pageParams.equals(""))
-			{
-				getModelData(facetype, pageParams, L3ID);
-			}
+			{ getModelData(facetype, pageParams, L3ID); }
 		}
 	}
 
-	private static void getCNavigation4(Map<String, Object> map)
-	{
+	private static void getCNavigation4(Map<String, Object> map) {
 		n = 4;
 		String id = (String) map.get("id");
 		String pid = (String) map.get("pid");
@@ -181,9 +165,7 @@ public class InitJurisdictionData
 		int facetype = map.get("facetype") != null ? (Integer) map.get("facetype") : -1;
 		String pageParams = String.valueOf(map.get("params")).replace("null", "");
 		if (!pageParams.equals(""))
-		{
-			getModelData(facetype, pageParams, L4ID);
-		}
+		{ getModelData(facetype, pageParams, L4ID); }
 	}
 
 	private static String L1ID = null;
@@ -192,8 +174,7 @@ public class InitJurisdictionData
 	private static String L4ID = null;
 	private static String tab = "usc_model_navigation";
 
-	private static void setResultData(String cid, String pid, Object no, Object name, String tableName, String type)
-	{
+	private static void setResultData(String cid, String pid, Object no, Object name, String tableName, String type) {
 		Map<String, Object> nData = new ConcurrentHashMap<String, Object>();
 		if (!tableName.equals(tab))
 		{
@@ -228,15 +209,12 @@ public class InitJurisdictionData
 		nData.put("ctn", tableName);
 		nData.put("type", type);
 		if (dataList == null)
-		{
-			System.out.println();
-		}
+		{ System.out.println(); }
 
 		dataList.add(nData);
 	}
 
-	private static void setResultData2(String cid, String pid, Object no, Object name, String tableName, String type)
-	{
+	private static void setResultData2(String cid, String pid, Object no, Object name, String tableName, String type) {
 		Map<String, Object> nData = new ConcurrentHashMap<String, Object>();
 
 		nData.put("ID", cid);
@@ -251,12 +229,9 @@ public class InitJurisdictionData
 
 	private static Map<String, Object> modelData = null;
 
-	private static void getModelData(int faceType, String pageParams, String nid)
-	{
+	private static void getModelData(int faceType, String pageParams, String nid) {
 		if (faceType == -1 || faceType == 0)
-		{
-			return;
-		}
+		{ return; }
 //		b = false;
 		JSONObject object = JSONObject.parseObject(pageParams);
 		String itemNo = object.getString("itemNo");
@@ -352,8 +327,7 @@ public class InitJurisdictionData
 	}
 
 	private static void setItemRelationPageData1(ItemInfo itemInfo, List<ItemRelationPageSign> itemRelationPageSigns,
-			int faceType, String nid)
-	{
+			int faceType, String nid) {
 		if (itemInfo == null || itemRelationPageSigns == null)
 		{
 			log.error(">>>>>> itemInfo is null Or itemRelationPageSigns is null");
@@ -374,17 +348,14 @@ public class InitJurisdictionData
 				setModelRelationShipData1(itemInfo, relationShip, nid);
 				List<ItemMenu> relMenus = relationShip.getRelationMenuList();
 				if (relMenus != null)
-				{
-					setRelationShipMenu1(relationShip, relMenus, nid);
-				}
+				{ setRelationShipMenu1(relationShip, relMenus, nid); }
 				ItemInfo Binfo = MateFactory.getItemInfo(itemRelationPageSign.getItemNo());
 				setItemData1(Binfo, nid + "_" + relationShip.getId());
 			}
 		}
 	}
 
-	private static void setRelationShipMenu1(ModelRelationShip relationShip, List<ItemMenu> relMenus, String nid)
-	{
+	private static void setRelationShipMenu1(ModelRelationShip relationShip, List<ItemMenu> relMenus, String nid) {
 		if (relMenus == null || relationShip == null)
 		{
 			log.error(">>>>>> relMenus is null Or relationShip is null");
@@ -397,8 +368,7 @@ public class InitJurisdictionData
 		}
 	}
 
-	private static void setModelRelationShipData1(ItemInfo itemInfo, ModelRelationShip relationShip, String nid)
-	{
+	private static void setModelRelationShipData1(ItemInfo itemInfo, ModelRelationShip relationShip, String nid) {
 		if (itemInfo == null || relationShip == null)
 		{
 			log.error(">>>>>> itemInfo is null Or relationShip is null");
@@ -409,8 +379,7 @@ public class InitJurisdictionData
 	}
 
 	private static void setItemRelationPageData2(ItemInfo itemInfo, List<ItemRelationPageSign> itemRelationPageSigns,
-			int faceType)
-	{
+			int faceType) {
 		if (itemInfo == null || itemRelationPageSigns == null)
 		{
 			log.error(">>>>>> itemInfo is null Or itemRelationPageSigns is null");
@@ -431,26 +400,21 @@ public class InitJurisdictionData
 				setModelRelationShipData(itemInfo, relationShip);
 				List<ItemMenu> relMenus = relationShip.getRelationMenuList();
 				if (relMenus != null)
-				{
-					setRelationShipMenu(relationShip, relMenus);
-				}
+				{ setRelationShipMenu(relationShip, relMenus); }
 				ItemInfo Binfo = MateFactory.getItemInfo(itemRelationPageSign.getItemNo());
 				setItemData(Binfo, relationShip.getId());
 				if (String.valueOf(faceType).startsWith("3"))
 				{
 					List<ItemRelationPageSign> relationPageSigns = relationShip.getItemRelationPage();
 					if (relationPageSigns != null)
-					{
-						setItemRelationPageData2(Binfo, relationPageSigns, faceType);
-					}
+					{ setItemRelationPageData2(Binfo, relationPageSigns, faceType); }
 
 				}
 			}
 		}
 	}
 
-	private static void setRelationShipMenu(ModelRelationShip relationShip, List<ItemMenu> relMenus)
-	{
+	private static void setRelationShipMenu(ModelRelationShip relationShip, List<ItemMenu> relMenus) {
 		if (relMenus == null || relationShip == null)
 		{
 			log.error(">>>>>> relMenus is null Or relationShip is null");
@@ -464,8 +428,7 @@ public class InitJurisdictionData
 
 	}
 
-	private static void setModelRelationShipData(ItemInfo itemInfo, ModelRelationShip relationShip)
-	{
+	private static void setModelRelationShipData(ItemInfo itemInfo, ModelRelationShip relationShip) {
 		if (itemInfo == null || relationShip == null)
 		{
 			log.error(">>>>>> itemInfo is null Or relationShip is null");
@@ -475,8 +438,7 @@ public class InitJurisdictionData
 				"usc_model_relationship", "api");
 	}
 
-	private static void setItemData(ItemInfo itemInfo, String pid)
-	{
+	private static void setItemData(ItemInfo itemInfo, String pid) {
 		String itemID = itemInfo.getId();
 		setResultData(itemID, pid, itemInfo.getItemNo(), itemInfo.getName(), "usc_model_item", "appstore");
 		List<ItemMenu> itemMenus = itemInfo.getItemMenuList();
@@ -491,8 +453,7 @@ public class InitJurisdictionData
 
 	}
 
-	private static void setItemData1(ItemInfo itemInfo, String pid)
-	{
+	private static void setItemData1(ItemInfo itemInfo, String pid) {
 		String itemID = pid + "_" + itemInfo.getId();
 		setResultData2(itemID, pid, itemInfo.getItemNo(), itemInfo.getName(), "usc_model_item", "appstore");
 		List<ItemMenu> itemMenus = itemInfo.getItemMenuList();
@@ -507,8 +468,7 @@ public class InitJurisdictionData
 
 	}
 
-	private static void setPageMenus(String pid)
-	{
+	private static void setPageMenus(String pid) {
 		List<ItemMenu> pageMenus = jdbcTemplate
 				.query("SELECT * FROM usc_model_itemmenu WHERE del=0 AND state='F' AND itemid='"
 						+ pid.substring(pid.lastIndexOf("_") + 1, pid.length()) + "'", new MenuRowMapper());

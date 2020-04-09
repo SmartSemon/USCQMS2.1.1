@@ -10,16 +10,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
 import com.usc.app.util.tran.StandardResultTranslate;
+import com.usc.server.DBConnecter;
 import com.usc.server.jdbc.DBUtil;
 import com.usc.server.util.SystemTime;
 
 @Transactional
-public class MUpdateAction
-{
+public class MUpdateAction {
 
 	@Transactional(rollbackFor = Exception.class)
-	public static Map<String, Object> update(String jsonString) throws Exception
-	{
+	public static Map<String, Object> update(String jsonString) throws Exception {
 		if (jsonString == null || jsonString.trim().equals("{}"))
 			StandardResultTranslate.getResult(false, "Action_Update");
 		JSONObject jsonObject = JSONObject.parseObject(jsonString);
@@ -45,9 +44,7 @@ public class MUpdateAction
 		for (String field : uMap.keySet())
 		{
 			if (i > 0)
-			{
-				fields.append(",");
-			}
+			{ fields.append(","); }
 			fields.append(field + "=?");
 			objects[i] = uMap.get(field);
 			i++;
@@ -57,8 +54,8 @@ public class MUpdateAction
 
 		if (DBUtil.insertOrUpdate(sql, objects))
 		{
-			DBUtil.insertOrUpdate("UPDATE usc_model_item SET mysm=? WHERE id=?", new Object[]
-			{ "M", map.get("ID") });
+			MCreateAction.insertOrUpdate("UPDATE usc_model_item SET mysm=? WHERE id=?",
+					new Object[] { "M", map.get("ID") });
 			map.putAll(uMap);
 			return StandardResultTranslate.getResult("Action_Update_1", map);
 		} else
@@ -69,8 +66,7 @@ public class MUpdateAction
 	}
 
 	@Transactional(rollbackFor = Exception.class)
-	public static Map<String, Object> updateDefaultc(JdbcTemplate jdbcTemplate, String queryParam)
-	{
+	public static Map<String, Object> updateDefaultc(String queryParam) {
 		if (queryParam == null || queryParam.trim().equals("{}"))
 			StandardResultTranslate.getResult(false, "Action_Update");
 		JSONObject jsonObject = JSONObject.parseObject(queryParam);
@@ -80,7 +76,7 @@ public class MUpdateAction
 
 		if (tableName == null || dataJson == null)
 			return StandardResultTranslate.getResult(false, "Action_Update");
-
+		JdbcTemplate jdbcTemplate = DBConnecter.getModelJdbcTemplate();
 		JSONObject dataJsonObject = JSONObject.parseObject(dataJson);
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		List<Object> list = new ArrayList<Object>();

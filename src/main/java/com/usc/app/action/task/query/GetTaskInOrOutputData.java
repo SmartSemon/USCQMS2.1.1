@@ -1,6 +1,6 @@
 package com.usc.app.action.task.query;
 
-import com.usc.app.action.utils.ActionMessage;
+import com.usc.app.action.retmsg.ActionMessage;
 import com.usc.app.query.a.AbstractQueryItemRelationDataAction;
 import com.usc.obj.api.type.task.TaskUtil;
 

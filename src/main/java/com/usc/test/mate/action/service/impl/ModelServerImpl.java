@@ -6,7 +6,10 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.Vector;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -19,13 +22,12 @@ import com.usc.util.ObjectHelperUtils;
 public class ModelServerImpl implements ModelServer {
 	RedisUtil redis = null;
 	@Autowired
+	@Qualifier("modelJdbcTemplate")
 	private JdbcTemplate jdbcTemplate;
 
 	@Override
-	public Object openModel(String param) {
+	public Object openModel(String userName) {
 		redis = RedisUtil.getInstanceOfObject();
-		JSONObject jsonObject = JSONObject.parseObject(param);
-		String userName = jsonObject.getString("userName");
 
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("flag", true);
@@ -37,10 +39,10 @@ public class ModelServerImpl implements ModelServer {
 	}
 
 	@Override
-	public Object closeModel(String param) {
+	public Object closeModel(String param, HttpServletRequest httpServletRequest) {
 		redis = RedisUtil.getInstanceOfString();
 		JSONObject jsonObject = JSONObject.parseObject(param);
-		String user = jsonObject.getString("userName");
+		String user = httpServletRequest.getHeader("UserName");
 		Object force = jsonObject.get("force");
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("flag", true);
@@ -143,9 +145,9 @@ public class ModelServerImpl implements ModelServer {
 	private String tableName;
 
 	@Override
-	public Object upgradeModel(String param) {
+	public Object upgradeModel(String param, HttpServletRequest httpServletRequest) {
 		JSONObject jsonObject = JSONObject.parseObject(param);
-		this.cuser = jsonObject.getString("userName");
+		this.cuser = httpServletRequest.getHeader("UserName");
 		Map<String, Object> map = new HashMap<String, Object>();
 //		if (redis.hasKey("OPENMODEL"))
 //		{
@@ -209,15 +211,15 @@ public class ModelServerImpl implements ModelServer {
 		Integer ver = obj.getInteger("VER") + 1;
 		String oldItemID = obj.getString("ID");
 		String newItemID = getUUID();
-		String itemSql = "INSERT INTO usc_model_item (id,sort,del,mysm,itemno,name,tablename,implclass,ver,effective,state,islife,type,queryfields,briefexp,remark,contrlfile,sitem,cuser,ctime) "
-				+ "SELECT '" + newItemID + "' AS id,sort,del,mysm,itemno,name,tablename,implclass," + ver
+		String itemSql = "INSERT INTO usc_model_item (id,sort,del,mysm,itemno,name,ename,tablename,implclass,ver,effective,state,islife,type,queryfields,briefexp,remark,contrlfile,sitem,cuser,ctime) "
+				+ "SELECT '" + newItemID + "' AS id,sort,del,mysm,itemno,name,ename,tablename,implclass," + ver
 				+ " AS ver,0 AS effective,'U' AS state,islife,type,queryfields,briefexp,remark,contrlfile,sitem, '"
 				+ cuser + "' AS cuser,(select NOW()) AS ctime FROM usc_model_item WHERE id='" + oldItemID + "' ";
 		sqls.add(itemSql);
 
-		String itemFiledSql = "INSERT INTO usc_model_field (itemid,id,del,state,no,fieldname,name,ftype,flength,allownull,accuracy,only,ispk,editor,editparams,defaultv,remark,type,cuser,ctime) SELECT '"
+		String itemFiledSql = "INSERT INTO usc_model_field (itemid,id,del,state,no,fieldname,name,ename,ftype,flength,allownull,accuracy,only,ispk,editor,editparams,defaultv,suplink,linkparams,remark,type,cuser,ctime) SELECT '"
 				+ newItemID
-				+ "' AS itemid,(select UUID()) AS id,del,'U' AS state,no,fieldname,name,ftype,flength,allownull,accuracy,only,ispk,editor,editparams,defaultv,remark,type,'"
+				+ "' AS itemid,(select UUID()) AS id,del,'U' AS state,no,fieldname,name,ename,ftype,flength,allownull,accuracy,only,ispk,editor,editparams,defaultv,suplink,linkparams,remark,type,'"
 				+ cuser + "' AS cuser,(select NOW()) AS ctime FROM usc_model_field WHERE del=0 AND itemid='" + oldItemID
 				+ "' ";
 		sqls.add(itemFiledSql);
@@ -232,9 +234,9 @@ public class ModelServerImpl implements ModelServer {
 			{
 				String oldProID = (String) map.get("ID");
 				String newProID = getUUID();
-				String proSql = "INSERT INTO usc_model_property (itemid,id,del,state,no,name,width,columns,defaultc,peptide,cuser,ctime) SELECT '"
+				String proSql = "INSERT INTO usc_model_property (itemid,id,del,state,no,name,ename,width,columns,defaultc,peptide,cuser,ctime) SELECT '"
 						+ newItemID + "' AS itemid,'" + newProID
-						+ "' AS id,del,'U' AS state,no,name,width,columns,defaultc,peptide,'" + cuser
+						+ "' AS id,del,'U' AS state,no,name,ename,width,columns,defaultc,peptide,'" + cuser
 						+ "' AS cuser,(select NOW()) AS ctime FROM usc_model_property WHERE id='" + oldProID + "'";
 				sqls.add(proSql);
 				List<Map<String, Object>> proTopFieldList = jdbcTemplate
@@ -246,15 +248,15 @@ public class ModelServerImpl implements ModelServer {
 					{
 						String topFiledid = (String) map2.get("ID");
 						String newTopFiledid = getUUID();
-						String proTopFieldSql = "INSERT INTO usc_model_property_field (pid,itemid,rootid,id,sort,del,state,no,name,editable,wline,cuser,ctime) SELECT pid,'"
+						String proTopFieldSql = "INSERT INTO usc_model_property_field (pid,itemid,rootid,id,sort,del,state,no,name,ename,editable,wline,cuser,ctime) SELECT pid,'"
 								+ newItemID + "' AS itemid,'" + newProID + "' AS rootid,'" + newTopFiledid
 								+ "' AS id,sort,del,'U' AS state,no,name,editable,wline,'" + cuser
 								+ "' AS cuser,(select NOW()) AS ctime FROM usc_model_property_field WHERE id='"
 								+ topFiledid + "'";
 						sqls.add(proTopFieldSql);
-						String proFieldSql = "INSERT INTO usc_model_property_field (pid,itemid,rootid,id,sort,del,state,no,name,editable,wline,cuser,ctime) SELECT '"
+						String proFieldSql = "INSERT INTO usc_model_property_field (pid,itemid,rootid,id,sort,del,state,no,name,ename,editable,wline,cuser,ctime) SELECT '"
 								+ newTopFiledid + "' AS pid,'" + newItemID + "' AS itemid,'" + newProID
-								+ "' AS rootid,(select UUID()) AS id,sort,del,'U' AS state,no,name,editable,wline,'"
+								+ "' AS rootid,(select UUID()) AS id,sort,del,'U' AS state,no,name,ename,editable,wline,'"
 								+ cuser
 								+ "' AS cuser,(select NOW()) AS ctime FROM usc_model_property_field WHERE del=0 AND itemid='"
 								+ oldItemID + "' AND rootid='" + oldProID + "' AND  pid='" + topFiledid + "'";
@@ -262,9 +264,10 @@ public class ModelServerImpl implements ModelServer {
 					}
 				} else
 				{
-					String proFieldSql = "INSERT INTO usc_model_property_field (pid,itemid,rootid,id,sort,del,state,no,name,editable,wline,cuser,ctime) SELECT pid,'"
+					String proFieldSql = "INSERT INTO usc_model_property_field (pid,itemid,rootid,id,sort,del,state,no,name,ename,editable,wline,cuser,ctime) SELECT pid,'"
 							+ newItemID + "' AS itemid,'" + newProID
-							+ "' AS rootid,(select UUID()) AS id,sort,del,'U' AS state,no,name,editable,wline,'" + cuser
+							+ "' AS rootid,(select UUID()) AS id,sort,del,'U' AS state,no,name,ename,editable,wline,'"
+							+ cuser
 							+ "' AS cuser,(select NOW()) AS ctime FROM usc_model_property_field WHERE del=0 AND itemid='"
 							+ oldItemID + "' AND rootid='" + oldProID + "'";
 					sqls.add(proFieldSql);
@@ -279,14 +282,15 @@ public class ModelServerImpl implements ModelServer {
 			{
 				String oldGridID = (String) map.get("ID");
 				String newGridID = getUUID();
-				String gridSql = "INSERT INTO usc_model_grid (itemid,id,del,state,no,name,type,defaultc,cuser,ctime) SELECT '"
-						+ newItemID + "' AS itemid,'" + newGridID + "' AS id,del,'U' AS state,no,name,type,defaultc,'"
-						+ cuser + "' AS cuser,(select NOW()) AS ctime FROM usc_model_grid WHERE id='" + oldGridID + "'";
+				String gridSql = "INSERT INTO usc_model_grid (itemid,id,del,state,no,name,ename,type,defaultc,cuser,ctime) SELECT '"
+						+ newItemID + "' AS itemid,'" + newGridID
+						+ "' AS id,del,'U' AS state,no,name,ename,type,defaultc,'" + cuser
+						+ "' AS cuser,(select NOW()) AS ctime FROM usc_model_grid WHERE id='" + oldGridID + "'";
 				sqls.add(gridSql);
 
-				String gridFieldSql = "INSERT INTO usc_model_grid_field (itemid,rootid,id,sort,del,state,no,name,fieldname,align,screen,width,editable,cuser,ctime) SELECT '"
+				String gridFieldSql = "INSERT INTO usc_model_grid_field (itemid,rootid,id,sort,del,state,no,name,ename,fieldname,align,screen,width,editable,cuser,ctime) SELECT '"
 						+ newItemID + "' AS itemid,'" + newGridID
-						+ "' AS rootid,(select UUID()) AS id,sort,del,'U' AS state,no,name,fieldname,align,screen,width,editable,'"
+						+ "' AS rootid,(select UUID()) AS id,sort,del,'U' AS state,no,name,ename,fieldname,align,screen,width,editable,'"
 						+ cuser
 						+ "' AS cuser,(select NOW()) AS ctime FROM usc_model_grid_field WHERE del=0 AND itemid='"
 						+ oldItemID + "' AND rootid='" + oldGridID + "'";
@@ -301,16 +305,16 @@ public class ModelServerImpl implements ModelServer {
 			{
 				String oldRelationPageID = (String) map.get("ID");
 				String newRelationPageID = getUUID();
-				String relationPageSql = "INSERT INTO usc_model_relationpage (itemid,id,del,state,no,name,defaultc,cuser,ctime) SELECT '"
+				String relationPageSql = "INSERT INTO usc_model_relationpage (itemid,id,del,state,no,name,ename,defaultc,cuser,ctime) SELECT '"
 						+ newItemID + "' AS itemid,'" + newRelationPageID
-						+ "' AS id,del,'U' AS state,no,name,defaultc,'" + cuser
+						+ "' AS id,del,'U' AS state,no,name,ename,defaultc,'" + cuser
 						+ "' AS cuser,(select NOW()) AS ctime FROM usc_model_relationpage WHERE id='"
 						+ oldRelationPageID + "'";
 				sqls.add(relationPageSql);
 
-				String relationPageSignFieldSql = "INSERT INTO usc_model_relationpage_sign (itemid,rootid,id,sort,del,state,no,name,rtype,itemno,itemgrid,relevanceno,relevancename,param,icon,cuser,ctime) SELECT '"
+				String relationPageSignFieldSql = "INSERT INTO usc_model_relationpage_sign (itemid,rootid,id,sort,del,state,no,name,ename,rtype,itemno,itemgrid,relevanceno,relevancename,param,icon,cuser,ctime) SELECT '"
 						+ newItemID + "' AS itemid,'" + newRelationPageID
-						+ "' AS rootid,(select UUID()) AS id,sort,del,'U' AS state,no,name,rtype,itemno,itemgrid,relevanceno,relevancename,param,icon,'"
+						+ "' AS rootid,(select UUID()) AS id,sort,del,'U' AS state,no,name,ename,rtype,itemno,itemgrid,relevanceno,relevancename,param,icon,'"
 						+ cuser
 						+ "' AS cuser,(select NOW()) AS ctime FROM usc_model_relationpage_sign WHERE del=0 AND itemid='"
 						+ oldItemID + "' AND rootid='" + oldRelationPageID + "'";
@@ -331,9 +335,9 @@ public class ModelServerImpl implements ModelServer {
 			{
 				String oldMenuId = (String) map.get("ID");
 				String newMenuId = getUUID();
-				String itemMenuSql = "INSERT INTO usc_model_itemmenu (itemid,id,pid,sort,del,state,ITEMNO,PROPERTYPARAM,no,name,mtype,frontparam,frontimplclass,param,implclass,webpath,reqparam,wtype,abtype,mno,remark,icon,cuser,ctime) SELECT '"
+				String itemMenuSql = "INSERT INTO usc_model_itemmenu (itemid,id,pid,sort,del,state,ITEMNO,PROPERTYPARAM,no,name,ename,mtype,frontparam,frontimplclass,param,implclass,webpath,reqparam,wtype,abtype,mno,remark,icon,cuser,ctime) SELECT '"
 						+ newItemID + "' AS itemid,'" + newMenuId
-						+ "' AS id,pid,sort,del,'U' AS state,ITEMNO,PROPERTYPARAM,no,name,mtype,frontparam,frontimplclass,param,implclass,webpath,reqparam,wtype,abtype,mno,remark,icon,'"
+						+ "' AS id,pid,sort,del,'U' AS state,ITEMNO,PROPERTYPARAM,no,name,ename,mtype,frontparam,frontimplclass,param,implclass,webpath,reqparam,wtype,abtype,mno,remark,icon,'"
 						+ cuser + "' AS cuser,(select NOW()) AS ctime FROM usc_model_itemmenu WHERE id='" + oldMenuId
 						+ "' ";
 				sqls.add(itemMenuSql);
@@ -354,9 +358,9 @@ public class ModelServerImpl implements ModelServer {
 			{
 				String oldMenuId = (String) map.get("ID");
 				String newMenuId = getUUID();
-				String itemMenuSql = "INSERT INTO usc_model_itemmenu (itemid,id,pid,del,state,sort,ITEMNO,PROPERTYPARAM,no,name,mtype,frontparam,frontimplclass,param,implclass,webpath,reqparam,wtype,abtype,mno,remark,icon,cuser,ctime) SELECT '"
+				String itemMenuSql = "INSERT INTO usc_model_itemmenu (itemid,id,pid,del,state,sort,ITEMNO,PROPERTYPARAM,no,name,ename,mtype,frontparam,frontimplclass,param,implclass,webpath,reqparam,wtype,abtype,mno,remark,icon,cuser,ctime) SELECT '"
 						+ newItemID + "' AS itemid,'" + newMenuId + "' AS id,'" + newPid
-						+ "' AS pid,del,'U' AS state,sort,ITEMNO,PROPERTYPARAM,no,name,mtype,frontparam,frontimplclass,param,implclass,webpath,reqparam,wtype,abtype,mno,remark,icon,'"
+						+ "' AS pid,del,'U' AS state,sort,ITEMNO,PROPERTYPARAM,no,name,ename,mtype,frontparam,frontimplclass,param,implclass,webpath,reqparam,wtype,abtype,mno,remark,icon,'"
 						+ cuser + "' AS cuser,(select NOW()) AS ctime FROM usc_model_itemmenu WHERE id='" + oldMenuId
 						+ "' ";
 				sqls.add(itemMenuSql);
@@ -378,9 +382,9 @@ public class ModelServerImpl implements ModelServer {
 		Integer ver = v == null ? 1 : v + 1;
 		String oldItemID = obj.getString("ID");
 		String newItemID = getUUID();
-		String itemSql = "INSERT INTO usc_model_relationship (id,sort,del,mysm,no,name,relationitem,itema,itemb,pitem,relatedevents,ship,ver,effective,state,remark,cuser,ctime) "
+		String itemSql = "INSERT INTO usc_model_relationship (id,sort,del,mysm,no,name,ename,relationitem,itema,itemb,pitem,relatedevents,ship,ver,effective,state,remark,cuser,ctime) "
 				+ "SELECT '" + newItemID
-				+ "' AS id,sort,del,mysm,no,name,relationitem,itema,itemb,pitem,relatedevents,ship," + ver
+				+ "' AS id,sort,del,mysm,no,name,ename,relationitem,itema,itemb,pitem,relatedevents,ship," + ver
 				+ " AS ver,0 AS effective,'U' AS state,remark, '" + cuser
 				+ "' AS cuser,(select NOW()) AS ctime FROM usc_model_relationship WHERE id='" + oldItemID + "' ";
 		sqls.add(itemSql);
@@ -395,8 +399,8 @@ public class ModelServerImpl implements ModelServer {
 		Integer ver = v == null ? 1 : v + 1;
 		String oldViewID = obj.getString("ID");
 		String newViewID = getUUID();
-		String itemSql = "INSERT INTO usc_model_classview (id,sort,del,mysm,no,itemno,name,wcondition,ver,effective,state,remark,cuser,ctime) "
-				+ "SELECT '" + newViewID + "' AS id,sort,del,mysm,no,itemno,name,wcondition," + ver
+		String itemSql = "INSERT INTO usc_model_classview (id,sort,del,mysm,no,itemno,name,ename,wcondition,ver,effective,state,remark,cuser,ctime) "
+				+ "SELECT '" + newViewID + "' AS id,sort,del,mysm,no,itemno,name,ename,wcondition," + ver
 				+ " AS ver,0 AS effective,'U' AS state,remark, '" + cuser
 				+ "' AS cuser,(select NOW()) AS ctime FROM usc_model_classview WHERE id='" + oldViewID + "' ";
 		sqls.add(itemSql);
@@ -409,9 +413,9 @@ public class ModelServerImpl implements ModelServer {
 			{
 				String oldNodeID = String.valueOf(map.get("ID"));
 				String newNodeID = getUUID();
-				String nodelSql = "INSERT INTO usc_model_classview_node (itemid,id,pid,sort,del,mysm,no,name,itemno,datacondition,nodecondition,loaddataset,summary,icon,state,remark,cuser,ctime) "
+				String nodelSql = "INSERT INTO usc_model_classview_node (itemid,id,pid,sort,del,mysm,no,name,ename,itemno,datacondition,nodecondition,loaddataset,summary,icon,state,remark,cuser,ctime) "
 						+ "SELECT '" + newViewID + "' AS itemid,'" + newNodeID
-						+ "' AS id,'0' AS pid,sort,del,mysm,no,name,itemno,datacondition,nodecondition,loaddataset,summary,icon,state,remark,"
+						+ "' AS id,'0' AS pid,sort,del,mysm,no,name,ename,itemno,datacondition,nodecondition,loaddataset,summary,icon,state,remark,"
 						+ "'" + cuser + "' AS cuser,(select NOW()) AS ctime FROM usc_model_classview_node WHERE id='"
 						+ oldNodeID + "'";
 				sqls.add(nodelSql);
@@ -433,9 +437,9 @@ public class ModelServerImpl implements ModelServer {
 			{
 				String oldNodeId = (String) map.get("ID");
 				String newNodeId = getUUID();
-				String classViewNodeSql = "INSERT INTO usc_model_classview_node (itemid,id,pid,sort,del,mysm,no,name,itemno,datacondition,nodecondition,loaddataset,summary,icon,state,remark,cuser,ctime) "
+				String classViewNodeSql = "INSERT INTO usc_model_classview_node (itemid,id,pid,sort,del,mysm,no,name,ename,itemno,datacondition,nodecondition,loaddataset,summary,icon,state,remark,cuser,ctime) "
 						+ "SELECT '" + newViewID + "' AS itemid,'" + newNodeId + "' AS id,'" + newPid
-						+ "' AS pid,sort,del,mysm,no,name,itemno,datacondition,nodecondition,loaddataset,summary,icon,state,remark,"
+						+ "' AS pid,sort,del,mysm,no,name,ename,itemno,datacondition,nodecondition,loaddataset,summary,icon,state,remark,"
 						+ "'" + cuser + "' AS cuser,(select NOW()) AS ctime FROM usc_model_classview_node WHERE id='"
 						+ oldNodeId + "'";
 				sqls.add(classViewNodeSql);
@@ -450,8 +454,8 @@ public class ModelServerImpl implements ModelServer {
 		Integer ver = v == null ? 1 : v + 1;
 		String oldItemID = obj.getString("ID");
 		String newItemID = getUUID();
-		String itemSql = "INSERT INTO usc_model_queryview (id,sort,del,mysm,no,itemno,name,wcondition,ver,effective,state,remark,cuser,ctime) "
-				+ "SELECT '" + newItemID + "' AS id,sort,del,mysm,no,itemno,name,wcondition," + ver
+		String itemSql = "INSERT INTO usc_model_queryview (id,sort,del,mysm,no,itemno,name,ename,wcondition,ver,effective,state,remark,cuser,ctime) "
+				+ "SELECT '" + newItemID + "' AS id,sort,del,mysm,no,itemno,name,ename,wcondition," + ver
 				+ " AS ver,0 AS effective,'U' AS state,remark, '" + cuser
 				+ "' AS cuser,(select NOW()) AS ctime FROM usc_model_queryview WHERE id='" + oldItemID + "' ";
 		sqls.add(itemSql);
@@ -461,7 +465,7 @@ public class ModelServerImpl implements ModelServer {
 	}
 
 	@Override
-	public Object cancelUpgradeModel(String param) {
+	public Object cancelUpgradeModel(String param, HttpServletRequest httpServletRequest) {
 		return null;
 	}
 

@@ -14,18 +14,16 @@ import com.usc.server.jdbc.DBUtil;
 import com.usc.server.util.SystemTime;
 import com.usc.util.ObjectHelperUtils;
 
-public class SaveInspectionResultAction extends AbstractAction
-{
+public class SaveInspectionResultAction extends AbstractAction {
 	private final String itemObj = "inspectionresult";
 	private final String relationObj = "rel_inspectionresult_obj";
 
 	@Override
-	public Object executeAction() throws Exception
-	{
+	public Object executeAction() throws Exception {
 		USCObject applyObj = context.getSelectedObj();
 		String dataString = (String) context.getExtendInfo("otherParam");
 		JSONArray jsonArray = JSONArray.parseArray(dataString);
-		List<Map> newDatas = new ArrayList<Map>();
+		List<Map<String, Object>> newDatas = new ArrayList<>();
 		for (int i = 0; i < jsonArray.size(); i++)
 		{
 			String string = jsonArray.getString(i);
@@ -40,8 +38,8 @@ public class SaveInspectionResultAction extends AbstractAction
 				newDatas.add(map);
 			}
 		}
-		List<Map> newList = DBUtil.bathInsertRecords(itemObj, newDatas, context.getUserName());
-		newDatas = new ArrayList<Map>();
+		List<Map<String, Object>> newList = DBUtil.bathInsertRecords(itemObj, newDatas, context.getUserName());
+		newDatas = new ArrayList<>();
 		for (Map map : newList)
 		{
 			USCObject resultObj = NewUSCObjectHelper.newObject(itemObj, map);
@@ -59,8 +57,7 @@ public class SaveInspectionResultAction extends AbstractAction
 	}
 
 	@Override
-	public boolean disable() throws Exception
-	{
+	public boolean disable() throws Exception {
 		return true;
 	}
 

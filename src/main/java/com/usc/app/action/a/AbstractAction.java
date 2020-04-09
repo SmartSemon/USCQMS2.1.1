@@ -66,6 +66,15 @@ public abstract class AbstractAction implements AppAction, QueryReturnRequest {
 
 	@Override
 	public boolean isCommandEnvironmentEnable(ApplicationContext context) {
+		USCObject[] objects = context.getSelectObjs();
+		if (objects != null)
+		{
+			for (USCObject object : objects)
+			{
+				if ("F".equals(object.getFieldValue("STATE")))
+				{ return false; }
+			}
+		}
 		return true;
 	}
 

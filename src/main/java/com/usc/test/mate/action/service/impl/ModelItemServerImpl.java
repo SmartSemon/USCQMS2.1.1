@@ -4,12 +4,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.usc.app.action.utils.ActionMessage;
+import com.usc.app.action.retmsg.ActionMessage;
 import com.usc.app.entry.ret.RetSignEnum;
 import com.usc.app.util.tran.StandardResultTranslate;
 import com.usc.cache.redis.RedisUtil;
@@ -21,6 +22,7 @@ import com.usc.util.ObjectHelperUtils;
 @Service("modelItemServer")
 public class ModelItemServerImpl implements ModelItemServer {
 	@Autowired
+	@Qualifier("modelJdbcTemplate")
 	private JdbcTemplate jdbcTemplate;
 
 	@Override

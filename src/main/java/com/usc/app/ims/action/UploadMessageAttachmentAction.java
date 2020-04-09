@@ -4,7 +4,7 @@ import java.util.Map;
 
 import com.usc.app.action.CreateObjAction;
 import com.usc.app.action.a.AbstractAction;
-import com.usc.app.action.utils.ActionMessage;
+import com.usc.app.action.retmsg.ActionMessage;
 import com.usc.obj.api.USCObject;
 
 public class UploadMessageAttachmentAction extends AbstractAction {

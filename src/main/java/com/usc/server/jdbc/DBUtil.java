@@ -1,5 +1,6 @@
 package com.usc.server.jdbc;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +17,9 @@ import java.util.Vector;
 
 import javax.validation.constraints.NotNull;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
+import org.springframework.jdbc.core.CallableStatementCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.util.Assert;
 
@@ -27,6 +30,7 @@ import com.usc.app.exception.ThrowException;
 import com.usc.server.DBConnecter;
 import com.usc.server.jdbc.base.DataBaseUtils;
 import com.usc.server.jdbc.base.DatabaseUtil;
+import com.usc.server.jdbc.procedure.USCCallableStatementCreator;
 import com.usc.server.md.ItemField;
 import com.usc.server.md.ItemInfo;
 import com.usc.server.md.USCModelMate;
@@ -92,7 +96,6 @@ public class DBUtil {
 		{ itemInfo = MateFactory.getItemInfo(String.valueOf(itemObject)); }
 		if (itemInfo == null)
 		{ throw new Exception("ItemInfo of " + itemObject + " UNFIND"); }
-//		Map valueMap = getValueMapByValues(values, 1, user);
 		Map<String, Object> valueMap = new HashMap<String, Object>();
 		valueMap.putAll((Map<String, Object>) values);
 		String tableName = itemInfo.getTableName();
@@ -161,7 +164,8 @@ public class DBUtil {
 		return valueMap;
 	}
 
-	public static List<Map> bathInsertRecords(Object itemObject, List<Map> list, String user) throws Exception {
+	public static List<Map<String, Object>> bathInsertRecords(Object itemObject, List<Map<String, Object>> list,
+			String user) throws Exception {
 		if (itemObject == null || list == null)
 			return null;
 		ItemInfo itemInfo = null;
@@ -213,22 +217,23 @@ public class DBUtil {
 		return row != null ? list : null;
 	}
 
-	private static List<Map> getNewMapList(List<Map> list, int sign, String user) throws Exception {
-		List<Map> maps = new ArrayList<Map>();
-		for (Map map : list)
+	private static List<Map<String, Object>> getNewMapList(List<Map<String, Object>> list, int sign, String user)
+			throws Exception {
+		List<Map<String, Object>> maps = new ArrayList<>();
+		for (Map<String, Object> map : list)
 		{
 
-			Map newMap = getValueMapByValues(map, sign, user);
+			Map<String, Object> newMap = getValueMapByValues(map, sign, user);
 			maps.add(newMap);
 		}
 		return maps;
 	}
 
 	static class MyBPSetter implements BatchPreparedStatementSetter {
-		List<Map> maps = null;
+		List<Map<String, Object>> maps = null;
 		ItemInfo itemInfo = null;
 
-		public MyBPSetter(ItemInfo itemInfo, List<Map> maps)
+		public MyBPSetter(ItemInfo itemInfo, List<Map<String, Object>> maps)
 		{
 			this.maps = maps;
 			this.itemInfo = itemInfo;
@@ -241,7 +246,7 @@ public class DBUtil {
 			{
 				String fieldNo = field.getNo();
 				Object value = null;
-				Map newMap = maps.get(i);
+				Map<String, Object> newMap = maps.get(i);
 				if (newMap.containsKey(fieldNo))
 				{
 					value = newMap.get(fieldNo);
@@ -345,9 +350,7 @@ public class DBUtil {
 			connection = DBConnecter.getConnection();
 			ps = connection.prepareStatement(strSql);
 			int row = ps.executeUpdate();
-//			int row = jdbcTemplate.update(strSql, id, Types.VARCHAR);
-			if (row != 1)
-			{ return false; }
+			return row == 1;
 		} catch (Exception e)
 		{
 			LoggerFactory.logError("delete failed", e);
@@ -373,7 +376,7 @@ public class DBUtil {
 		{ itemInfo = MateFactory.getItemInfo(String.valueOf(itemObject)); }
 		if (itemInfo == null)
 		{ throw new Exception("ItemInfo of " + itemObject + " UNFIND"); }
-		Map valueMap = getValueMapByValues(values, 2, user);
+		Map<String, Object> valueMap = getValueMapByValues(values, 2, user);
 		String tableName = itemInfo.getTableName();
 		List<ItemField> fieldList = itemInfo.getItemFieldList();
 		int nCount = 0;
@@ -451,7 +454,6 @@ public class DBUtil {
 		{ itemInfo = MateFactory.getItemInfo(String.valueOf(itemObject)); }
 		if (itemInfo == null)
 		{ throw new Exception("ItemInfo of " + itemObject + " UNFIND"); }
-		Map valueMap = values;
 		String tableName = itemInfo.getTableName();
 		List<ItemField> fieldList = itemInfo.getItemFieldList();
 		int nCount = 0;
@@ -466,7 +468,7 @@ public class DBUtil {
 			String fieldNo = field.getNo();
 			if (!fieldNo.equals("id"))
 			{
-				if (valueMap.containsKey(fieldNo))
+				if (values.containsKey(fieldNo))
 				{
 					nCount++;
 					if (nCount > 1)
@@ -490,20 +492,9 @@ public class DBUtil {
 				Object value = null;
 				if (!fieldNO.equals("id"))
 				{
-					if (valueMap.containsKey(fieldNO))
+					if (values.containsKey(fieldNO))
 					{
-						value = valueMap.get(fieldNO);
-//						if ((value != null) && (value instanceof Date))
-//						{
-//							value = new Timestamp(((Date) value).getTime());
-//						} else if ((value != null) && ((value instanceof String)) || (value instanceof Integer))
-//						{
-//							String editor = field.getEditor();
-//							if (FieldEditor.MAPVALUELIST.equals(editor))
-//							{
-//								value = FieldMappingConverter.getValue2Key(field, value);
-//							}
-//						}
+						value = values.get(fieldNO);
 						setObjValueByFieldType(ps, value, idx, field.getFType());
 						idx++;
 					}
@@ -535,7 +526,7 @@ public class DBUtil {
 		{ itemInfo = MateFactory.getItemInfo(String.valueOf(itemObject)); }
 		if (itemInfo == null)
 		{ throw new Exception("ItemInfo of " + itemObject + " UNFIND"); }
-		Map valueMap = getValueMapByValues(values, 2, user);
+		Map<String, Object> valueMap = getValueMapByValues(values, 2, user);
 		String tableName = itemInfo.getTableName();
 		List<ItemField> fieldList = itemInfo.getItemFieldList();
 		int nCount = 0;
@@ -601,7 +592,7 @@ public class DBUtil {
 
 	}
 
-	public static Map getObjValuesByID(Object itemObject, String strID) throws Exception {
+	public static Map<String, Object> getObjValuesByID(Object itemObject, String strID) throws Exception {
 		ItemInfo itemInfo = null;
 		if (itemObject instanceof ItemInfo)
 		{
@@ -631,7 +622,7 @@ public class DBUtil {
 			ps.setObject(1, strID);
 			ResultSet rs = ps.executeQuery();
 			if (rs != null)
-			{ return (Map) getResultSet(itemInfo, rs).get(0); }
+			{ return getResultSet(itemInfo, rs).get(0); }
 		} finally
 		{
 			DatabaseUtil.cleanUp(connection);
@@ -641,7 +632,8 @@ public class DBUtil {
 
 	}
 
-	public static List<Map> getObjValues(Object itemObject, String condition, Object... objects) throws Exception {
+	public static List<Map<String, Object>> getObjValues(Object itemObject, String condition, Object... objects)
+			throws Exception {
 		ItemInfo itemInfo = null;
 		if (itemObject instanceof ItemInfo)
 		{
@@ -668,7 +660,8 @@ public class DBUtil {
 
 	}
 
-	private static List<Map> getRowSet(Connection connection, String sql, List<ItemField> fields, Object... objects)
+	private static List<Map<String, Object>> getRowSet(Connection connection, String sql, List<ItemField> fields,
+			Object... objects)
 
 	{
 		PreparedStatement ps = null;
@@ -692,12 +685,11 @@ public class DBUtil {
 
 	}
 
-	private static List convertList(ResultSet rs, List<ItemField> fields) throws Exception {
-		List list = new Vector();
-		ResultSetMetaData md = rs.getMetaData();
+	private static List<Map<String, Object>> convertList(ResultSet rs, List<ItemField> fields) throws Exception {
+		List<Map<String, Object>> list = new Vector<>();
 		while (rs.next())
 		{
-			Map rowData = new HashMap();
+			Map<String, Object> rowData = new HashMap<>();
 			for (int i = 1; i <= fields.size(); i++)
 			{
 				Object value = FieldUtils.getObjectByType(rs, i, fields.get(i - 1));
@@ -708,7 +700,7 @@ public class DBUtil {
 		return list.isEmpty() ? null : list;
 	}
 
-	private static Map getValueMapByValues(Object values, int sign, String user) throws Exception {
+	private static Map<String, Object> getValueMapByValues(Object values, int sign, String user) throws Exception {
 		Map<String, Object> valueMap = new HashMap<String, Object>();
 		if (values instanceof Map)
 		{
@@ -924,7 +916,7 @@ public class DBUtil {
 		return null;
 	}
 
-	public static List getSQLResultByCondition(Object param, String paramCondition) {
+	public static List<Map<String, Object>> getSQLResultByCondition(Object param, String paramCondition) {
 
 		PreparedStatement localPreparedStatement = null;
 		Connection connection = null;
@@ -1014,8 +1006,8 @@ public class DBUtil {
 		}
 	}
 
-	public static List getSQLResultByConditionLimit(Object param, String paramCondition, Object[] objects, int[] types,
-			int page) {
+	public static List<Map<String, Object>> getSQLResultByConditionLimit(Object param, String paramCondition,
+			Object[] objects, int[] types, int page) {
 
 		String sql2 = paramCondition == null ? "" : paramCondition;
 		if (!sql2.toLowerCase().contains("limit") && !sql2.toLowerCase().contains("order"))
@@ -1029,7 +1021,8 @@ public class DBUtil {
 		return getSQLResultByCondition(param, paramCondition, objects, types);
 	}
 
-	public static List getSQLResultByConditionLimit(Object param, String paramCondition, int page) {
+	public static List<Map<String, Object>> getSQLResultByConditionLimit(Object param, String paramCondition,
+			int page) {
 
 		String sql2 = paramCondition == null ? "" : paramCondition;
 		if (!sql2.toLowerCase().contains("limit") && !sql2.toLowerCase().contains("order"))
@@ -1043,7 +1036,8 @@ public class DBUtil {
 		return getSQLResultByCondition(param, sql2);
 	}
 
-	public static List getResultSet(ItemInfo info, ResultSet resultSet) throws SQLException, Exception {
+	public static List<Map<String, Object>> getResultSet(ItemInfo info, ResultSet resultSet)
+			throws SQLException, Exception {
 		List<ItemField> fieldList = info.getItemFieldList();
 		int i = fieldList.size();
 		List<Map<String, Object>> resultList = new Vector<Map<String, Object>>();
@@ -1053,7 +1047,6 @@ public class DBUtil {
 			for (int j = 1; j < i + 1; j++)
 			{
 				ItemField field = fieldList.get(j - 1);
-//				Object localObject1 = FieldUtils.getObjectByType(resultSet, j, field);
 				Object localObject1 = resultSet.getObject(j);
 				String str2 = field.getNo();
 				if ((localObject1 instanceof String))
@@ -1071,15 +1064,14 @@ public class DBUtil {
 
 	}
 
-	public static List getSQLResultByOnlyFieldObject(ItemInfo itemInfo, Map map) throws Exception {
-		List<ItemField> fields = itemInfo.getItemFieldList();
+	public static List<Map<String, Object>> getSQLResultByOnlyFieldObject(ItemInfo itemInfo, Map<String, Object> map)
+			throws Exception {
 		StringBuffer sfields = new StringBuffer("SELECT ");
 		StringBuffer condition = new StringBuffer(" del=0 ");
 		List<ItemField> onlyFields = USCModelMate.getOnlyItemFields(itemInfo);
 		if (onlyFields != null)
 		{
 			Object[] objects = new Object[onlyFields.size()];
-			int[] types = new int[onlyFields.size()];
 			int i = 0;
 			for (ItemField itemField : onlyFields)
 			{
@@ -1106,7 +1098,7 @@ public class DBUtil {
 		Object object = null;
 		if (paramObject instanceof Map)
 		{
-			object = ((Map) paramObject).get(itemField.getNo());
+			object = ((Map<String, Object>) paramObject).get(itemField.getNo());
 		} else
 		{
 			object = paramObject;
@@ -1115,16 +1107,16 @@ public class DBUtil {
 		return FieldUtils.getObjectByType(object, itemField);
 	}
 
-	public static List getRelationItemResult(ItemInfo itemA, ItemInfo itemB, ItemInfo relationItemInfo, String itemAID,
-			int page) {
+	public static List<Map<String, Object>> getRelationItemResult(ItemInfo itemA, ItemInfo itemB,
+			ItemInfo relationItemInfo, String itemAID, int page) {
 		if (itemA == null || itemB == null || relationItemInfo == null)
 		{ return null; }
-		List<ItemField> fields = itemB.getItemFieldList();
 
 		return getRelationItemResult(itemA.getTableName(), itemB, relationItemInfo.getTableName(), itemAID, page);
 	}
 
-	public static List getRelationItemResult(String tableA, ItemInfo itemB, String relTable, String itemAID, int page) {
+	public static List<Map<String, Object>> getRelationItemResult(String tableA, ItemInfo itemB, String relTable,
+			String itemAID, int page) {
 		String querySql = "del=0 AND EXISTS(SELECT 1 FROM " + relTable + " WHERE " + "del=0 AND itema=? AND itemb=? "
 				+ "AND itembid=" + itemB.getTableName() + ".id AND itemaid=?)";
 		Object[] objects = new Object[] { tableA, itemB.getTableName(), itemAID };
@@ -1247,5 +1239,80 @@ public class DBUtil {
 			sql += paramCondition;
 		}
 		return sql;
+	}
+
+	/**
+	 * 调用存储过程无返回值
+	 * 
+	 * @param procedureName 存储过程名称
+	 * @param params        输入参数必须都为字符串类型,以#分割，如A#B#C
+	 */
+	public static void callProcedure(String procedureName, String params) {
+		String ps = params.replace("#", "','");
+		String sql = "{call " + procedureName + "('" + ps + "')}";
+		DBConnecter.getJdbcTemplate().execute(sql);
+	}
+
+	/**
+	 * 调用存储过程返回非结果集 true or false
+	 * 
+	 * @param procedureName 存储过程名称
+	 * @param params        输入参数必须都为字符串类型,以#分割，如A#B#C
+	 */
+	public static boolean callProcedure(String procedureName, Object[] inparams) {
+		USCCallableStatementCreator csc = new USCCallableStatementCreator(procedureName, inparams, Types.INTEGER);
+		boolean result = DBConnecter.getJdbcTemplate().execute(csc, new CallableStatementCallback<Boolean>() {
+
+			@Override
+			public Boolean doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+				cs.execute();
+				return cs.getInt(csc.getParamLength()) != 0;
+			}
+		});
+		return result;
+	}
+
+	/**
+	 * 调用存储过程返回多个结果集
+	 * 
+	 * @param procedureName 存储过程名称
+	 * @param inparams      输入参数
+	 */
+	public static List<List<Map<String, Object>>> callProcedureList(String procedureName, Object[] inparams) {
+		USCCallableStatementCreator csc = new USCCallableStatementCreator(procedureName, inparams, Types.INTEGER);
+		List<List<Map<String, Object>>> result = DBConnecter.getJdbcTemplate().execute(csc,
+				new CallableStatementCallback<List<List<Map<String, Object>>>>() {
+
+					@Override
+					public List<List<Map<String, Object>>> doInCallableStatement(CallableStatement cs)
+							throws SQLException, DataAccessException {
+						cs.execute();
+						List<List<Map<String, Object>>> result = new ArrayList<List<Map<String, Object>>>();
+						result.add(getResultSet(cs.getResultSet()));
+						while (cs.getMoreResults())
+						{ result.add(getResultSet(cs.getResultSet())); }
+
+						return result;
+					}
+				});
+		return result;
+	}
+
+	public static List<Map<String, Object>> getResultSet(ResultSet rs) throws SQLException {
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		ResultSetMetaData metaData = rs.getMetaData();
+		int columnCount = metaData.getColumnCount();
+		while (rs.next())
+		{
+			Map<String, Object> rowMap = new HashMap<>();
+			for (int i = 1; i <= columnCount; i++)
+			{
+				String columnName = metaData.getColumnName(i);
+				rowMap.put(columnName, rs.getString(columnName));
+			}
+			resultList.add(rowMap);
+		}
+		rs.close();
+		return resultList;
 	}
 }

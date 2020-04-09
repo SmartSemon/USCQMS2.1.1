@@ -7,12 +7,13 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.usc.app.action.AppActionFactory;
 import com.usc.app.action.i.AppAction;
-import com.usc.app.action.utils.ActionMessage;
-import com.usc.app.action.utils.ResultMessage;
+import com.usc.app.action.retmsg.ActionMessage;
+import com.usc.app.action.retmsg.ResultMessage;
 import com.usc.app.entry.ret.RetSignEnum;
 import com.usc.app.exception.ApplicationException;
 import com.usc.app.exception.GetExceptionDetails;
@@ -67,11 +68,6 @@ public class DefaultEventProcessor {
 	}
 
 	public void setResultJson(Object obj) {
-//		if (obj == null)
-//		{
-//			this.resultJson = StandardResultTranslate.successfulOperation();
-//			return;
-//		}
 		if (obj instanceof ResultMessage)
 		{
 			this.resultJson = obj;
@@ -94,8 +90,7 @@ public class DefaultEventProcessor {
 			return;
 		}
 
-		this.resultJson = ActionMessage.creator(true, RetSignEnum.NOT_DEAL_WITH,
-				StandardResultTranslate.translate("Action_Default_1"), obj);
+		this.resultJson = ActionMessage.creator(true, RetSignEnum.NOT_DEAL_WITH, "", obj);
 	}
 
 	public DefaultEventProcessor(MultipartFile file, HttpServletRequest request, HttpServletResponse response)
@@ -162,7 +157,8 @@ public class DefaultEventProcessor {
 		}
 	}
 
-	private void execute(AppAction action, ApplicationContext context) {
+	@Transactional
+	public void execute(AppAction action, ApplicationContext context) {
 		Object object = null;
 		try
 		{
@@ -175,6 +171,7 @@ public class DefaultEventProcessor {
 		} catch (Exception e)
 		{
 			handException(e);
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -183,7 +180,7 @@ public class DefaultEventProcessor {
 		return action.action();
 	}
 
-	private boolean doBeforeAction(ApplicationContext context, AppAction action) {
+	private boolean doBeforeAction(ApplicationContext context, AppAction action) throws Exception {
 		String implString = action.getClass().getName();
 		ItemMenu menu = context.getItemInfo().getItemMenu(implString);
 		if (menu != null)
@@ -191,17 +188,11 @@ public class DefaultEventProcessor {
 			List<MenuLibrary> beforeActionsLibraries = menu.getBeforeActionList();
 			if (beforeActionsLibraries != null)
 			{
+
 				for (MenuLibrary menuLibrary : beforeActionsLibraries)
 				{
 					String beforeImplclass = menuLibrary.getImplclass();
-					try
-					{
-						doAction(context, beforeImplclass);
-					} catch (Exception e)
-					{
-						handException(e);
-						return false;
-					}
+					doAction(context, beforeImplclass);
 				}
 			}
 		}

@@ -26,8 +26,7 @@ import com.usc.conf.cf.polltask.task.PollTaskJob;
 
 @SuppressWarnings("rawtypes")
 @Service("pollTaskService")
-public class PollTaskServiceImpl implements PollTaskService
-{
+public class PollTaskServiceImpl implements PollTaskService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(PollTaskServiceImpl.class);
 	@Autowired
 	private PollTaskMapper taskMapper;
@@ -46,14 +45,11 @@ public class PollTaskServiceImpl implements PollTaskService
 	private Map<String, ScheduledFuture> scheduledFutureMap = new ConcurrentHashMap<>();
 
 	@Override
-	synchronized public List<PollTaskBean> taskList()
-	{
+	synchronized public List<PollTaskBean> taskList() {
 
 		List<PollTaskBean> taskBeanList = taskMapper.getAllTask(jdbcTemplate);
 		if (CollectionUtils.isEmpty(taskBeanList))
-		{
-			return new ArrayList<>();
-		}
+		{ return new ArrayList<>(); }
 
 		for (PollTaskBean taskBean : taskBeanList)
 		{
@@ -64,8 +60,7 @@ public class PollTaskServiceImpl implements PollTaskService
 	}
 
 	@Override
-	synchronized public Boolean start(String implclass)
-	{
+	synchronized public Boolean start(String implclass) {
 		lock.lock();
 		try
 		{
@@ -91,8 +86,7 @@ public class PollTaskServiceImpl implements PollTaskService
 	}
 
 	@Override
-	synchronized public Boolean stop(String implclass)
-	{
+	synchronized public Boolean stop(String implclass) {
 		boolean taskStartFlag = scheduledFutureMap.containsKey(implclass);
 		if (taskStartFlag)
 		{
@@ -104,43 +98,34 @@ public class PollTaskServiceImpl implements PollTaskService
 	}
 
 	@Override
-	synchronized public Boolean restart(String implclass)
-	{
+	synchronized public Boolean restart(String implclass) {
 		LOGGER.info(">>>>>> 进入重启事务 实现类 {" + implclass + "}  >>>>>>");
 		this.stop(implclass);
 		return this.start(implclass);
 	}
 
 	@Override
-	synchronized public void initAllTask(List<PollTaskBean> pollTaskBeanList)
-	{
+	synchronized public void initAllTask(List<PollTaskBean> pollTaskBeanList) {
 		LOGGER.info("程序启动 ==> 初始化所有事务开始 ！size={" + pollTaskBeanList.size() + "}");
 		if (CollectionUtils.isEmpty(pollTaskBeanList))
-		{
-			return;
-		}
+		{ return; }
 		for (PollTaskBean pollTask : pollTaskBeanList)
 		{
 			String implclass = pollTask.getImplclass();
 			if (this.isStart(implclass))
-			{
-				continue;
-			}
+			{ continue; }
 			this.doStartTask(pollTask);
 		}
 
 	}
 
-	private void doStartTask(PollTaskBean pollTask)
-	{
+	private void doStartTask(PollTaskBean pollTask) {
 		String implclass = pollTask.getImplclass();
 		String polltime = pollTask.getPolltime();
 		PollTaskJob pollTaskJob = scheduledTaskJobMap.get(implclass);
-		ScheduledFuture scheduledFuture = threadPoolTaskScheduler.schedule(pollTaskJob, new Trigger()
-		{
+		ScheduledFuture scheduledFuture = threadPoolTaskScheduler.schedule(pollTaskJob, new Trigger() {
 			@Override
-			public Date nextExecutionTime(TriggerContext triggerContext)
-			{
+			public Date nextExecutionTime(TriggerContext triggerContext) {
 				CronTrigger cronTrigger = new CronTrigger(polltime);
 				return cronTrigger.nextExecutionTime(triggerContext);
 			}
@@ -149,14 +134,11 @@ public class PollTaskServiceImpl implements PollTaskService
 		scheduledFutureMap.put(implclass, scheduledFuture);
 	}
 
-	private Boolean isStart(String implclass)
-	{
+	private Boolean isStart(String implclass) {
 		if (scheduledFutureMap.containsKey(implclass))
 		{
 			if (!scheduledFutureMap.get(implclass).isCancelled())
-			{
-				return true;
-			}
+			{ return true; }
 		}
 		return false;
 	}

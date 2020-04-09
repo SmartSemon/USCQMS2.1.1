@@ -18,7 +18,11 @@ public class ItemGrid implements Serializable {
 	private static final long serialVersionUID = -9148923512210049627L;
 	private String id;
 	private String no;
+
+	private String caption;
 	private String name;
+	private String enName;
+
 	private String align;
 	private int defaultc;
 	private int type;

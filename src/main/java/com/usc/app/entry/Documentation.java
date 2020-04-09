@@ -13,12 +13,10 @@ import org.springframework.web.multipart.MultipartFile;
 @EnableAsync
 @RestController
 @RequestMapping(value = "/dcm")
-public class Documentation
-{
+public class Documentation {
 	@PostMapping(value = "/access")
 	public Object access(@RequestParam(value = "file", required = false) MultipartFile file, HttpServletRequest request,
-			HttpServletResponse response)
-	{
+			HttpServletResponse response) {
 		DefaultEventProcessor processor = new DefaultEventProcessor(file, request, response);
 		return processor.getResultJson();
 	}

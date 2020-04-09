@@ -3,7 +3,7 @@ package com.usc.app.action.task.util;
 import java.util.List;
 
 import com.usc.app.action.cache.PromptTranslationTools;
-import com.usc.app.action.utils.ActionMessage;
+import com.usc.app.action.retmsg.ActionMessage;
 
 public class TaskActionResult
 {

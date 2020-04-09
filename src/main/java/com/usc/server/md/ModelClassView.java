@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class ModelClassView implements Serializable
-{
+public class ModelClassView implements Serializable {
 
 	/**
 	 *
@@ -20,9 +19,13 @@ public class ModelClassView implements Serializable
 
 	private String id;
 	private String no;
-	private String name;
+
 	private String itemNo;
 	private String wcondition;
+
+	private String caption;
+	private String name;
+	private String enName;
 
 	private List<ModelClassViewTreeNode> classViewNodeList;
 	private Map<String, ModelClassViewTreeNode> classViewNodeMap = new ConcurrentHashMap<String, ModelClassViewTreeNode>();

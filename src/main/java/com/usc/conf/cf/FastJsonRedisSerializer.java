@@ -17,8 +17,7 @@ import com.alibaba.fastjson.util.IOUtils;
 import com.usc.util.ObjectHelperUtils;
 import com.usc.util.SystemProperties;
 
-public class FastJsonRedisSerializer<T> implements RedisSerializer<Object>
-{
+public class FastJsonRedisSerializer<T> implements RedisSerializer<Object> {
 	private Class<T> clazz;
 	private static ParserConfig defaultRedisConfig = new ParserConfig();
 	static
@@ -59,12 +58,10 @@ public class FastJsonRedisSerializer<T> implements RedisSerializer<Object>
 		this.clazz = clazz;
 	}
 
-	public byte[] serialize(Object object) throws SerializationException
-	{
+	@Override
+	public byte[] serialize(Object object) throws SerializationException {
 		if (object == null)
-		{
-			return new byte[0];
-		}
+		{ return new byte[0]; }
 		try
 		{
 			return JSON.toJSONBytes(object, SerializerFeature.WriteClassName);
@@ -74,12 +71,10 @@ public class FastJsonRedisSerializer<T> implements RedisSerializer<Object>
 		}
 	}
 
-	public T deserialize(byte[] bytes) throws SerializationException
-	{
+	@Override
+	public T deserialize(byte[] bytes) throws SerializationException {
 		if (bytes == null || bytes.length == 0)
-		{
-			return null;
-		}
+		{ return null; }
 		try
 		{
 			String string = new String(bytes, IOUtils.UTF8);
@@ -90,14 +85,11 @@ public class FastJsonRedisSerializer<T> implements RedisSerializer<Object>
 		}
 	}
 
-	public static void getAllFileName(String classDirPath, String path, ArrayList<String> fileNameList)
-	{
+	public static void getAllFileName(String classDirPath, String path, ArrayList<String> fileNameList) {
 		File file = new File(path);
 		File[] tempList = file.listFiles();
 		if (ObjectHelperUtils.isEmpty(tempList))
-		{
-			return;
-		}
+		{ return; }
 		for (int i = 0; i < tempList.length; i++)
 		{
 			File f = tempList[i];
@@ -110,9 +102,7 @@ public class FastJsonRedisSerializer<T> implements RedisSerializer<Object>
 				fileNameList.add(f.getName());
 			}
 			if (f.isDirectory())
-			{
-				getAllFileName(classDirPath + "." + f.getName(), f.getAbsolutePath(), fileNameList);
-			}
+			{ getAllFileName(classDirPath + "." + f.getName(), f.getAbsolutePath(), fileNameList); }
 		}
 	}
 }

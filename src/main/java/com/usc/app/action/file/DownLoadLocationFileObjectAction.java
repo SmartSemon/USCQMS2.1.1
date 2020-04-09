@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.usc.app.util.file.FileUtil;
 import com.usc.app.util.file.ZipUtil;
-import com.usc.app.util.tran.StandardResultTranslate;
 import com.usc.obj.api.USCObject;
 import com.usc.obj.api.impl.AppFileContext;
 import com.usc.obj.api.impl.USCServerBeanProvider;
@@ -35,15 +34,15 @@ public class DownLoadLocationFileObjectAction extends AbstractFileObjAction {
 			IFile file = (IFile) objects[0];
 			FileObject fileObject = (FileObject) file;
 			if (!fileObject.hasFile())
-			{ return StandardResultTranslate.getResult("Action_DownLoad_3", false); }
+			{ return false; }
 			if (!fileObject.downLoadFile(fileContext))
-			{ return StandardResultTranslate.getResult(StandardResultTranslate.translate("Action_DownLoad_3"), false); }
+			{ return false; }
 		} else
 		{
 			bathDownloadFile(objects, null, fileContext.getServletRequest(), fileContext.getServletResponse());
 		}
 
-		return StandardResultTranslate.getResult(true, "Action_DownLoad");
+		return true;
 	}
 
 	@Override

@@ -1,0 +1,47 @@
+spring:
+  datasource:
+  # 数据源：master
+    master:
+      type: com.alibaba.druid.pool.DruidDataSource
+      druid:
+        driverClassName: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/usc_qms_master?useUnicode=true&serverTimezone=Asia/Shanghai&characterEncoding=UTF8&zeroDateTimeBehavior=convertToNull&useSSL=false
+        username: root
+        password: root
+        initial-size: 10
+        max-active: 30
+        min-idle: 15
+        max-wait: 60000
+        #max-evictable-idle-time-millis: 900000
+        pool-prepared-statements: true
+        max-pool-prepared-statement-per-connection-size: 20
+        time-between-eviction-runs-millis: 6000
+        validation-query: SELECT 1 FROM DUAL
+        validation-query-timeout: 5000
+        test-on-borrow: false
+        test-on-return: false
+        test-while-idle: true
+        keep-alive: true
+        connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+  # 数据源：model
+    model:
+      type: com.alibaba.druid.pool.DruidDataSource
+      druid:
+        driverClassName: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/usc_qms_model?useUnicode=true&serverTimezone=Asia/Shanghai&characterEncoding=UTF8&zeroDateTimeBehavior=convertToNull&useSSL=false
+        username: root
+        password: root
+        initial-size: 5
+        max-active: 10
+        min-idle: 5
+        max-wait: 60000
+        pool-prepared-statements: true
+        max-pool-prepared-statement-per-connection-size: 20
+        time-between-eviction-runs-millis: 6000
+        validation-query: SELECT 1 FROM DUAL
+        validation-query-timeout: 5000
+        test-on-borrow: false
+        test-on-return: false
+        test-while-idle: true
+        keep-alive: true
+        connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000

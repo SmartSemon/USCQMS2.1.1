@@ -6,14 +6,13 @@ import com.usc.server.md.ItemInfo;
 import lombok.Data;
 
 @Data
-public class USCObjectQueryJsonBean extends USCObjectJSONBean
-{
+public class USCObjectQueryJsonBean extends USCObjectJSONBean {
 
-	private String QUERYWORD;
+	private String queryWord;
 
-	public String CONDITION;
+	public String condition;
 
-	public Integer PAGE;
+	public Integer page;
 
 	private String classNodeItemNo;
 	private String classNodeItemPropertyNo;
@@ -24,9 +23,9 @@ public class USCObjectQueryJsonBean extends USCObjectJSONBean
 		super();
 	}
 
-	public ItemInfo getItemInfo()
-	{
-		return MateFactory.getItemInfo(ITEMNO);
+	@Override
+	public ItemInfo getItemInfo() {
+		return MateFactory.getItemInfo(itemNo);
 	}
 
 }

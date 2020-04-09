@@ -33,7 +33,7 @@ public class ItemBeanFactoryConverter {
 	public static <T> T getBean(Class<T> calss, ResultSet resultSet) {
 		try
 		{
-			jdbcTemplate = new JdbcTemplate(DBConnecter.getDataSource());
+			jdbcTemplate = DBConnecter.getModelJdbcTemplate();
 		} catch (Exception e1)
 		{
 			e1.printStackTrace();

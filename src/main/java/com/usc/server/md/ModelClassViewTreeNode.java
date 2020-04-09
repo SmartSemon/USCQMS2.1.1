@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class ModelClassViewTreeNode implements Serializable
-{
+public class ModelClassViewTreeNode implements Serializable {
 
 	/**
 	 *
@@ -17,12 +16,11 @@ public class ModelClassViewTreeNode implements Serializable
 
 	private String id;
 	private String no;
-	private String name;
+
 	private String icon;
 	private String nodecondition;
 	private String datacondition;
 	private String pid;
-	private String itemid;
 
 	private String treenodeid;
 	private String treenodepid;
@@ -30,12 +28,16 @@ public class ModelClassViewTreeNode implements Serializable
 
 	private Integer summary;
 	private Integer loadDataSet;
+	private String itemid;
+
+	private String caption;
+	private String name;
+	private String enName;
 
 	private Integer nodeDataTotal;
 
 	@Override
-	public ModelClassViewTreeNode clone()
-	{
+	public ModelClassViewTreeNode clone() {
 		ModelClassViewTreeNode classViewTreeNode = new ModelClassViewTreeNode();
 		classViewTreeNode.setId(id);
 		classViewTreeNode.setNo(no);

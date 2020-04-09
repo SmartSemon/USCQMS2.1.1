@@ -3,14 +3,14 @@ package com.usc.app.action;
 import java.util.Map;
 
 import com.usc.app.action.a.AbstractAction;
-import com.usc.app.util.tran.StandardResultTranslate;
+import com.usc.app.util.tran.InternationalFormat;
 
 public class CreateTreeObjAction extends AbstractAction {
 
 	@Override
 	public Object executeAction() throws Exception {
 		if (!context.getItemInfo().containsField("PID"))
-		{ return failedOperation(StandardResultTranslate.translate("Object_Miss_TreeField")); }
+		{ return failedOperation(InternationalFormat.getFormatMessage("Object_Miss_TreeField", context.getLocale())); }
 		Map<String, Object> newData = ActionParamParser.getFieldVaues(context.getItemInfo(), context.getItemPage(),
 				context.getFormData());
 		String pid = (String) context.getExtendInfo("pid");

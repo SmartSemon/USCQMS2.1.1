@@ -13,8 +13,7 @@ import com.usc.server.DBConnecter;
 import com.usc.server.md.ModelClassViewTreeNode;
 import com.usc.util.ObjectHelperUtils;
 
-public class ViewBeanFactoryConverter
-{
+public class ViewBeanFactoryConverter {
 	private static List<ModelClassViewTreeNode> viewTreeNodeList = null;
 	private static JdbcTemplate jdbcTemplate;
 
@@ -22,11 +21,10 @@ public class ViewBeanFactoryConverter
 	 * @return
 	 * @see 返回单个实体对象
 	 */
-	public static <T> T getBean(Class<T> calss, ResultSet resultSet)
-	{
+	public static <T> T getBean(Class<T> calss, ResultSet resultSet) {
 		try
 		{
-			jdbcTemplate = new JdbcTemplate(DBConnecter.getDataSource());
+			jdbcTemplate = DBConnecter.getModelJdbcTemplate();
 		} catch (Exception e1)
 		{
 			e1.printStackTrace();
@@ -47,16 +45,13 @@ public class ViewBeanFactoryConverter
 	/**
 	 * @see 返回实体对象集
 	 */
-	public static <T> List<T> getBeans(Class<T> calss, ResultSet resultSet)
-	{
+	public static <T> List<T> getBeans(Class<T> calss, ResultSet resultSet) {
 		List<T> ts = null;
 		try
 		{
 			ts = new ArrayList<>();
 			while (resultSet.next())
-			{
-				ts.add(createBean(calss, resultSet));
-			}
+			{ ts.add(createBean(calss, resultSet)); }
 		} catch (Exception e)
 		{
 			e.printStackTrace();
@@ -71,8 +66,7 @@ public class ViewBeanFactoryConverter
 	 * @return 实体对象
 	 * @throws Exception
 	 */
-	private static <T> T createBean(Class<T> calss, ResultSet resultSet) throws Exception
-	{
+	private static <T> T createBean(Class<T> calss, ResultSet resultSet) throws Exception {
 		T object = calss.newInstance();
 		// 获取字段
 		Field[] fields = calss.getDeclaredFields();
@@ -94,9 +88,7 @@ public class ViewBeanFactoryConverter
 			{
 
 				if (fieldName.equalsIgnoreCase("serialVersionUID"))
-				{
-					continue;
-				}
+				{ continue; }
 
 				if ("classViewNodeList".equals(fieldName) || "classViewNodeMap".equals(fieldName))
 				{
@@ -144,19 +136,15 @@ public class ViewBeanFactoryConverter
 		return object;
 	}
 
-	private static String getSql(String viewId, String tableName)
-	{
+	private static String getSql(String viewId, String tableName) {
 		if (viewId == null || tableName == null)
-		{
-			return null;
-		}
+		{ return null; }
 		String sql = "SELECT * FROM " + tableName + " WHERE del=0 AND state='F' AND itemid='" + viewId + "'";
 		return sql;
 
 	}
 
-	public static List<ModelClassViewTreeNode> getTreeNodes(String viewId)
-	{
+	public static List<ModelClassViewTreeNode> getTreeNodes(String viewId) {
 		return jdbcTemplate.query(getSql(viewId, "usc_model_classview_node"), new ModelClassViewTreeNodeMapper());
 	}
 

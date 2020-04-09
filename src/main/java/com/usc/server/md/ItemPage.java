@@ -20,11 +20,15 @@ public class ItemPage implements Serializable {
 
 	private String id;
 	private String no;
-	private String name;
+
 	private double width;
 	private Integer columns;
 	private Integer defaultc;
 	private Integer peptide;
+
+	private String caption;
+	private String name;
+	private String enName;
 
 	private List<ItemPeptidePage> peptidePageList;
 	private Map<String, ItemPeptidePage> peptidePageMap;

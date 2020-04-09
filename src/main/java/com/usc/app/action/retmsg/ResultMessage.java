@@ -1,4 +1,4 @@
-package com.usc.app.action.utils;
+package com.usc.app.action.retmsg;
 
 import java.io.Serializable;
 

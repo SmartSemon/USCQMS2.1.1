@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +20,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.usc.app.util.tran.StandardResultTranslate;
 import com.usc.dto.Dto;
 import com.usc.dto.impl.MapDto;
-import com.usc.server.jdbc.DBUtil;
+import com.usc.server.DBConnecter;
 import com.usc.test.mate.action.MCreateAction;
 import com.usc.test.mate.action.service.ModelItemServer;
 import com.usc.test.mate.action.service.ModelServer;
@@ -45,21 +47,19 @@ public class SysModelItemResource {
 	}
 
 	@GetMapping("/packet")
-	public Object findPagingList(@RequestParam(value = "queryParam", required = false) String queryParam)
-			throws JsonParseException, JsonMappingException, IOException {
+	public Object findPagingList(@RequestParam(value = "queryParam", required = false) String queryParam,
+			HttpServletRequest request) throws JsonParseException, JsonMappingException, IOException {
 		JSONObject jsonObject = JSONObject.parseObject(queryParam);
-		String userName = jsonObject.getString("userName");
+		String userName = request.getHeader("UserName");
 		String table = jsonObject.getString("tableName");
 		String queryCondition = ObjectHelperUtils.isNotEmpty(jsonObject.getString("condition"))
 				? " AND " + jsonObject.getString("condition")
 				: "";
 
 		StringBuffer condition = modelServer.isModelingUser(userName)
-				? new StringBuffer(
-						"del=0 AND effective<>-1 AND (state='F' OR (cuser='" + userName + "' AND state IN('C','U')))")
-				: new StringBuffer("del=0 AND effective <>0 AND state='F'");
-		List<Map<String, Object>> dataList = DBUtil.queryForList(table, condition.append(queryCondition).toString());
-		return StandardResultTranslate.getQueryResult(true, "Action_Query", dataList);
+				? new StringBuffer("effective<>-1 AND (state='F' OR (cuser='" + userName + "' AND state IN('C','U')))")
+				: new StringBuffer("effective <>0 AND state='F'");
+		return getResult(table, condition.append(queryCondition).toString());
 	}
 
 	@GetMapping("/getAbolishedItem")
@@ -67,9 +67,8 @@ public class SysModelItemResource {
 			throws JsonParseException, JsonMappingException, IOException {
 		JSONObject jsonObject = JSONObject.parseObject(queryParam);
 		String table = jsonObject.getString("tableName");
-
-		List<Map<String, Object>> dataList = DBUtil.queryForList(table, "state='HS' AND effective IN(-1,0,1)");
-		return StandardResultTranslate.getQueryResult(true, "Action_Query", dataList);
+		String condition = "state='HS' AND effective IN(-1,0,1)";
+		return getResult(table, condition);
 	}
 
 	@PostMapping("/recovery")
@@ -79,37 +78,36 @@ public class SysModelItemResource {
 	}
 
 	@GetMapping("/query")
-	public Object queryItemList(@RequestParam(value = "queryParam", required = false) String queryParam)
-			throws JsonParseException, JsonMappingException, IOException {
+	public Object queryItemList(@RequestParam(value = "queryParam", required = false) String queryParam,
+			HttpServletRequest request) throws JsonParseException, JsonMappingException, IOException {
 		JSONObject jsonObject = JSONObject.parseObject(queryParam);
-		String userName = jsonObject.getString("userName");
+		String userName = request.getHeader("UserName");
 		String table = jsonObject.getString("tableName");
 		String queryWord = jsonObject.getString("queryWord");
-		String queryCondition = "";
-		StringBuffer condition = new StringBuffer("del=0");
+
+		StringBuffer condition = new StringBuffer("");
 		if (table.equals("usc_model_item") || table.equals("usc_model_relationship")
 				|| table.equals("usc_model_queryview") || table.equals("usc_model_classview"))
 		{
 			if (modelServer.isModelingUser(userName))
 			{
 				condition.append(
-						" AND effective IN(1,0) AND (state='F' OR (cuser='" + userName + "' AND state IN('C','U')))");
+						"effective IN(1,0) AND (state='F' OR (cuser='" + userName + "' AND state IN('C','U')))");
 			} else
 			{
-				condition.append(" AND effective IN(1,-1) AND state='F'");
+				condition.append("effective IN(1,-1) AND state='F'");
 			}
 		} else
 		{
 			if (modelServer.isModelingUser(userName))
 			{
-				condition.append(" AND state IN('F','C','U')");
+				condition.append("state IN('F','C','U')");
 			} else
 			{
-				condition.append(" AND state='F'");
+				condition.append("state='F'");
 			}
-
 		}
-		List<Map<String, Object>> dataList = null;
+		String queryCondition = "";
 		if (ObjectHelperUtils.isNotEmpty(queryWord))
 		{
 			queryWord = queryWord.toUpperCase();
@@ -119,43 +117,42 @@ public class SysModelItemResource {
 			queryCondition = " AND (" + field + " LIKE '%" + queryWord + "%' OR UPPER(name) LIKE '%" + queryWord
 					+ "%' )";
 		}
-		dataList = DBUtil.queryForList(table, condition.append(queryCondition).toString());
-		return StandardResultTranslate.getQueryResult(true, "Action_Query", dataList);
+		return getResult(table, condition.append(queryCondition).toString());
 	}
 
 	@GetMapping("/queryItemPGR")
-	public Object getItemList(@RequestParam(value = "queryParam", required = false) String queryParam)
-			throws JsonParseException, JsonMappingException, IOException {
+	public Object getItemList(@RequestParam(value = "queryParam", required = false) String queryParam,
+			HttpServletRequest request) throws JsonParseException, JsonMappingException, IOException {
 		JSONObject jsonObject = JSONObject.parseObject(queryParam);
-		String userName = jsonObject.getString("userName");
+		String userName = request.getHeader("UserName");
 		String table = jsonObject.getString("tableName");
 		String itemNo = jsonObject.getString("itemNo");
-		StringBuffer condition = new StringBuffer("del=0");
+		StringBuffer condition = new StringBuffer("");
 		if (table.equals("usc_model_item") || table.equals("usc_model_relationship")
 				|| table.equals("usc_model_queryview") || table.equals("usc_model_classview"))
 		{
 			if (modelServer.isModelingUser(userName))
 			{
-				condition.append(" AND effective IN(1,0) AND state IN('F','C','U')");
+				condition.append("effective IN(1,0) AND state IN('F','C','U')");
 			} else
 			{
-				condition.append(" AND effective IN(1,-1) AND state='F'");
+				condition.append("effective IN(1,-1) AND state='F'");
 			}
 		} else
 		{
 			if (modelServer.isModelingUser(userName))
 			{
-				condition.append(" AND state IN('F','C','U')");
+				condition.append("state IN('F','C','U')");
 			} else
 			{
-				condition.append(" AND state='F'");
+				condition.append("state='F'");
 			}
 
 		}
-		List<Map<String, Object>> dataList = DBUtil.queryForList(table,
-				condition.append(" AND itemid=(SELECT id FROM usc_model_item WHERE del=0 AND itemno='" + itemNo
-						+ "' ORDER BY ctime DESC LIMIT 0,1)").toString());
-		return StandardResultTranslate.getQueryResult(true, "Action_Query", dataList);
+
+		condition.append(" AND itemid=(SELECT id FROM usc_model_item WHERE del=0 AND itemno='" + itemNo
+				+ "' ORDER BY ctime DESC LIMIT 0,1)");
+		return getResult(table, condition.toString());
 	}
 
 	@GetMapping("/queryItemFields")
@@ -164,19 +161,24 @@ public class SysModelItemResource {
 		String table = "USC_MODEL_FIELD";
 		String propertyNo = jsonObject.getString("propertyPageNo");
 		String itemNo = jsonObject.getString("itemNo");
-		String sql = " DEL=0";
+		String condition = " ";
 		String itemidsql = "(SELECT id FROM usc_model_item WHERE del=0 AND itemno='" + itemNo
 				+ "' ORDER BY ctime DESC LIMIT 0,1)";
 		if (propertyNo == null)
 		{
-			sql += " AND itemid=" + itemidsql;
+			condition = "itemid=" + itemidsql;
 		} else
 		{
 			table = "USC_MODEL_PROPERTY_FIELD";
-			sql += " AND ROOTID = (SELECT ID FROM USC_MODEL_PROPERTY WHERE DEL=0 AND NO='" + propertyNo
+			condition = "ROOTID = (SELECT ID FROM USC_MODEL_PROPERTY WHERE DEL=0 AND NO='" + propertyNo
 					+ "' AND itemid=" + itemidsql + ")";
 		}
-		List<Map<String, Object>> dataList = DBUtil.queryForList(table, sql);
-		return dataList;
+		return getResult(table, condition);
+	}
+
+	public Object getResult(String table, String condition) {
+		String sql = "select * from " + table + " where DEL=0 and " + condition;
+		List<Map<String, Object>> dataList = DBConnecter.getModelJdbcTemplate().queryForList(sql);
+		return StandardResultTranslate.getQueryResult(true, "Action_Query", dataList);
 	}
 }

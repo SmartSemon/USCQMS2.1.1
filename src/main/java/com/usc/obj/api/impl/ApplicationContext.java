@@ -7,6 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Vector;
 
@@ -253,6 +254,11 @@ public class ApplicationContext extends DefaultInvokeContext {
 			return null;
 		}
 
+	}
+
+	@Override
+	public Locale getLocale() {
+		return OnlineUsers.getOnUser(getUserName()).getLocale();
 	}
 
 }

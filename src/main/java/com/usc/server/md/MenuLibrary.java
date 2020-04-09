@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class MenuLibrary implements Serializable
-{
+public class MenuLibrary implements Serializable {
 	/**
 	 *
 	 */
@@ -19,7 +18,7 @@ public class MenuLibrary implements Serializable
 	private String id;
 	private String itemNo;
 	private String no;
-	private String name;
+
 	private String mtype;
 	private String implclass;
 	private String webpath;
@@ -30,14 +29,16 @@ public class MenuLibrary implements Serializable
 	private String abtype;
 	private String title;
 
+	private String caption;
+	private String name;
+	private String enName;
+
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return this.no + "-" + this.name;
 	}
 
-	public Map<String, Object> toMap()
-	{
+	public Map<String, Object> toMap() {
 		MenuLibrary menuType = this;
 		return BeanConverter.toMap(menuType);
 	}

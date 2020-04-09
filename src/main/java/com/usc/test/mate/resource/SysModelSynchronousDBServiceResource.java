@@ -515,15 +515,6 @@ public class SysModelSynchronousDBServiceResource {
 		{
 			String field = getFieldSql(modifyField);
 
-//			try
-//			{
-//				field = field.substring(0, field.length() - 1);
-//			} catch (Exception e)
-//			{
-//				System.out.println(field);
-//				System.out.println(modifyField.get("FIELDNAME"));
-//			}
-
 			String alterSql = alterTable + tableName + modify + field;
 			System.out.println(alterSql);
 			sqls.add(alterSql);

@@ -24,21 +24,20 @@ import com.usc.autho.MD5.MD5Util;
 import com.usc.interceptor.a.APPHandlerInterceptor;
 import com.usc.obj.api.impl.USCServerBeanProvider;
 import com.usc.server.syslog.LOGActionEnum;
+import com.usc.server.util.BeanFactoryConverter;
+import com.usc.test.mate.jsonbean.USCObjectJSONBean;
 import com.usc.test.mate.resource.ServiceToWbeClientResource;
 import com.usc.util.ObjectHelperUtils;
 
 @Component
-public class LoginInterceptor extends APPHandlerInterceptor
-{
+public class LoginInterceptor extends APPHandlerInterceptor {
 	@Autowired
 	private LogInOrOutService logInOrOutService;
-
 	private String userName = null;
 
 	@Override
 	public boolean beforeHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-			throws Exception
-	{
+			throws Exception {
 
 		ServletRequest requestWapper = ServerletUtils.getServletRequestWapper(request);
 		if (requestWapper != null)
@@ -68,6 +67,7 @@ public class LoginInterceptor extends APPHandlerInterceptor
 												.toJSONString());
 						return false;
 					}
+					this.userName = userName;
 					jsonObject.put("response", response);
 					jsonObject.put("request", request);
 					if (jsonObject.containsKey("force"))
@@ -128,8 +128,7 @@ public class LoginInterceptor extends APPHandlerInterceptor
 
 	@Override
 	public void afterHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
-			ModelAndView modelAndView) throws Exception
-	{
+			ModelAndView modelAndView) throws Exception {
 		if (userName != null)
 		{
 			Long st = System.currentTimeMillis();
@@ -139,6 +138,7 @@ public class LoginInterceptor extends APPHandlerInterceptor
 			{
 				Map<String, Map<String, Object>> userModel = new ConcurrentHashMap<String, Map<String, Object>>();
 				ServiceToWbeClientResource resource = new ServiceToWbeClientResource();
+
 				for (Map<String, Object> navigation : navigations)
 				{
 					Integer faceType = (Integer) navigation.get("FACETYPE");
@@ -158,25 +158,26 @@ public class LoginInterceptor extends APPHandlerInterceptor
 								String reqParam = paramObject.toJSONString();
 								if (faceType == 4)
 								{
-									model = resource.getClassNodeModelData(reqParam);
+									model = resource.getClassNodeModelData(reqParam, request);
 								} else if (faceType == 5)
 								{
-									model = resource.getClassViewModelData(reqParam);
+									model = resource.getClassViewModelData(reqParam, request);
 
 								} else
 								{
-									model = resource.getModelData(reqParam);
+									model = resource.getModelData(
+											BeanFactoryConverter.getJsonBean(USCObjectJSONBean.class, reqParam),
+											request);
 								}
 								if ((boolean) model.get("flag"))
-								{
-									userModel.put(pageID, model);
-								}
+								{ userModel.put(pageID, model); }
 
 							}
 						}
 					}
 				}
-				ServiceToWbeClientResource.webPageModelData.put(userName, userModel);
+				String userModelKey = OnlineUsers.getUserNameAcceptLanguage(userName);
+				ServiceToWbeClientResource.webPageModelData.put(userModelKey, userModel);
 				System.out.println(
 						"<<<<<<<<<< 用户 [ " + userName + " ] 建模加载耗时：           " + (System.currentTimeMillis() - st));
 			}
@@ -185,9 +186,9 @@ public class LoginInterceptor extends APPHandlerInterceptor
 
 	@Override
 	protected void afterReaderCompletion(HttpServletRequest request, HttpServletResponse response, Object handler,
-			Exception ex) throws Exception
-	{
-		// TODO Auto-generated method stub
+			Exception ex) throws Exception {
+		System.out.println("获取国际化登陆语言：" + messageSourceUtil.getMessage("Login_Success", request.getLocale()));
+		System.out.println("页面渲染完成");
 
 	}
 

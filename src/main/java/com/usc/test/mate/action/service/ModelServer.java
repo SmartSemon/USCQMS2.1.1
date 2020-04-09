@@ -1,14 +1,15 @@
 package com.usc.test.mate.action.service;
 
-public interface ModelServer
-{
+import javax.servlet.http.HttpServletRequest;
+
+public interface ModelServer {
 	boolean isModelingUser(String userName);
 
 	Object openModel(String param);
 
-	Object closeModel(String param);
+	Object closeModel(String param, HttpServletRequest httpServletRequest);
 
-	Object upgradeModel(String param);
+	Object upgradeModel(String param, HttpServletRequest httpServletRequest);
 
-	Object cancelUpgradeModel(String param);
+	Object cancelUpgradeModel(String param, HttpServletRequest httpServletRequest);
 }

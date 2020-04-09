@@ -19,7 +19,6 @@ public class ItemInfo implements Serializable {
 	private String id;
 	private String itemNo;
 	private String tableName;
-	private String name;
 	private Integer isLife;
 	private Integer type;
 	private Integer sitem;
@@ -27,6 +26,10 @@ public class ItemInfo implements Serializable {
 	private String briefExp;
 	private String implClass;
 	private String colors;
+
+	private String caption;
+	private String name;
+	private String enName;
 
 	private Map<String, ItemField> itemFieldMap = null;
 	private List<ItemField> itemFieldList = null;
@@ -52,6 +55,38 @@ public class ItemInfo implements Serializable {
 	public boolean isFileObj() {
 		return this.type == 1 ? true : false;
 
+	}
+
+	@Override
+	public ItemInfo clone() {
+		ItemInfo info = new ItemInfo();
+		info.setId(id);
+		info.setItemNo(itemNo);
+		info.setBriefExp(briefExp);
+		info.setColors(colors);
+		info.setDefaultItemGrid(defaultItemGrid);
+		info.setDefaultItemPage(defaultItemPage);
+		info.setDefaultItemRelationPage(defaultItemRelationPage);
+		info.setEnName(enName);
+		info.setImplClass(implClass);
+		info.setIsLife(isLife);
+		info.setItemFieldList(itemFieldList);
+		info.setItemFieldMap(itemFieldMap);
+		info.setItemGridList(itemGridList);
+		info.setItemGridMap(itemGridMap);
+		info.setItemMenuList(itemMenuList);
+		info.setItemMenuMap(itemMenuMap);
+		info.setItemPageList(itemPageList);
+		info.setItemPageMap(itemPageMap);
+		info.setName(name);
+		info.setQueryFields(queryFields);
+		info.setRelationPageList(relationPageList);
+		info.setRelationPageMap(relationPageMap);
+		info.setSitem(sitem);
+		info.setTableName(tableName);
+		info.setSupQueryFieldList(supQueryFieldList);
+		info.setType(type);
+		return info;
 	}
 
 	/**

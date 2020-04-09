@@ -11,7 +11,7 @@ import com.usc.util.ObjectHelperUtils;
 public class InitMqLines {
 	public static void init() {
 		String sql = "select A.NAME AS ENAME,B.QUEUES AS QUEUE from usc_model_mq_lines A,usc_model_mq_listener B where A.DEL=0 and B.DEL=0 and A.STATE='F' and B.STATE='F' and A.ID=B.ITEMID";
-		List<Map<String, Object>> queryForList = DBConnecter.getJdbcTemplate().queryForList(sql);
+		List<Map<String, Object>> queryForList = DBConnecter.getModelJdbcTemplate().queryForList(sql);
 		if (ObjectHelperUtils.isNotEmpty(queryForList))
 		{
 			RabbitMqUtils mqUtils = RabbitMqUtilsBuilder.build();

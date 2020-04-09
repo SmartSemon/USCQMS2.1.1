@@ -1,8 +1,11 @@
 package com.usc.app._log.service.impl;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
+import com.usc.app.sys.online.OnlineUsers;
+import com.usc.app.sys.online.OnlineUsers.OnlineUserInfo;
 import com.usc.autho.UserAuthority;
 import com.usc.server.DBConnecter;
 import com.usc.server.jdbc.SDBUtils;
@@ -35,8 +38,22 @@ public class Navigation {
 			}
 		}
 		sql.append(" ORDER BY sort,ctime");
-		return DBConnecter.getJdbcTemplate().queryForList("SELECT * FROM USC_MODEL_NAVIGATION WHERE " + sql.toString(),
-				objects);
+		String selectFields = getQueryFields(userName) + (sql.toString());
+
+		return DBConnecter.getModelJdbcTemplate().queryForList(selectFields, objects);
+	}
+
+	private static String getQueryFields(String userName) {
+		String queryFields = "SELECT ID,PID,LEVEL,NO,ITEMNO,FACETYPE,PARAMS,ICON,SUPQUERY,";
+		OnlineUserInfo onUser = OnlineUsers.getOnUser(userName);
+		Locale language = onUser.getLocale();
+		if (language.equals(Locale.SIMPLIFIED_CHINESE))
+		{
+			queryFields += "NAME AS CAPTION";
+		} else if (language.equals(Locale.US))
+		{ queryFields += "enNAME AS CAPTION"; }
+
+		return queryFields + " FROM USC_MODEL_NAVIGATION WHERE ";
 	}
 
 }

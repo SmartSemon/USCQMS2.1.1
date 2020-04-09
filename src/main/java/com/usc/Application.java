@@ -12,20 +12,18 @@ import lombok.extern.slf4j.Slf4j;
  * ClassName: Application <br/>
  * Class description: Application Entry. <br/>
  * date: 2019年7月31日 下午4:50:35 <br/>
- *
+ * 
+ * @version 2.2.2
  * @author PuTianXiong
  * @since JDK 1.8
  */
 @Slf4j
 @EnableCaching
 @EnableAsync
-@SpringBootApplication(exclude =
-{ SecurityAutoConfiguration.class })
-public class Application
-{
+@SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
+public class Application {
 
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 		log.info("QMS-Service Started Successfully");
 	}

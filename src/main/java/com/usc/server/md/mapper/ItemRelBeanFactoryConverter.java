@@ -50,7 +50,7 @@ public class ItemRelBeanFactoryConverter {
 	public static <T> T getBean(Class<T> calss, ResultSet resultSet) {
 		try
 		{
-			jdbcTemplate = new JdbcTemplate(DBConnecter.getDataSource());
+			jdbcTemplate = DBConnecter.getModelJdbcTemplate();
 		} catch (Exception e1)
 		{
 			e1.printStackTrace();
@@ -224,7 +224,7 @@ public class ItemRelBeanFactoryConverter {
 	}
 
 	private static List<ItemPeptidePage> getItemPeptidePageList(String itemId, String rootId) {
-		String sql = "SELECT id,no,name,rootid,itemid,sort FROM usc_model_property_field WHERE del=0 AND "
+		String sql = "SELECT id,no,name,enname,rootid,itemid,sort FROM usc_model_property_field WHERE del=0 AND "
 				+ "pid='0' AND itemid='" + itemId + "' AND rootid='" + rootId + "' ORDER BY sort";
 		return jdbcTemplate.query(sql, new PeptidePageRowMapper());
 	}
@@ -272,7 +272,7 @@ public class ItemRelBeanFactoryConverter {
 	private static final String _go = " GROUP BY no,id ORDER BY sort,ctime,id";
 
 	private static String getSql(String itemId, String rootId, String tableName) {
-		String sql = "SELECT P.id AS id,P.no AS no,P.name AS name,P.editable AS editable,P.sort AS sort,P.ctime AS ctime,";
+		String sql = "SELECT P.id AS id,P.no AS no,P.name AS name,P.enname AS enname,P.editable AS editable,P.sort AS sort,P.ctime AS ctime,";
 		String sql2 = "F.fieldname AS fieldname,F.ftype AS ftype,F.flength AS flength,P.defaultv AS defaultv,"
 				+ "F.allownull AS allownull,F.accuracy AS accuracy,F.only AS only,"
 				+ "F.ispk AS ispk,F.editor AS editor,F.editparams AS editparams,F.type AS type,F.itemid AS itemid ,F.suplink AS suplink,F.linkparams AS linkparams "

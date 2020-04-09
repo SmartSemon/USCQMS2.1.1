@@ -5,17 +5,20 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-public abstract class APPHandlerInterceptor implements HandlerInterceptor
-{
+import com.usc.conf.cf.i18n.MessageSourceUtil;
+
+public abstract class APPHandlerInterceptor extends HandlerInterceptorAdapter {
 	@Autowired
 	protected JdbcTemplate jdbcTemplate;
+	@Autowired
+	protected MessageSourceUtil messageSourceUtil;
 
 	@Override
-	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception
-	{
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+			throws Exception {
 
 		return beforeHandle(request, response, handler);
 	}
@@ -25,8 +28,7 @@ public abstract class APPHandlerInterceptor implements HandlerInterceptor
 
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
-			ModelAndView modelAndView) throws Exception
-	{
+			ModelAndView modelAndView) throws Exception {
 		afterHandle(request, response, handler, modelAndView);
 	}
 
@@ -35,8 +37,7 @@ public abstract class APPHandlerInterceptor implements HandlerInterceptor
 
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
-			throws Exception
-	{
+			throws Exception {
 		afterReaderCompletion(request, response, handler, ex);
 	}
 

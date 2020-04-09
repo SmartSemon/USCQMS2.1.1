@@ -4,19 +4,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.usc.app.action.a.AbstractClassAction;
-import com.usc.app.action.utils.ActionMessage;
+import com.usc.app.action.retmsg.ActionMessage;
 import com.usc.app.entry.ret.RetSignEnum;
-import com.usc.app.util.tran.StandardResultTranslate;
+import com.usc.app.util.tran.InternationalFormat;
 import com.usc.obj.api.USCObject;
 import com.usc.obj.api.impl.ApplicationContext;
 import com.usc.obj.api.impl.USCServerBeanProvider;
 
-public class CreateClassBusinessObjectAction extends AbstractClassAction
-{
+public class CreateClassBusinessObjectAction extends AbstractClassAction {
 
 	@Override
-	public Object executeAction() throws Exception
-	{
+	public Object executeAction() throws Exception {
 		Map<String, Object> map = ActionParamParser.getFieldVaues(context.getItemInfo(), context.getItemPage(),
 				context.getFormData());
 		context.setFormData(map);
@@ -33,8 +31,8 @@ public class CreateClassBusinessObjectAction extends AbstractClassAction
 			applicationContext.setItemNo(classItemNo);
 			applicationContext.setFormData(clrData);
 			applicationContext.createObj(applicationContext.getItemNo());
-			return new ActionMessage(flagTrue, RetSignEnum.NEW, StandardResultTranslate.translate("Action_Create_1"),
-					object);
+			return new ActionMessage(true, RetSignEnum.NEW,
+					InternationalFormat.getFormatMessage("Action_Create_1", context.getLocale()), object);
 		} else
 		{
 			return context.getExtendInfo("CreateResult");

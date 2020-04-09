@@ -5,8 +5,8 @@ import java.util.List;
 
 import com.usc.app.action.a.AbstractAction;
 import com.usc.app.action.cache.PromptTranslationTools;
+import com.usc.app.action.retmsg.ActionMessage;
 import com.usc.app.action.task.util.TaskActionResult;
-import com.usc.app.action.utils.ActionMessage;
 import com.usc.app.ims.config.action.EndpointEnum;
 import com.usc.app.util.SendMessageUtils;
 import com.usc.obj.api.USCObject;

@@ -15,9 +15,9 @@ import org.springframework.context.annotation.Scope;
 
 import lombok.Data;
 
-@ConfigurationProperties(prefix = "spring.rabbitmq")
 @Data
 @Configuration
+
 public class RabbitConnectConfig {
 	String host;
 	String port;
@@ -25,17 +25,18 @@ public class RabbitConnectConfig {
 	String password;
 
 	@Bean("mqConnectionFactory")
+	@ConfigurationProperties(prefix = "spring.rabbitmq")
 	public ConnectionFactory mqConnectionFactory() {
-		CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
-		connectionFactory.setUsername(username);
-		connectionFactory.setPassword(password);
-		connectionFactory.setVirtualHost("/");
-		connectionFactory.setPublisherConfirms(true);
-		connectionFactory.setChannelCacheSize(100);
-
-		// 该方法配置多个host，在当前连接host down掉的时候会自动去重连后面的host
-		connectionFactory.setAddresses(host);
-		return connectionFactory;
+//		CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
+//		connectionFactory.setUsername(username);
+//		connectionFactory.setPassword(password);
+//		connectionFactory.setVirtualHost("/");
+//		connectionFactory.setPublisherConfirms(true);
+//		connectionFactory.setChannelCacheSize(100);
+//
+//		// 该方法配置多个host，在当前连接host down掉的时候会自动去重连后面的host
+//		connectionFactory.setAddresses(host);
+		return new CachingConnectionFactory();
 	}
 
 	@Bean

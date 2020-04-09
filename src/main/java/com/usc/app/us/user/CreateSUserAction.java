@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.usc.app.action.ActionParamParser;
 import com.usc.app.action.a.AbstractRelationAction;
-import com.usc.app.action.utils.ActionMessage;
+import com.usc.app.action.retmsg.ActionMessage;
 import com.usc.app.entry.ret.RetSignEnum;
 import com.usc.app.util.UserInfoUtils;
 import com.usc.app.util.tran.StandardResultTranslate;

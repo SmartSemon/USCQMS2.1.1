@@ -40,7 +40,7 @@ public class InitModelData {
 
 	public static void initModel() {
 		RedisUtil redisUtil = RedisUtil.getInstanceOfObject();
-		JdbcTemplate jdbcTemplate = DBConnecter.getJdbcTemplate();
+		JdbcTemplate jdbcTemplate = DBConnecter.getModelJdbcTemplate();
 		List<ItemInfo> itemInfos = jdbcTemplate.query(MODELITEMSQL, new ItemRowMapper());
 		if (!ObjectHelperUtils.isEmpty(itemInfos))
 		{

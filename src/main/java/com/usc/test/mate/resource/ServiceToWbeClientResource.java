@@ -5,25 +5,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alibaba.fastjson.JSONObject;
 import com.usc.app.action.mate.MateFactory;
+import com.usc.app.sys.online.OnlineUsers;
 import com.usc.app.util.UserInfoUtils;
-import com.usc.app.util.tran.StandardResultTranslate;
 import com.usc.autho.UserAuthority;
 import com.usc.obj.api.BeanFactoryConverter;
 import com.usc.obj.api.bean.UserInformation;
 import com.usc.server.DBConnecter;
 import com.usc.server.jdbc.DBUtil;
-import com.usc.server.jdbc.base.DataBaseUtils;
 import com.usc.server.md.ItemInfo;
 import com.usc.server.md.ItemMenu;
 import com.usc.server.md.mapper.MenuRowMapper;
@@ -33,35 +29,31 @@ import com.usc.test.mate.jsonbean.USCObjectQueryJsonBean;
 
 @RestController
 @RequestMapping(value = "/sysModelToWbeClient", produces = "application/json;charset=UTF-8")
-public class ServiceToWbeClientResource
-{
-	public static Map<String, Map<String, Map<String, Object>>> webPageModelData = new ConcurrentHashMap<String, Map<String, Map<String, Object>>>();
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
+public class ServiceToWbeClientResource {
+	public static ConcurrentHashMap<String, Map<String, Map<String, Object>>> webPageModelData = new ConcurrentHashMap<String, Map<String, Map<String, Object>>>();
 
 	@PostMapping("/getModelData")
-	public Map<String, Object> getModelData(@RequestBody String queryParam) throws Exception
-	{
-		USCObjectJSONBean jsonBean = null;
-		try
-		{
-			jsonBean = BeanFactoryConverter.getJsonBean(USCObjectJSONBean.class, queryParam);
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		String userName = jsonBean.getUSERNAME();
-		String pageID = jsonBean.getPAGEID();
+	public Map<String, Object> getModelData(@RequestBody USCObjectJSONBean queryParam, HttpServletRequest request)
+			throws Exception {
+		USCObjectJSONBean jsonBean = queryParam;
+//		try
+//		{
+//			jsonBean = BeanFactoryConverter.getJsonBean(USCObjectJSONBean.class, queryParam);
+//		} catch (Exception e)
+//		{
+//			e.printStackTrace();
+//		}
+		String userName = jsonBean.getUserName() != null ? jsonBean.getUserName() : request.getHeader("UserName");
+		String pageID = jsonBean.getPageId();
 		if (pageID != null)
 		{
-			Map<String, Map<String, Object>> wpm = webPageModelData.get(userName);
+			Map<String, Map<String, Object>> wpm = webPageModelData
+					.get(OnlineUsers.getUserNameAcceptLanguage(userName));
 			if (wpm != null)
 			{
 				Map<String, Object> um = wpm.get(pageID);
 				if (um != null)
-				{
-					return um;
-				}
+				{ return um; }
 			}
 		}
 
@@ -75,14 +67,19 @@ public class ServiceToWbeClientResource
 		}
 
 		UserInformation userInformation = UserInfoUtils.getUserInformation(userName);
-		String itemGridNo = jsonBean.ITEMGRIDNO;
-		String itemPropertyNo = jsonBean.ITEMPROPERTYNO;
-		int faceType = jsonBean.FACETYPE;
-		String itemRelationPageNo = jsonBean.ITEMRELATIONPAGENO;
+		String itemGridNo = jsonBean.itemGridNo;
+		String itemPropertyNo = jsonBean.itemPropertyNo;
+		int faceType = jsonBean.faceType;
+		String itemRelationPageNo = jsonBean.itemRelationPageNo;
 
-		List<ItemMenu> pageMenus = DBConnecter.getJdbcTemplate().query(
-				"SELECT * FROM usc_model_itemmenu WHERE del=0 AND state='F' AND itemid='" + jsonBean.getPAGEID() + "'",
+		List<ItemMenu> pageMenus = DBConnecter.getModelJdbcTemplate().query(
+				"SELECT * FROM usc_model_itemmenu WHERE del=0 AND state='F' AND itemid='" + jsonBean.getPageId() + "'",
 				new MenuRowMapper());
+		if (pageMenus != null)
+		{
+			for (ItemMenu itemMenu : pageMenus)
+			{ ModelUtils.setAcceptLanguage(itemMenu, userInformation); }
+		}
 		UserAuthority.authorityMenus(userInformation, pageMenus);
 		resultMap.put("flag", true);
 		resultMap.put("faceType", faceType);
@@ -94,8 +91,8 @@ public class ServiceToWbeClientResource
 	}
 
 	@PostMapping("/getClassViewModelData")
-	public Map<String, Object> getClassViewModelData(@RequestBody String queryParam) throws Exception
-	{
+	public Map<String, Object> getClassViewModelData(@RequestBody String queryParam, HttpServletRequest request)
+			throws Exception {
 		USCObjectJSONBean jsonBean = null;
 		Map<String, Object> resultMap = new HashMap<>();
 		try
@@ -109,18 +106,17 @@ public class ServiceToWbeClientResource
 			resultMap.put("info", "参数不正确，获取建模数据失败");
 			return resultMap;
 		}
-		String userName = jsonBean.getUSERNAME();
-		String pageID = jsonBean.getPAGEID();
+		String userName = jsonBean.getUserName() != null ? jsonBean.getUserName() : request.getHeader("UserName");
+		String pageID = jsonBean.getPageId();
 		if (pageID != null)
 		{
-			Map<String, Map<String, Object>> wpm = webPageModelData.get(userName);
+			Map<String, Map<String, Object>> wpm = webPageModelData
+					.get(OnlineUsers.getUserNameAcceptLanguage(userName));
 			if (wpm != null)
 			{
 				Map<String, Object> um = wpm.get(pageID);
 				if (um != null)
-				{
-					return um;
-				}
+				{ return um; }
 			}
 		}
 
@@ -134,14 +130,18 @@ public class ServiceToWbeClientResource
 		}
 
 		UserInformation userInformation = UserInfoUtils.getUserInformation(userName);
-		String itemGridNo = jsonBean.ITEMGRIDNO;
-		String itemPropertyNo = jsonBean.ITEMPROPERTYNO;
-		int faceType = jsonBean.FACETYPE;
-		String itemRelationPageNo = jsonBean.ITEMRELATIONPAGENO;
-		List<ItemMenu> pageMenus = DBConnecter.getJdbcTemplate().query(
+		String itemGridNo = jsonBean.itemGridNo;
+		String itemPropertyNo = jsonBean.itemPropertyNo;
+		int faceType = jsonBean.faceType;
+		String itemRelationPageNo = jsonBean.itemRelationPageNo;
+		List<ItemMenu> pageMenus = DBConnecter.getModelJdbcTemplate().query(
 				"SELECT * FROM usc_model_itemmenu WHERE del=0 AND state='F' AND itemid='" + pageID + "'",
 				new MenuRowMapper());
-
+		if (pageMenus != null)
+		{
+			for (ItemMenu itemMenu : pageMenus)
+			{ ModelUtils.setAcceptLanguage(itemMenu, userInformation); }
+		}
 		UserAuthority.authorityMenus(userInformation, pageMenus);
 
 		resultMap.put("flag", true);
@@ -149,12 +149,12 @@ public class ServiceToWbeClientResource
 		resultMap.put("pageMenus", pageMenus);
 		ModelUtils.getClientAllPageData(userInformation, resultMap, info, itemGridNo, itemPropertyNo,
 				itemRelationPageNo, faceType);
-		if (jsonBean.getVIEWNO() != null)
+		if (jsonBean.getViewNo() != null)
 		{
 			if (faceType == 5)
 			{
 				resultMap.put("classViewNodeList", MGetClassViewModelData
-						.getClassViewModelData(jsonBean.getVIEWNO(), null, userName).getClassViewNodeList());
+						.getClassViewModelData(jsonBean.getViewNo(), null, userName).getClassViewNodeList());
 				return resultMap;
 			}
 		}
@@ -163,8 +163,7 @@ public class ServiceToWbeClientResource
 	}
 
 	@PostMapping("/getClassNodeModelData")
-	public Map<String, Object> getClassNodeModelData(@RequestBody String queryParam)
-	{
+	public Map<String, Object> getClassNodeModelData(@RequestBody String queryParam, HttpServletRequest request) {
 		USCObjectQueryJsonBean jsonBean = null;
 		try
 		{
@@ -176,12 +175,12 @@ public class ServiceToWbeClientResource
 		ItemInfo info = jsonBean.getItemInfo();
 		if (info == null)
 			return null;
-		String itemGridNo = jsonBean.ITEMGRIDNO;
-		String itemPropertyNo = jsonBean.ITEMPROPERTYNO;
-		int faceType = jsonBean.FACETYPE;
-		String itemRelationPageNo = jsonBean.ITEMRELATIONPAGENO;
+		String itemGridNo = jsonBean.itemGridNo;
+		String itemPropertyNo = jsonBean.itemPropertyNo;
+		int faceType = jsonBean.faceType;
+		String itemRelationPageNo = jsonBean.itemRelationPageNo;
 
-		String userName = jsonBean.getUSERNAME();
+		String userName = jsonBean.getUserName() != null ? jsonBean.getUserName() : request.getHeader("UserName");
 		UserInformation userInformation = UserInfoUtils.getUserInformation(userName);
 
 		Map<String, Object> result = new HashMap<>();
@@ -199,14 +198,16 @@ public class ServiceToWbeClientResource
 		ModelUtils.getClientAllPageData(userInformation, classModel, classInfo, null, classNodeItemPropertyNo, null,
 				faceType);
 
-		List<ItemMenu> pageMenus = DBConnecter.getJdbcTemplate().query(
-				"SELECT * FROM usc_model_itemmenu WHERE del=0 AND state='F' AND itemid='" + jsonBean.getPAGEID() + "'",
+		List<ItemMenu> pageMenus = DBConnecter.getModelJdbcTemplate().query(
+				"SELECT * FROM usc_model_itemmenu WHERE del=0 AND state='F' AND itemid='" + jsonBean.getPageId() + "'",
 				new MenuRowMapper());
 		Object itemMenus = classModel.get("itemMenus");
 		if (itemMenus != null)
 		{
 			List<ItemMenu> itemMenus2 = (List<ItemMenu>) itemMenus;
 			pageMenus.addAll(itemMenus2);
+			for (ItemMenu itemMenu : pageMenus)
+			{ ModelUtils.setAcceptLanguage(itemMenu, userInformation); }
 		}
 
 		UserAuthority.authorityMenus(userInformation, pageMenus);
@@ -221,17 +222,16 @@ public class ServiceToWbeClientResource
 	}
 
 	@PostMapping("/getModel/gridData")
-	public Object GetModelGridData(@RequestBody String queryParam)
-	{
+	public Object GetModelGridData(@RequestBody String queryParam, HttpServletRequest request) {
 		try
 		{
+
 			USCObjectJSONBean bean = BeanFactoryConverter.getJsonBean(USCObjectJSONBean.class, queryParam);
 			ItemInfo info = bean.getItemInfo();
 			if (info == null)
-			{
-				return null;
-			}
-			return info.getItemGrid(bean.getITEMGRIDNO());
+			{ return null; }
+			UserInformation userInformation = UserInfoUtils.getUserInformation(bean.getUserName());
+			return ModelUtils.getItemGrid(info, bean.getItemGridNo(), userInformation);
 		} catch (Exception e)
 		{
 			e.printStackTrace();
@@ -241,14 +241,15 @@ public class ServiceToWbeClientResource
 	}
 
 	@PostMapping("/getModel/propertyData")
-	public Object GetModePropertyData(@RequestBody String queryParam)
-	{
+	public Object GetModePropertyData(@RequestBody String queryParam, HttpServletRequest request) {
 		try
 		{
 			USCObjectJSONBean bean = BeanFactoryConverter.getJsonBean(USCObjectJSONBean.class, queryParam);
 			ItemInfo info = bean.getItemInfo();
-
-			return info.getItemPage(bean.getITEMPROPERTYNO());
+			if (info == null)
+			{ return null; }
+			UserInformation userInformation = UserInfoUtils.getUserInformation(bean.getUserName());
+			return ModelUtils.getItemPage(info, bean.getItemPropertyNo(), userInformation);
 		} catch (Exception e)
 		{
 			e.printStackTrace();
@@ -258,14 +259,16 @@ public class ServiceToWbeClientResource
 	}
 
 	@PostMapping("/getModel/menuData")
-	public Object GetModeMenuData(@RequestBody String queryParam)
-	{
+	public Object GetModeMenuData(@RequestBody String queryParam, HttpServletRequest request) {
 		try
 		{
 			USCObjectJSONBean bean = BeanFactoryConverter.getJsonBean(USCObjectJSONBean.class, queryParam);
 			ItemInfo info = bean.getItemInfo();
 
-			return info.getItemMenuList();
+			if (info == null)
+			{ return null; }
+			UserInformation userInformation = UserInfoUtils.getUserInformation(bean.getUserName());
+			return ModelUtils.getItemMenus(info, userInformation);
 		} catch (Exception e)
 		{
 			e.printStackTrace();
@@ -275,14 +278,13 @@ public class ServiceToWbeClientResource
 	}
 
 	@PostMapping("/getModel/relationPageData")
-	public Object GetModeRelationPageData(@RequestBody String queryParam)
-	{
+	public Object GetModeRelationPageData(@RequestBody String queryParam, HttpServletRequest request) {
 		try
 		{
 			USCObjectJSONBean bean = BeanFactoryConverter.getJsonBean(USCObjectJSONBean.class, queryParam);
 			ItemInfo info = bean.getItemInfo();
 
-			return info.getItemRelationPage(bean.getITEMRELATIONPAGENO());
+			return info.getItemRelationPage(bean.getItemRelationPageNo());
 		} catch (Exception e)
 		{
 			e.printStackTrace();
@@ -290,91 +292,4 @@ public class ServiceToWbeClientResource
 		return null;
 
 	}
-
-	@PostMapping("/getItemDataListLimit")
-	public Object getDataListLimit(@RequestBody String queryParam) throws Exception
-	{
-		Map map = new HashMap<>();
-		try
-		{
-			USCObjectQueryJsonBean jsonBean = BeanFactoryConverter.getJsonBean(USCObjectQueryJsonBean.class,
-					queryParam);
-			ItemInfo info = jsonBean.getItemInfo();
-			Long s = System.currentTimeMillis();
-			JSONObject jsonObject = JSONObject.parseObject(queryParam);
-			Object condition = jsonObject.getString("condition");
-			List list = DBUtil.getSQLResult(info.getItemNo(),
-					"SELECT * FROM " + info.getTableName() + " WHERE del=0 "
-							+ ((condition == null) ? "" : (" AND " + condition.toString()))
-							+ DataBaseUtils.getLimit(jsonBean.getPAGE()),
-					info.getItemFieldList());
-			Long e = System.currentTimeMillis();
-			double d = (e - s);
-			map = StandardResultTranslate.getResult("Action_Query_1", list);
-			if (list == null || list.size() == 0)
-			{
-				map.put("roll", false);
-			} else
-			{
-				if (list.size() < DataBaseUtils.getDefaultLimitPageSize())
-				{
-					map.put("roll", false);
-				} else
-				{
-					map.put("roll", true);
-				}
-			}
-			return map;
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-			return StandardResultTranslate.getResult(false, e.getMessage());
-		}
-
-	}
-
-	@GetMapping("/getClassDataListLimit")
-	private Object getClassDataListLimit(@RequestParam String queryParam) throws Exception
-	{
-		if (queryParam == null)
-			return null;
-		if (queryParam.trim().equals("{}"))
-			return null;
-		JSONObject jsonObject = JSONObject.parseObject(queryParam);
-		int page = jsonObject.getInteger("page");
-		String classItemNo = jsonObject.getString("classItemNo");
-		String classNodeIds = jsonObject.getString("classNodeId");
-		String itemNo = jsonObject.getString("itemNo");
-		ItemInfo itemInfo = MateFactory.getItemInfo(itemNo);
-		ItemInfo classItemIfo = MateFactory.getItemInfo(classItemNo);
-		if (itemInfo == null || classItemIfo == null)
-			return null;
-		String itemTn = classItemIfo.getTableName();
-		String paramCondition = " EXISTS(SELECT 1 FROM " + itemTn + " WHERE del=0 AND itemid=" + itemInfo.getTableName()
-				+ ".id AND nodeid='" + classNodeIds + "')";
-
-		return StandardResultTranslate.getQueryResult(true, "Action_Query",
-				DBUtil.getSQLResultByCondition(itemInfo, paramCondition));
-	}
-
-	@GetMapping("/getItemDataList")
-	private Object getDataList(@RequestParam String queryParam)
-	{
-		if (queryParam == null)
-			return null;
-		if (queryParam.trim().equals("{}"))
-			return null;
-		JSONObject jsonObject = JSONObject.parseObject(queryParam);
-		Object itemNo = jsonObject.getString("itemNo");
-		Object condition = jsonObject.getString("condition");
-		ItemInfo info = MateFactory.getItemInfo((String) itemNo);
-		if (info == null)
-			return null;
-		String sql = "SELECT * FROM " + info.getTableName() + " WHERE del=0";
-		List<Map<String, Object>> maps = jdbcTemplate
-				.queryForList(sql + ((condition == null) ? "" : (" AND " + condition.toString())));
-
-		return (maps == null || maps.isEmpty()) ? null : maps;
-	}
-
 }

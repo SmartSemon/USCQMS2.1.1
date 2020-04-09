@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
 import com.usc.app.util.tran.StandardResultTranslate;
-import com.usc.server.jdbc.DBUtil;
+import com.usc.server.DBConnecter;
 
 public class MRelationQueryAction {
 	public static Map<String, Object> query(String queryParam) {
@@ -22,7 +22,8 @@ public class MRelationQueryAction {
 		{
 			objects = new Object[] { 0, "F", "C", "U", cond[1] };
 		}
-		List<Map<String, Object>> dataList = DBUtil.queryForList(table, cond[0], objects);
+		String sql = "SELECT * FROM " + table + " WHERE " + cond[0];
+		List<Map<String, Object>> dataList = DBConnecter.getModelJdbcTemplate().queryForList(sql, objects);
 		return StandardResultTranslate.getQueryResult(true, "Action_Query", dataList);
 	}
 

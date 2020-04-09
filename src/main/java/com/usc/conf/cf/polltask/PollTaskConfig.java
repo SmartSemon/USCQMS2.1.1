@@ -21,16 +21,14 @@ import com.usc.conf.cf.polltask.task.PollTaskJob;
 
 @Component
 @Configuration
-public class PollTaskConfig
-{
+public class PollTaskConfig {
 	private static final Logger LOGGER = LoggerFactory.getLogger(PollTaskConfig.class);
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
 	@Bean
-	public ThreadPoolTaskScheduler threadPoolTaskScheduler()
-	{
+	public ThreadPoolTaskScheduler threadPoolTaskScheduler() {
 		LOGGER.info("ST-创建任务调度池-START");
 		ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
 		scheduler.setPoolSize(20);
@@ -43,13 +41,11 @@ public class PollTaskConfig
 	}
 
 	@Bean(name = "scheduledTaskJobMap")
-	public Map<String, PollTaskJob> scheduledTaskJobMap()
-	{
+	public Map<String, PollTaskJob> scheduledTaskJobMap() {
 		return initTaskJobs();
 	}
 
-	public Map<String, PollTaskJob> initTaskJobs()
-	{
+	public Map<String, PollTaskJob> initTaskJobs() {
 		LOGGER.info("开始初始化POLLTASK");
 		PollTaskMapper taskMapper = new PolllTaskMapperImpl();
 		List<PollTaskBean> beans = taskMapper.getAllTask(jdbcTemplate);

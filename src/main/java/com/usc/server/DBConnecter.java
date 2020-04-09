@@ -11,8 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.usc.util.SpringContextUtil;
 
-public class DBConnecter implements Serializable
-{
+public class DBConnecter implements Serializable {
 
 	protected static final long serialVersionUID = 1L;
 //	static InitialContext context = null;
@@ -22,8 +21,7 @@ public class DBConnecter implements Serializable
 
 	public static String JNDI = "USCDBS";
 
-	public static JdbcTemplate getJdbcTemplate()
-	{
+	public static JdbcTemplate getJdbcTemplate() {
 		if (jdbcTemplate == null)
 		{
 			try
@@ -37,24 +35,28 @@ public class DBConnecter implements Serializable
 		return jdbcTemplate;
 	}
 
-	public static void setJdbcTemplate(JdbcTemplate jdbcTemp)
-	{
+	public static JdbcTemplate getModelJdbcTemplate() {
+		return new JdbcTemplate(getModelDataSource());
+	}
+
+	private static DataSource getModelDataSource() {
+		return (DataSource) SpringContextUtil.getBean("modelDataSource");
+	}
+
+	public static void setJdbcTemplate(JdbcTemplate jdbcTemp) {
 		jdbcTemplate = jdbcTemp;
 	}
 
-	public static String getJNDI()
-	{
+	public static String getJNDI() {
 		return JNDI;
 	}
 
-	public static Connection getConnection() throws Exception
-	{
+	public static Connection getConnection() throws Exception {
 
 		return getConnection(getJNDI());
 	}
 
-	public static DataSource getDataSource() throws Exception
-	{
+	public static DataSource getDataSource() throws Exception {
 
 		if (dataSource == null)
 		{
@@ -68,18 +70,7 @@ public class DBConnecter implements Serializable
 		return dataSource;
 	}
 
-	private static Connection getConnection(String jndi2)
-	{
-//			if (context == null)
-//			{
-//				context = new InitialContext();
-//			}
-//			DataSource dataSource = SpringContextUtil.getBean(DruidDataSource.class);
-//			if (dataSource == null)
-//			{
-//				dataSource = (DataSource) context.lookup(jndi2);
-//			}
-
+	private static Connection getConnection(String jndi2) {
 		try
 		{
 			return getDataSource().getConnection();
@@ -93,8 +84,21 @@ public class DBConnecter implements Serializable
 		return null;
 	}
 
-	public static String getDataBaseProductName()
-	{
+	public static Connection getModelConnection() {
+		try
+		{
+			return getModelDataSource().getConnection();
+		} catch (SQLException e)
+		{
+			e.printStackTrace();
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static String getDataBaseProductName() {
 		try
 		{
 			return getConnection().getMetaData().getDatabaseProductName();
@@ -105,13 +109,11 @@ public class DBConnecter implements Serializable
 		return null;
 	}
 
-	public static boolean isOracle()
-	{
+	public static boolean isOracle() {
 		return "Oracle".equals(getDataBaseProductName());
 	}
 
-	public static boolean isMySQL()
-	{
+	public static boolean isMySQL() {
 		return "MySQL".equals(getDataBaseProductName());
 	}
 }

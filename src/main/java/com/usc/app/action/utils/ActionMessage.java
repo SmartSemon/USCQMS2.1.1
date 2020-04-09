@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.usc.app.action.retmsg.ResultMessage;
 import com.usc.app.entry.ret.RetSignEnum;
 import com.usc.obj.api.USCObject;
 import com.usc.util.ObjectHelperUtils;

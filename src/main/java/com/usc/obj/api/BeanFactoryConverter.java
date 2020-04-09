@@ -30,24 +30,21 @@ import com.usc.server.md.mapper.DataClassType;
  *
  * @date 2019年4月26日
  */
-public class BeanFactoryConverter
-{
 
-	public static <T> T getBean(Class<T> calss, ResultSet resultSet) throws Exception
-	{
+@SuppressWarnings("unchecked")
+public class BeanFactoryConverter {
+
+	public static <T> T getBean(Class<T> calss, ResultSet resultSet) throws Exception {
 		return createBean(calss, resultSet);
 	}
 
-	public static <T> List<T> getBeans(Class<T> calss, ResultSet resultSet)
-	{
+	public static <T> List<T> getBeans(Class<T> calss, ResultSet resultSet) {
 		List<T> ts = null;
 		try
 		{
 			ts = new ArrayList<>();
 			while (resultSet.next())
-			{
-				ts.add(createBean(calss, resultSet));
-			}
+			{ ts.add(createBean(calss, resultSet)); }
 		} catch (Exception e)
 		{
 			e.printStackTrace();
@@ -55,15 +52,13 @@ public class BeanFactoryConverter
 		return ts;
 	}
 
-	private static <T> T createBean(Class<T> calss, ResultSet resultSet) throws Exception
-	{
+	private static <T> T createBean(Class<T> calss, ResultSet resultSet) throws Exception {
 		T object = calss.newInstance();
 		Field[] fields = calss.getDeclaredFields();
 
 		for (Field field : fields)
 		{
 			String fieldName = field.getName();
-
 			try
 			{
 				resultSet.findColumn(fieldName.toLowerCase());
@@ -74,83 +69,56 @@ public class BeanFactoryConverter
 
 			Object fieldVlaue = resultSet.getObject(fieldName.toLowerCase());
 			if (fieldVlaue != null)
-			{
-				doMethod(field, calss, object, fieldVlaue);
-			}
+			{ doMethod(field, calss, object, fieldVlaue); }
 
 		}
 		return object;
 	}
 
-	public static <T> T getJsonBean(Class<T> calss, @NotNull Object json) throws Exception
-	{
-		if (json == null)
-		{
-			return null;
-		}
-
-		return createBean(calss, json instanceof String ? JSON.parseObject((String) json) : (JSONObject) json);
+	public static <T> T getJsonBean(Class<T> calss, @NotNull Object json) throws Exception {
+		return json == null ? null
+				: createBean(calss, json instanceof String ? JSON.parseObject((String) json) : (JSONObject) json);
 	}
 
-	public static <T> T getMapBean(Class<T> calss, @NotNull Map map) throws Exception
-	{
+	public static <T> T getMapBean(Class<T> calss, @NotNull Map<String, Object> map) throws Exception {
 		if (map == null)
-		{
-			return null;
-		}
+		{ return null; }
 
 		return createBean(calss, map);
 	}
 
-	private static <T> T createBean(Class<T> calss, JSONObject jsonObject) throws Exception
-	{
+	private static <T> T createBean(Class<T> calss, JSONObject jsonObject) throws Exception {
 		T object = calss.newInstance();
-		Map map = JSON.parseObject(jsonObject.toJSONString());
-//		List<Field> fields = new ArrayList<Field>();
-		Class class1 = calss;
-
-		while (class1 != null)
+		while (calss != null)
 		{
-			Field[] fields = class1.getDeclaredFields();
-			forEachFields(object, class1, map, fields);
-//			fields.addAll(Arrays.asList(class1.getDeclaredFields()));
-			class1 = class1.getSuperclass();
+			Field[] fields = calss.getDeclaredFields();
+			forEachFields(object, calss, jsonObject, fields);
+			calss = (Class<T>) calss.getSuperclass();
 		}
 
 		return object;
 	}
 
-	private static <T> T createBean(Class<T> calss, Map map) throws Exception
-	{
+	private static <T> T createBean(Class<T> calss, Map<String, Object> map) throws Exception {
 		T object = calss.newInstance();
-//		List<Field> fields = new ArrayList<Field>();
-		Class class1 = calss;
-
-		while (class1 != null)
+		while (calss != null)
 		{
-			Field[] fields = class1.getDeclaredFields();
-			forEachFields(object, class1, map, fields);
-//			fields.addAll(Arrays.asList(class1.getDeclaredFields()));
-			class1 = class1.getSuperclass();
+			Field[] fields = calss.getDeclaredFields();
+			forEachFields(object, calss, map, fields);
+			calss = (Class<T>) calss.getSuperclass();
 		}
 
 		return object;
 	}
 
-	private static <T> T forEachFields(T object, Class<T> calss, Map map, Field[] fields) throws Exception
-	{
+	private static <T> T forEachFields(T object, Class<T> calss, Map<String, Object> map, Field[] fields)
+			throws Exception {
 		if (fields == null || fields.length == 0)
-		{
-			return null;
-		}
+		{ return null; }
 		for (Field field : fields)
 		{
 			Object fieldVlaue = null;
 			String fieldName = field.getName();
-			if (fieldName.equals("loaddata"))
-			{
-				System.out.println();
-			}
 			for (Object key : map.keySet())
 			{
 				String fKey = String.valueOf(key).toUpperCase();
@@ -174,9 +142,7 @@ public class BeanFactoryConverter
 			}
 
 			if (fieldVlaue != null)
-			{
-				doMethod(field, calss, object, fieldVlaue);
-			}
+			{ doMethod(field, calss, object, fieldVlaue); }
 		}
 		return object;
 
@@ -184,10 +150,8 @@ public class BeanFactoryConverter
 
 	private static <T> void doMethod(Field field, Class<T> calss, T object, Object fieldVlaue)
 			throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
-			InvocationTargetException
-	{
+			InvocationTargetException {
 		String fieldName = field.getName();
-
 		String setMethodName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
 
 		Class<?> type = field.getType();
@@ -196,8 +160,7 @@ public class BeanFactoryConverter
 
 	}
 
-	public static boolean isJson(Object content)
-	{
+	public static boolean isJson(Object content) {
 		try
 		{
 			JSON.parse(String.valueOf(content));

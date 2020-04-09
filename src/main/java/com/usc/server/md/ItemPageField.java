@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class ItemPageField implements Serializable
-{
+public class ItemPageField implements Serializable {
 
 	/**
 	 *
@@ -21,7 +20,7 @@ public class ItemPageField implements Serializable
 	private String id;
 	private String no;
 	private String fieldName;
-	private String name;
+
 	private String FType;
 	private Integer FLength;
 	private Integer allowNull;
@@ -37,11 +36,14 @@ public class ItemPageField implements Serializable
 
 	private Integer sort;
 
+	private String caption;
+	private String name;
+	private String enName;
+
 	/**
 	 * @return this.toMap()
 	 */
-	public Map<String, Object> toMap()
-	{
+	public Map<String, Object> toMap() {
 
 		return BeanConverter.toMap(this);
 
@@ -50,8 +52,8 @@ public class ItemPageField implements Serializable
 	/**
 	 * @return this.toString()
 	 */
-	public String toString()
-	{
+	@Override
+	public String toString() {
 		return this.no + "-" + this.name;
 
 	}

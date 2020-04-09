@@ -3,7 +3,7 @@ package com.usc.app.exception;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import com.usc.app.action.utils.ActionMessage;
+import com.usc.app.action.retmsg.ActionMessage;
 import com.usc.app.entry.ret.RetSignEnum;
 import com.usc.app.util.tran.FormatPromptInformation;
 

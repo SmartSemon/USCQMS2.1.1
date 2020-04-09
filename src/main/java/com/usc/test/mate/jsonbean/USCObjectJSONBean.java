@@ -11,26 +11,24 @@ import com.usc.server.md.ItemInfo;
 import lombok.Data;
 
 @Data
-public class USCObjectJSONBean
-{
+public class USCObjectJSONBean {
 	@NotNull
-	public String USERNAME;
+	public String userName;
 	@NotNull
-	public String ITEMNO;
+	public String itemNo;
 
 	@NotNull
-	public String ITEMGRIDNO;
-	public String ITEMPROPERTYNO;
-	public String ITEMRELATIONPAGENO;
+	public String itemGridNo;
+	public String itemPropertyNo;
+	public String itemRelationPageNo;
 
-	public String PAGEID;
+	public String pageId;
 
-	public String VIEWNO;
+	public String viewNo;
 
-	public Integer FACETYPE;
+	public Integer faceType;
 
-//	@NotNull
-	public Map DATA;
+	public Map<String, Object> data;
 
 	public USCObjectJSONBean()
 	{
@@ -42,8 +40,7 @@ public class USCObjectJSONBean
 		setFieldsValues(jsonString);
 	}
 
-	private void setFieldsValues(String jsonString)
-	{
+	private void setFieldsValues(String jsonString) {
 
 	}
 
@@ -52,14 +49,12 @@ public class USCObjectJSONBean
 		setFieldsValues(jsonObject);
 	}
 
-	private void setFieldsValues(JSONObject jsonObject)
-	{
+	private void setFieldsValues(JSONObject jsonObject) {
 
 	}
 
-	public ItemInfo getItemInfo()
-	{
-		return this.ITEMNO == null ? null : MateFactory.getItemInfo(ITEMNO);
+	public ItemInfo getItemInfo() {
+		return this.itemNo == null ? null : MateFactory.getItemInfo(itemNo);
 	}
 
 }
